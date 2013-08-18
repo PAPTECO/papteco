@@ -28,8 +28,8 @@ public class PropertiesController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getPredefineStructureFolders")
 	@ResponseBody
 	public List<FolderBean> getPredefineStructureFolders() {
-		System.out.println(this.preDefineUtils.prepareFolderStructure().size());
-		return this.preDefineUtils.prepareFolderStructure();
+		System.out.println(this.sysConfig.prepareFolderStructure().size());
+		return this.sysConfig.prepareFolderStructure();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "getClientInfo")

@@ -2,16 +2,16 @@ package com.papteco.web.beans;
 
 public class FolderBean {
 
-	private String folderType;
+	private String docType;
 	private String folderName;
 	private String nuberformat;
 
-	public String getFolderType() {
-		return folderType;
+	public String getDocType() {
+		return docType;
 	}
 
-	public void setFolderType(String folderType) {
-		this.folderType = folderType;
+	public void setDocType(String docType) {
+		this.docType = docType;
 	}
 
 	public String getFolderName() {

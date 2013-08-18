@@ -11,14 +11,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cc.monggo.domain.LoginForm;
 
-import com.papteco.web.utils.PreDefineUtils;
+import com.papteco.web.utils.SystemConfiguration;
 
 @Controller
 public class LoginController {
 	@Autowired
-	PreDefineUtils preDefineUtils;
+	SystemConfiguration preDefineUtils;
 
-	public void setPre(PreDefineUtils preDefineUtils) {
+	public void setPre(SystemConfiguration preDefineUtils) {
 		this.preDefineUtils = preDefineUtils;
 	}
 	@RequestMapping(value="login")

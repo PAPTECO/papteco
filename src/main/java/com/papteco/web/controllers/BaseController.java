@@ -5,7 +5,7 @@ package com.papteco.web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.papteco.web.utils.PreDefineUtils;
+import com.papteco.web.utils.SystemConfiguration;
 
 
 /**
@@ -14,6 +14,6 @@ import com.papteco.web.utils.PreDefineUtils;
  */
 public class BaseController {
 	@Autowired
-	PreDefineUtils preDefineUtils;
+	SystemConfiguration sysConfig;
 
 }

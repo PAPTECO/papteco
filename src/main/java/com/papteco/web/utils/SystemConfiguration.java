@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.papteco.web.beans.FolderBean;
 
-public class PreDefineUtils {
+public class SystemConfiguration {
 	public List<FolderBean> preDefineFolderStructur;
 	
 	public void setPreDefineFolderStructur(
