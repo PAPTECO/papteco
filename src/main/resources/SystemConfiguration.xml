@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="sysConfig" class="com.papteco.web.utils.SystemConfiguration">
+		<property name="preDefineFolderStructure">
+			<list>
+				<ref bean="A" />
+				<ref bean="B" />
+				<ref bean="C" />
+				<ref bean="D" />
+				<ref bean="E" />
+				<ref bean="F" />
+				<ref bean="G" />
+				<ref bean="H" />
+				<ref bean="J" />
+				<ref bean="K" />
+				<ref bean="L" />
+				<ref bean="M" />
+				<ref bean="N" />
+				<ref bean="P" />
+				<ref bean="Q" />
+				<ref bean="R" />
+				<ref bean="S" />
+				<ref bean="T" />
+				<ref bean="U" />
+				<ref bean="V" />
+				<ref bean="W" />
+				<ref bean="Z" />
+			</list>
+		</property>
+		<property name="preDefineClientsInfo">
+			<list>
+				<ref bean="C1000" />
+				<ref bean="C1100" />
+				<ref bean="C1200" />
+				<ref bean="C2011" />
+				<ref bean="C3044" />
+				<ref bean="C5681" />
+				<ref bean="C6606" />
+				<ref bean="C6607" />
+				<ref bean="C8801" />
+				<ref bean="C9600" />
+				<ref bean="C9650" />
+				<ref bean="C9700" />
+				<ref bean="C9710" />
+				<ref bean="C9860" />
+				<ref bean="C9861" />
+				<ref bean="C9862" />
+				<ref bean="C9863" />
+				<ref bean="C9864" />
+				<ref bean="C9866" />
+				<ref bean="C9867" />
+				<ref bean="C9911" />
+				<ref bean="C9912" />
+				<ref bean="C9913" />
+				<ref bean="C9914" />
+				<ref bean="C9960" />
+				<ref bean="C9970" />
+				<ref bean="C9971" />
+				<ref bean="C9972" />
+				<ref bean="C9980" />
+				<ref bean="C9982" />
+				<ref bean="C9983" />
+				<ref bean="C9984" />
+			</list>
+		</property>
+	</bean>
+</beans>

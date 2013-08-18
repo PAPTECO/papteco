@@ -112,33 +112,4 @@
 		<property name="nuberformat" value="xxx-zzz-fff" />
 	</bean>
 
-	<bean id="sysConfig" class="com.papteco.web.utils.SystemConfiguration">
-		<property name="preDefineFolderStructur">
-			<list>
-				<ref bean="A" />
-				<ref bean="B" />
-				<ref bean="C" />
-				<ref bean="D" />
-				<ref bean="E" />
-				<ref bean="F" />
-				<ref bean="G" />
-				<ref bean="H" />
-				<ref bean="J" />
-				<ref bean="K" />
-				<ref bean="L" />
-				<ref bean="M" />
-				<ref bean="N" />
-				<ref bean="P" />
-				<ref bean="Q" />
-				<ref bean="R" />
-				<ref bean="S" />
-				<ref bean="T" />
-				<ref bean="U" />
-				<ref bean="V" />
-				<ref bean="W" />
-				<ref bean="Z" />
-			</list>
-		</property>
-	</bean>
-
 </beans>

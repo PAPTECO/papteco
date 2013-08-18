@@ -8,7 +8,7 @@
 </head>
 <body>
     <div>
-        <form action="getPredefineStructureFolders" methed="get">
+        <form action="getClientInfo" methed="get">
             <input type="text" name="username">
             <input type="submit" value="SUBMIT">
         </form>

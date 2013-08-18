@@ -35,7 +35,8 @@ public class PropertiesController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getClientInfo")
 	@ResponseBody
 	public List<ClientBean> getClientInfo() {
-		return clientService.returnAllClientInfo();
+		System.out.println(this.sysConfig.prepareClientsInfo().size());
+		return this.sysConfig.prepareClientsInfo();
 	}
 
 	/* mandatory constructor method */
