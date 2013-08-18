@@ -1,0 +1,3 @@
+﻿function testclk(){
+	alert("abc");
+}

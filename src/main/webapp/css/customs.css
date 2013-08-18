@@ -1,0 +1,220 @@
+html, body, #mainDiv {
+    width: 100%; height: 100%;
+    border: 0; padding: 0; margin: 0;
+}
+#grid {
+	width: 100%;
+	height: 30em;
+}
+
+.blank_interrupt{
+	height: 2em;
+}
+
+.notext_wrap{
+	text-wrap:none;
+	white-space: nowrap;
+	display:inline;
+}
+
+.blank_interval{
+	padding-right:5px;
+}
+
+#DirectoryTab{
+	padding:10px;
+}
+
+.labelstyle{
+	font-weight:bold;
+}
+
+.labelContentstyle{
+	color:#739f1d;
+	font-weight:bold;
+}
+
+.projectinfo {
+	background:#d4f684 50% no-repeat;
+	border:1px solid #739f1d;
+	display:block;
+	padding:5px;
+	font-size:17px;
+	font-weight:bold;
+}
+
+/* Grid need a explicit width/height by default */
+#detailgrids {
+	width: 100%;
+	height: 30em;
+}
+
+
+.bLightBlue {
+    background: -moz-linear-gradient(center top , #6DB5D5 0%, #4A91C0 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #5897C3;
+    box-shadow: 0 1px 2px 0 #84C4DD inset;
+}
+
+.bGreen {
+    background: -moz-linear-gradient(center top , #96C161 0%, #609C3D 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #68A341;
+    box-shadow: 0 1px 2px 0 #A4CA6C inset;
+}
+
+.bRed {
+    background: -moz-linear-gradient(center top , #C57979 0%, #A34C4C 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #A95151;
+    box-shadow: 0 1px 2px 0 #CD8787 inset;
+}
+
+.bgray {
+    background: -moz-linear-gradient(center top , #F8F8F8 0%, #ECECEC 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #F8F8F8;
+    box-shadow: 0 1px 2px 0 #ECECEC inset;
+}
+
+.bGold {
+    background: -moz-linear-gradient(center top , #D5A44C 0%, #C07833 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #C4853E;
+    box-shadow: 0 1px 2px 0 #DDB65B inset;
+}
+
+.bWhite {
+    background: -moz-linear-gradient(center top , #FFFFFF 0%, #FFFFFF 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #FFFFFF;
+    box-shadow: 0 1px 2px 0 #FFFFFF inset;
+    color: #000000;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+}
+
+.insideFont {
+    border-radius: 2px 2px 2px 2px;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+    
+    width:150px;
+}
+
+a {
+    cursor: pointer;
+}
+a {
+    color: #2B6893;
+    text-decoration: none;
+}
+
+.dijitDialogPaneContentArea {
+    width: 600px !important;
+    height: 400px !important;
+}
+
+.dialogNum{
+    width: 40px;
+}
+
+.dialogText{
+    width: 200px;
+}
+
+.dijitdialog_index tr{
+    height:50px;
+}
+
+.leftSlideElem {
+	background:#d4f684 50% no-repeat;
+	display:block;
+}
+
+
+ul {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+
+.filesDown > li.currentFile {
+    background: none repeat scroll 0 0 #F2F2F2;
+    border-top: 1px solid #C3C3C3;
+}
+.filesDown > li.currentFile {
+    background: none repeat scroll 0 0 transparent;
+}
+.filesDown > li:first-child {
+    padding: 8px 12px;
+}
+.filesDown > li {
+    background: -moz-linear-gradient(center top , #FAFAFA 0%, #EEEEEE 100%) repeat scroll 0 0 transparent;
+    border-bottom: 1px solid #DDDDDD;
+    border-top: 1px solid #FDFDFD;
+    display: block;
+    font-size: 11px;
+    padding: 8px 24px 8px 12px;
+    position: relative;
+}
+
+
+.fileSuccess {
+    background: url("../assets/icons/folder.png") no-repeat scroll 0 0 transparent;
+}
+
+.fileSearch{
+    background: url("../assets/icons/search.png") no-repeat scroll 0 0 transparent;
+}
+
+
+.fileSuccess, .fileError, .fileSearch{
+    display: block;
+    float: left;
+    height: 13px;
+    margin: 0px 10px 0 0;
+    width: 12px;
+}
+
+
+.filesDown .remove {
+    background: url("../assets/icons/removeLi.png") no-repeat scroll 0 0 transparent;
+    cursor: pointer;
+    display: block;
+    height: 8px;
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    width: 7px;
+}
+
+.buttom {
+    background: url("../assets/repgray2.png") repeat-x scroll 0 0 #FFFFFF;
+text-align:center;
+color:white;
+}
+
+.gridsize{
+    width:98%;
+    height:500px;
+}
+
+.fileInfo{
+	width:400px;
+
+}
+
+.doc_info_disp{
+	font-size:13px;
+}
+
+.doc_field{
+	background-color:red;
+	width:200px;
+}
+
+
+.fileInfo fieldset p {
+	line-height:10px;
+}
