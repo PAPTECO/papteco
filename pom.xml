@@ -40,13 +40,27 @@
 			<classifier>jdk15</classifier>
 		</dependency>
 
+		<!-- berkeley db -->
 		<dependency>
 			<groupId>com.sleepycat</groupId>
 			<artifactId>je</artifactId>
 			<version>5.0.73</version>
 			<scope>runtime</scope>
 		</dependency>
+
 	</dependencies>
+
+	<!-- <repositories>
+		<repository>
+			<id>oracleReleases</id>
+			<name>Oracle Released Java Packages</name>
+			<url>http://download.oracle.com/maven</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots />
+		</repository>
+	</repositories> -->
 	<build>
 		<finalName>Papteco</finalName>
 	</build>

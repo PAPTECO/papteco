@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
+	<bean id="fld1" class="com.papteco.web.beans.FolderBean">
+		<property name="folderType" value="TYPE1" />
+		<property name="folderName" value="Folder_1" />
+		<property name="nuberformat" value="xxx-zzz-fff" />
+	</bean>
+	<bean id="fld2" class="com.papteco.web.beans.FolderBean">
+		<property name="folderType" value="TYPE2" />
+		<property name="folderName" value="Folder_2" />
+		<property name="nuberformat" value="xxx-zzz-fff" />
+	</bean>
+	<bean id="preDefineUtils" class="com.papteco.web.utils.PreDefineUtils">
+		<property name="preDefineFolderStructur">
+			<list>
+				<ref bean="fld1" />
+				<ref bean="fld2" />
+			</list>
+		</property>
+	</bean>
+	
 </beans>
