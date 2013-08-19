@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.papteco.web.beans.FileTreeBean;
-import com.papteco.web.beans.FolderTreeBean;
-import com.papteco.web.beans.ProjectTreeBean;
+import com.papteco.web.beans.FileBean;
+import com.papteco.web.beans.FolderBean;
+import com.papteco.web.beans.ProjectBean;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.persist.EntityStore;
@@ -17,7 +17,7 @@ import com.sleepycat.persist.StoreConfig;
 public class CacheDB {
 
 	private static final String DATAPATH = "tmp/data";
-	private static PrimaryIndex<Integer, ProjectTreeBean> projectIndex;
+	private static PrimaryIndex<Integer, ProjectBean> projectIndex;
 
 	static{
 		File f = new File(DATAPATH);
@@ -44,42 +44,42 @@ public class CacheDB {
 		EntityStore store = new EntityStore(env, "ProjectStore", storeConfig);
 
 		projectIndex = store.getPrimaryIndex(Integer.class,
-				ProjectTreeBean.class);
+				ProjectBean.class);
 	}
 
 	// this is retry function
-	public static void saveProjectTree(ProjectTreeBean tree) {
-		projectIndex.put(tree);
+	public static void saveProjectTree(ProjectBean project) {
+		projectIndex.put(project);
 	}
 	
-	public static ProjectTreeBean getProjectTree(int id) {
+	public static ProjectBean getProjectTree(int id) {
 		return projectIndex.get(id);
 	}
 
 	public static void main(String[] args) {
 
-		ProjectTreeBean projectexm = new ProjectTreeBean();
+		ProjectBean projectexm = new ProjectBean();
 		
 		projectexm.setCreatedAt(new Date());
-		projectexm.setCreatedBy("Simple");
+		projectexm.setCreatedBy("Cony");
 		projectexm.setDescription("This is new project");
 		projectexm.setProjectId(203);
 		
-		FolderTreeBean folderexm1 = new FolderTreeBean();
+		FolderBean folderexm1 = new FolderBean();
 		
 		
-		List<FileTreeBean> arr = new ArrayList<FileTreeBean>();
+		List<FileBean> arr = new ArrayList<FileBean>();
 		
 		
-		FileTreeBean fileexm1 = new FileTreeBean();
+		FileBean fileexm1 = new FileBean();
 		fileexm1.setDescription("this is a new fileA");
 		fileexm1.setFileName("FileA");
 		
-		FileTreeBean fileexm2 = new FileTreeBean();
+		FileBean fileexm2 = new FileBean();
 		fileexm2.setDescription("this is a new fileB");
 		fileexm2.setFileName("FileB");
 		
-		FileTreeBean fileexm3 = new FileTreeBean();
+		FileBean fileexm3 = new FileBean();
 		fileexm3.setDescription("this is a new fileC");
 		fileexm3.setFileName("FileC");
 		
@@ -89,15 +89,15 @@ public class CacheDB {
 		
 		folderexm1.setFileTree(arr);
 		
-		List<FolderTreeBean> arrfolder = new ArrayList<FolderTreeBean>();
+		List<FolderBean> arrfolder = new ArrayList<FolderBean>();
 		arrfolder.add(folderexm1);
 		
 		projectexm.setFolderTree(arrfolder);
 		
-		saveProjectTree(projectexm);
+//		saveProjectTree(projectexm);
 		System.out.println("Project saved");
 		
 		
-		System.out.println("Project print:"+getProjectTree(203));
+		System.out.println("Project print:"+getProjectTree(110).getCreatedBy());
 	}
 }
