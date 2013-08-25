@@ -33,7 +33,7 @@
 	</bean>
 	<bean id="G" class="com.papteco.web.beans.FolderBean">
 		<property name="docType" value="G" />
-		<property name="folderName" value="Formal orders/Supplier contract" />
+		<property name="folderName" value="Formal orders, Supplier contract" />
 		<property name="nuberformat" value="xxx-zzz-fff" />
 	</bean>
 	<bean id="H" class="com.papteco.web.beans.FolderBean">

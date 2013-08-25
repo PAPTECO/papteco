@@ -7,14 +7,14 @@ import com.sleepycat.persist.model.Persistent;
 @Persistent
 public class FolderTreeBean {
 
-	private List<FileTreeBean> fileTree;
+	private List<FolderBean> folderTree;
 
-	public List<FileTreeBean> getFileTree() {
-		return fileTree;
+	public List<FolderBean> getFolderTree() {
+		return folderTree;
 	}
 
-	public void setFileTree(List<FileTreeBean> fileTree) {
-		this.fileTree = fileTree;
+	public void setFolderTree(List<FolderBean> folderTree) {
+		this.folderTree = folderTree;
 	}
 
 }

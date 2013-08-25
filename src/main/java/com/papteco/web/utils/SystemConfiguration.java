@@ -5,7 +5,7 @@ import java.util.List;
 import com.papteco.web.beans.ClientBean;
 import com.papteco.web.beans.FolderBean;
 
-public class SystemConfiguration {
+public class SystemConfiguration extends BaseUtils{
 	
 	/*pre defined folders structure*/
 	private List<FolderBean> preDefineFolderStructure;

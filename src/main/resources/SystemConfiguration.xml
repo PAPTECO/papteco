@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
+	<!-- <bean id="cacheDB" class="com.papteco.web.dbs.CacheDB">
+		<property name="DATAPATH" value="tmp/data" />
+	</bean> -->
+	
 	<bean id="sysConfig" class="com.papteco.web.utils.SystemConfiguration">
 		<property name="preDefineFolderStructure">
 			<list>

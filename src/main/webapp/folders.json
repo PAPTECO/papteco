@@ -19,8 +19,7 @@
 	        		"children":[{"_reference":"MO_1"}] },
 	        	{ "id": "MO_1", "name":"E9970-130310-136-Carbide knife grinder - Specifications.doc", "type":"country" },
 	        { "id": "QUO", "name":"Quotations", "type":"continent", "population":"900 million", "area": "30,221,532 sq km",
-	        		"timezone": "-1 UTC to +4 UTC",
-	        		"children":[{"_reference":"QUO_1"}] },
+	        		"timezone": "-1 UTC to +4 UTC"}] },
 	        { "id": "IVO", "name":"Invoices", "type":"continent", "population":"900 million", "area": "30,221,532 sq km",
 	        		"timezone": "-1 UTC to +4 UTC",
 	        		"children":[{"_reference":"QUO_2"}] }

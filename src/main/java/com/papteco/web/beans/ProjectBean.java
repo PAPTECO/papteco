@@ -1,5 +1,6 @@
 package com.papteco.web.beans;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,12 +8,19 @@ import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
 
 @Entity
-public class ProjectTreeBean {
+public class ProjectBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8155353323885191907L;
 
 	@PrimaryKey
 	private int projectId;
+	
+	private String projectCde;
 
-	private List<FolderTreeBean> folderTree;
+	private List<FolderBean> folderTree;
 
 	private String createdBy;
 
@@ -28,11 +36,11 @@ public class ProjectTreeBean {
 		this.projectId = projectId;
 	}
 
-	public List<FolderTreeBean> getFolderTree() {
+	public List<FolderBean> getFolderTree() {
 		return folderTree;
 	}
 
-	public void setFolderTree(List<FolderTreeBean> folderTree) {
+	public void setFolderTree(List<FolderBean> folderTree) {
 		this.folderTree = folderTree;
 	}
 
@@ -58,6 +66,14 @@ public class ProjectTreeBean {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getProjectCde() {
+		return projectCde;
+	}
+
+	public void setProjectCde(String projectCde) {
+		this.projectCde = projectCde;
 	}
 
 }
