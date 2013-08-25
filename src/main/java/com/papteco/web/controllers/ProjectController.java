@@ -31,7 +31,7 @@ public class ProjectController extends BaseController {
 		project2.setFolderTree(this.sysConfig.prepareFolderStructure());
 		project2.setProjectCde("9910-1301-112");
 		try {
-			projectService.createProject(project2);
+			projectService.createProject(project2, this.sysConfig.prepareFolderStructure());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -8,23 +8,24 @@ import java.util.List;
 import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.utils.BaseUtils;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.persist.EntityStore;
 import com.sleepycat.persist.PrimaryIndex;
 import com.sleepycat.persist.StoreConfig;
 
-public class CacheDB {
+public class CacheDB extends BaseUtils{
 
-	private static final String DATAPATH = "tmp/data";
+//	private static final String DATAPATH = "";
 	private static PrimaryIndex<Integer, ProjectBean> projectIndex;
 
 	static{
-		File f = new File(DATAPATH);
+		File f = new File(props.getProperty("datapath"));
 		if(!f.exists()){
 			f.mkdirs();
 		}
-		new CacheDB(DATAPATH);
+		new CacheDB(props.getProperty("datapath"));
 	}
 	
 	public CacheDB(String databasePath) {
@@ -98,6 +99,6 @@ public class CacheDB {
 		System.out.println("Project saved");
 		
 		
-		System.out.println("Project print:"+getProjectTree(110).getCreatedBy());
+		System.out.println("Project print:"+getProjectTree(110));
 	}
 }
