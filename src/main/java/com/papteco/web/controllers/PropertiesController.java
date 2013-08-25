@@ -1,8 +1,8 @@
 package com.papteco.web.controllers;
 
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.papteco.web.beans.ClientBean;
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.services.ClientService;
+import com.papteco.web.utils.WebUtils;
 
 @Controller
 public class PropertiesController extends BaseController {
 
 	// protected List<FolderBean> folders;
 	// protected List<ClientBean> clients;
-//	@Autowired
+	// @Autowired
 	protected ClientService clientService;
 
 	public int getIncreaseNumber() {
@@ -27,16 +28,23 @@ public class PropertiesController extends BaseController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "getPredefineStructureFolders")
 	@ResponseBody
-	public List<FolderBean> getPredefineStructureFolders() {
+	public Map getPredefineStructureFolders() {
 		System.out.println(this.sysConfig.prepareFolderStructure().size());
-		return this.sysConfig.prepareFolderStructure();
+		return WebUtils.toTreeJson(this.sysConfig.prepareFolderStructure());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "getClientInfo")
 	@ResponseBody
-	public List<ClientBean> getClientInfo() {
+	public Map getClientInfo() {
 		System.out.println(this.sysConfig.prepareClientsInfo().size());
-		return this.sysConfig.prepareClientsInfo();
+		return WebUtils.toClientJson(this.sysConfig.prepareClientsInfo());
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "getUniqueNo")
+	@ResponseBody
+	public Map getUniqueNo() {
+		
+		return WebUtils.toUniqueJson(6);
 	}
 
 	/* mandatory constructor method */

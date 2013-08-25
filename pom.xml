@@ -48,19 +48,23 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<dependency><!-- jackson -->
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>12.0</version>
+		</dependency>
+
 	</dependencies>
 
-	<!-- <repositories>
-		<repository>
-			<id>oracleReleases</id>
-			<name>Oracle Released Java Packages</name>
-			<url>http://download.oracle.com/maven</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots />
-		</repository>
-	</repositories> -->
+	<!-- <repositories> <repository> <id>oracleReleases</id> <name>Oracle Released 
+		Java Packages</name> <url>http://download.oracle.com/maven</url> <releases> 
+		<enabled>true</enabled> </releases> <snapshots /> </repository> </repositories> -->
 	<build>
 		<finalName>Papteco</finalName>
 	</build>

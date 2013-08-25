@@ -37,7 +37,6 @@
 
 
 <script type="text/javascript" src="lib/dojo/dojo.js"></script>
-
 <script>
 	require([ "dojo/parser", "dijit/layout/BorderContainer",
 			"dijit/layout/ContentPane" ]); // layout of content
@@ -62,42 +61,6 @@
 	/** for upload**/
 	require([ "dojox/form/FileInput" ]);
 
-
-	/** date type 
-	require([ "dojo/_base/declare", "dijit/form/DateTextBox",
-			"dojo/date/locale", "dojo/dom", "dojo/domReady!" ], function(
-			declare, DateTextBox, locale, dom) {
-		declare("DocDateTextBox", DateTextBox, {
-			oracleFormat : {
-				selector : 'date',
-				datePattern : 'yyyy-MMM-dd',
-				locale : 'en-us'
-			},
-			value : "", // prevent parser from trying to convert to Date object
-			postMixInProperties : function() { // change value string to Date object
-				this.inherited(arguments);
-			
-			alert(this.value);
-				// convert value to Date object
-				this.value = locale.parse(this.value, this.oracleFormat);
-			},
-			// To write back to the server in Oracle format, override the serialize method:
-			serialize : function(dateObject, options) {
-				alert(locale.format(dateObject, this.oracleFormat));
-				return locale.format(dateObject, this.oracleFormat);
-			}
-		});
-		//function showServerValue(){
-		//    dom.byId('toServerValue').value = document.getElementsByName('oracle')[0].value;
-		//}
-		new DocDateTextBox({
-			value : "2009-12-01",
-			name : "oracle"
-		//onChange: function(v){ setTimeout(showServerValue, 0)}
-		}, "docCreateDate");
-		//showServerValue();
-	});*/
-
 	/** for tab container**/
 	require([ "dojo/parser", "dijit/layout/TabContainer",
 			"dijit/layout/ContentPane" ]);
@@ -109,8 +72,10 @@
 	require([ "dojo/parser", "dojo/data/ItemFileReadStore", "dijit/Tree" ]);
 
 	require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
-			"dijit/tree/ForestStoreModel", "dojo/domReady!" ], function(Tree,
-			ItemFileReadStore, ForestStoreModel) {
+			"dijit/tree/ForestStoreModel", "dojo/store/Memory",
+			"dijit/tree/ObjectStoreModel", "dojo/domReady!" ], function(Tree,
+			ItemFileReadStore, ForestStoreModel, Memory, ObjectStoreModel) {
+
 		var store = new ItemFileReadStore({
 			url : "folders.json"
 		});
@@ -131,13 +96,7 @@
 			showRoot : false
 		}, "treeOne");
 		myTree.startup();
-		
-		var create_project_tree = new Tree({
-			model : treeModel,
-			showRoot : false
-		}, "createProjectFolders");
-		create_project_tree.startup();
-		
+
 	});
 
 	require([ "dojo/parser", "dojo/store/Memory", "dojo/query!css2",
@@ -146,164 +105,16 @@
 
 	/** for folder tree end*/
 
-	require(["dojo/parser", "dojo/store/Memory", "dijit/tree/ObjectStoreModel", "dijit/Tree"]);
-	
-	/** combox for client no.*/
+	require([ "dojo/parser", "dojo/store/Memory",
+			"dijit/tree/ObjectStoreModel", "dijit/Tree" ]);
 
-	require([ "dojo/store/Memory", "dijit/form/ComboBox", "dojo/domReady!" ],
-			function(Memory, ComboBox) {
-				var stateStore = new Memory({
-					data : [ {
-						name : "9862",
-						id : "9862"
-					}, {
-						name : "9966",
-						id : "9966"
-					}, {
-						name : "9912",
-						id : "9912"
-					}, {
-						name : "9911",
-						id : "9911"
-					} ]
-				});
-
-				var comboBox = new ComboBox({
-					id : "stateSelect",
-					name : "state",
-					value : "9911",
-					store : stateStore,
-					searchAttr : "name"
-				}, "stateSelect");
-			});
-	/** combox for client no. end */
-
-	require(
-			[ 'dojox/grid/EnhancedGrid',
-					'dojox/grid/enhanced/plugins/Pagination',
-					'dojo/data/ItemFileWriteStore',
-					'dojox/grid/enhanced/plugins/Selector', 'dojo/domReady!' ],
-			function(EnhancedGrid, Pagination, ItemFileWriteStore, Selector) {
-				/*set up data store*/
-				var data = {
-					identifier : 'id',
-					items : []
-				};
-				var data_list = [
-						{
-							col1 : "E9970-130310-136",
-							col2 : '7 May 2013 13:25:59',
-							col3 : 'Short description',
-							col4 : 'E9970-130310-136-Carbide knife grinder - Specifications.doc\n E9970-130310-136-Project2-Specifications.doc'
-						}, {
-							col1 : "E440-3234-2112",
-							col2 : '23 Apr 2013 18:25:59',
-							col3 : 'Because a % sign always indicates',
-							col4 : 'E440-3234-2112-Plan Specifications.doc'
-						}, {
-							col1 : "B330-2234-124",
-							col2 : '17 Dec 2013 09:25:59',
-							col3 : 'Signs can be selectively',
-							col4 : 'B330-2234-124-Qutations Specifications.doc'
-						} ];
-				var rows = 200;
-				for ( var i = 0, l = data_list.length; i < rows; i++) {
-					data.items.push(dojo.mixin({
-						id : i + 1
-					}, data_list[i % l]));
-				}
-				var store = new dojo.data.ItemFileWriteStore({
-					data : data
-				});
-
-				/*set up layout*/
-				var layout = [ [ {
-					name : 'Project ID',
-					field : 'col1',
-					width : "150px"
-				}, {
-					name : 'Last Modification At',
-					field : 'col2',
-					width : "150px"
-				}, {
-					name : 'Description',
-					field : 'col3',
-					width : "230px"
-				}, {
-					name : 'Searched document',
-					field : 'col4',
-					width : "300px"
-				} ] ];
-
-				/*create a new grid:*/
-				var grid = new dojox.grid.EnhancedGrid({
-					id : 'grid',
-					store : store,
-					structure : layout,
-					rowSelector : '20px',
-					selectionMode : 'none',
-					plugins : {
-						pagination : {
-							pageSizes : [ "25", "50", "100", "All" ],
-							description : true,
-							sizeSwitch : true,
-							pageStepper : true,
-							gotoButton : true,
-							/*page step to be displayed*/
-							maxPageStep : 4,
-							/*position of the pagination bar*/
-							position : "bottom"
-						},
-						selector : {
-							row : "single",
-							col : false,
-							cell : false
-						}
-					}
-				}, document.createElement('div'));
-
-				/*append the new grid to the div*/
-				dojo.byId("gridDiv").appendChild(grid.domNode);
-
-				/*Call startup() to render the grid*/
-				grid.startup();
-
-				var handle = dojo.connect(grid, "onEndSelect", function(type,
-						startPoint, endPoint, selected) {
-					//alert("startPoint:"+selected.row[0].col3);
-
-					require([ "dojo/_base/fx", "dojo/dom-style" ], function(fx,
-							style) {
-						// Function linked to the button to trigger the fade.
-						function fadeIt(tabname) {
-							style.set(tabname, "opacity", "1");
-							var fadeArgs = {
-								node : tabname
-							};
-							fx.fadeOut(fadeArgs).play();
-							style.set(tabname, "display", "none");
-						}
-						function fadeItShow(tabname) {
-							style.set(tabname, "opacity", "0");
-							style.set(tabname, "display", "block");
-							var fadeArgs = {
-								node : tabname
-							};
-							fx.fadeIn(fadeArgs).play();
-
-						}
-						fadeIt("MainSearchTab");
-						fadeItShow("DirectoryTab");
-
-					});
-
-				});
-
-			});
+	require([ "dojo/parser", "dijit/form/DateTextBox" ]);
 
 	// for validation on input box
 	require([ "dojo/parser", "dijit/form/ValidationTextBox" ]);
+
 	require([ "dojox/grid/TreeGrid" ]);
+
 	require([ "dijit/form/Button", "dojo/dom", "dojo/domReady!" ], function(
 			Button, dom) {
 		// Create a button programmatically:
@@ -342,6 +153,9 @@
 		});
 	}
 </script>
+<script type="text/javascript" src="lib/scripts/core.js"></script>
+<script type="text/javascript" src="lib/scripts/createprj.js"></script>
+<script type="text/javascript" src="lib/scripts/dosearch.js"></script>
 <!-- End of Libraries -->
 </head>
 <body class="claro">
@@ -398,8 +212,8 @@
 			<div id="search">
 				<form action="http://unithemes.net/search/" method="POST">
 					<p>
-						<input type="submit" value="" class="but" /> <input type="text"
-							name="q" value="Search project"
+						<input id="psch" type="submit" value="" class="but" /> <input
+							type="text" name="q" value="Search project"
 							onfocus="if(this.value==this.defaultValue)this.value='';"
 							onblur="if(this.value=='')this.value=this.defaultValue;" />
 					</p>
@@ -412,18 +226,21 @@
 	</div>
 	<!-- End of Container -->
 
-	<div data-dojo-type="dijit/layout/BorderContainer"
+	<div data-dojo-id="mainbc"
+		data-dojo-type="dijit/layout/BorderContainer"
 		style="width: 100%; height: 100%; margin: 0px; padding: 0px;">
 
-		<div data-dojo-type="dijit/layout/ContentPane"
+		<div data-dojo-id="maincpleft"
+			data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="region:'leading'" style="margin: 0px; padding: 0px;">
 			<div style="width: 250px; height: 100%;">
-				<div data-dojo-type="dijit/layout/TabContainer"
-					class="leadingtabcus">
+				<div data-dojo-id="maincp_tc"
+					data-dojo-type="dijit/layout/TabContainer" class="leadingtabcus">
 
-					<div data-dojo-type="dijit/layout/ContentPane" title="Tools"
+					<div data-dojo-id="maincp_tc_cp1"
+						data-dojo-type="dijit/layout/ContentPane" title="Tools"
 						data-dojo-props="selected:true">
-						<a onclick="createProjectDialog.show()" id="SearchButton3"
+						<a onclick="createProjectShowUp()" id="SearchButton3"
 							class="bWhite notext_wrap" title="" href="#">
 							<div>
 								<img src="assets/icons/create_documents.png" style="width: 48px" />
@@ -431,7 +248,8 @@
 							<div>Create Project</div>
 						</a>
 					</div>
-					<div data-dojo-type="dijit/layout/ContentPane" title="Projects">
+					<div data-dojo-id="maincp_tc_cp2"
+						data-dojo-type="dijit/layout/ContentPane" title="Projects">
 
 						<ul class="filesDown">
 							<li><span class="fileSuccess"></span> 202-039-4056
@@ -443,7 +261,8 @@
 						</ul>
 					</div>
 
-					<div data-dojo-type="dijit/layout/ContentPane" title="Search">
+					<div data-dojo-id="maincp_tc_cp3"
+						data-dojo-type="dijit/layout/ContentPane" title="Search">
 						<ul class="filesDown">
 							<li><span class="fileSearch"></span> Client is 203 <span
 								class="remove"></span></li>
@@ -456,7 +275,8 @@
 				</div>
 			</div>
 		</div>
-		<div data-dojo-type="dijit/layout/ContentPane"
+		<div data-dojo-id="maincpcenter"
+			data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="region:'center'" style="margin: 0px; padding: 0px;">
 
 			<div id="MainSearchTab" class="gridsize">
@@ -476,7 +296,7 @@
 							data-dojo-props="regExp:'[\\w]+', invalidMessage:'Invalid Non-Space Text.'" />
 						<div class="notext_wrap" style="padding-left: 20px">&nbsp;</div>
 						<a id="SearchButton1" class="insideFont bLightBlue notext_wrap"
-							title="" href="#">Search</a>
+							title="" href="#" onClick="doSearch()">Search</a>
 						<div class="blank_interval notext_wrap">&nbsp;</div>
 						<a id="SearchButton1" class="insideFont bGreen notext_wrap"
 							title="" href="#" onclick="searchSaveDialog.show()">+Add to
@@ -502,7 +322,7 @@
 
 					</legend>
 					<div style="float: left; padding: 30px">
-						<h1>Project Name</h1>
+						<h1 id="prj_name">Project Name</h1>
 						<div class="blank_interrupt"></div>
 						<a id="SearchButton2" onClick="backtosearch();"
 							class="insideFont bGreen notext_wrap " title="" href="#">+
@@ -510,12 +330,12 @@
 					</div>
 					<div style="padding: 30, 0, 30, 0">
 						<label for="sf" class="labelstyle">Creator: </label><label
-							for="sf" class="labelContentstyle">John</label> <label for="sf">Last
+							for="sf" class="labelContentstyle" id="prj_creator">John</label> <label for="sf" >Last
 							Modification At: </label> <label for="sf"
-							class="notext_wrap labelContentstyle"><b>07 May 2013
+							class="notext_wrap labelContentstyle" id="prj_modify"><b>07 May 2013
 								12:59:80</b></label>
 						<div class="blank_interrupt"></div>
-						<span style="width: auto;">Here's an example of creating a
+						<span style="width: auto;" id="prj_desc">Here's an example of creating a
 							Tree in markup. It's not wrapping the store in Observable(), so
 							that store updates won't be reflected into the tree. (Wrapping
 							the store in Observable is not easy to do through markup. If you
@@ -526,7 +346,8 @@
 					</div>
 				</fieldset>
 				<div class="bgray1">
-					<div data-dojo-type="dijit/layout/ContentPane" title="Projects"
+					<div data-dojo-id="sectioncp"
+						data-dojo-type="dijit/layout/ContentPane" title="Projects"
 						style="float: left">
 						<div class="fileInfo">
 							<fieldset>
@@ -569,7 +390,8 @@
 						</div>
 
 					</div>
-					<div data-dojo-type="dijit/layout/ContentPane" title="Projects"
+					<div data-dojo-id="sectioncp2"
+						data-dojo-type="dijit/layout/ContentPane" title="Projects"
 						style="width: 400px">
 						<div id="treeOne"></div>
 					</div>
@@ -678,52 +500,69 @@ documentFormDialog.show();
 				</div>
 			</div>
 
+
 			<div data-dojo-type="dijit/Dialog" data-dojo-id="createProjectDialog"
 				title="Create New Project"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
-				<div class="dijitDialogPaneContentArea">
-					<table class="dijitdialog_index">
-						<tr>
-							<td><label for="name">Project Name: </label></td>
-							<td><!-- <input id="stateSelect"> -->
-							
-							<input
-								data-dojo-type="dijit/form/TextBox" type="text" id="name3"
-								value="9911" class="dialogNum"> - <input
-								data-dojo-type="dijit/form/TextBox" type="text" id="name3"
-								value="1308" class="dialogNum">- <input
-								data-dojo-type="dijit/form/TextBox" type="text" id="name4"
-								value="112" class="dialogNum">
-								- <input
-								data-dojo-type="dijit/form/TextBox" type="text" id="name4"
-								value="Description here" class="dialogText"></td>
-						</tr>
-						
-						<tr>
-							<td><label for="desc">Description: </label></td>
-							<td><textarea id="textarea2" name="textarea2"
-									data-dojo-type="dijit/form/Textarea" style="width: 200px;">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</textarea></td>
-						</tr>
-						<tr>
-							<td><label for="name">Folders: </label></td>
-							<td>
-								<div id="createProjectFolders"></div>
-							</td>
-						</tr>
-					</table>
+				<div data-dojo-type="dijit/form/Form" id="prjcreateform"
+					data-dojo-id="prjcreateform" encType="multipart/form-data"
+					action="" method="">
+
+					<div class="dijitDialogPaneContentArea">
+
+						<div style="float: left">
+							<fieldset style="float: left">
+								<legend>Require Information</legend>
+								<table class="dijitdialog_index">
+									<tr>
+										<td><label for="name">Client No: </label></td>
+										<td><input id="clientSelect" /></td>
+									</tr>
+									<tr>
+										<td><label for="name">Create Date: </label></td>
+										<td><input id="prjym" /></td>
+									</tr>
+									<tr>
+										<td><label for="name">Unique No: </label></td>
+										<td><input id="prjno" style="width: 330px;" /></td>
+									</tr>
+									<tr>
+										<td><label for="name">Short Desc: </label></td>
+										<td><input id="prjshortdesc"
+											style="width: 330px; height: 24px" required="true"
+											data-dojo-type="dijit/form/ValidationTextBox" /></td>
+									</tr>
+									<tr>
+										<td><label for="desc">Long Desc: </label></td>
+										<td><textarea id="prjlongdesc" name="prjlongdesc"
+												data-dojo-type="dijit/form/Textarea" rows="4"
+												style="width: 340px;"></textarea></td>
+									</tr>
+
+								</table>
+								<div class="dijitDialogPaneActionBar">
+									<button data-dojo-id="createprjsubmit"
+										data-dojo-type="dijit/form/Button" type="button"
+										onClick="submitCreateProject()">Create</button>
+									<button data-dojo-type="dijit/form/Button" type="button"
+										onClick="createProjectDialog.hide()">Cancel</button>
+								</div>
+							</fieldset>
+						</div>
+
+						<fieldset>
+							<legend>Folders</legend>
+							<div id="createProjectFolders"></div>
+						</fieldset>
+					</div>
 				</div>
 
-				<div class="dijitDialogPaneActionBar">
-					<button data-dojo-type="dijit/form/Button" type="submit"
-						onClick="return myFormDialog.isValid();">Create</button>
-					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="myFormDialog.hide()">Cancel</button>
-				</div>
 			</div>
 
 		</div>
-		<div class="buttom" data-dojo-type="dijit/layout/ContentPane"
+		<div data-dojo-id="maincpbottom" class="buttom"
+			data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="region:'bottom'">
 
 			<div>PAPTECO Engineering & Sales (GZ) Co., Ltd.</div>
@@ -735,8 +574,10 @@ documentFormDialog.show();
 			<div>Copyright 2013-2014 by Papteco. All Rights Reserved.</div>
 		</div>
 		<!-- end of bottom-->
-	</div>
+		<div data-dojo-type="dijit/Dialog" data-dojo-id="loadingDialog"
+			title="Loading...">Please wait...</div>
 
+	</div>
 </body>
 </html>
 
