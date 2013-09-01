@@ -8,7 +8,8 @@
 </head>
 <body>
     <div>
-        <form action="createProject" methed="get">
+        
+<form action="createProject" method="post">
             <input type="text" name="username">
             <input type="submit" value="SUBMIT">
         </form>

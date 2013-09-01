@@ -13,8 +13,14 @@
 	<mvc:annotation-driven />
 	<mvc:default-servlet-handler />
 	<!-- 对包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 需要更改 -->
-	<context:component-scan base-package="cc.monggo.web.controller" />
 	<context:component-scan base-package="com.papteco.web.controllers" />
+	<context:component-scan base-package="com.papteco.web.services" />
+	<context:component-scan base-package="com.papteco.web.beans" />
+	<context:component-scan base-package="com.papteco.web.utils" />
+	<context:component-scan base-package="com.papteco.web.dbs" />
+	
+	<!-- environment properties -->
+	<util:properties id="settings" location="classpath:environment.properties" />
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -25,8 +31,6 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
-	
-	<context:component-scan base-package="com.papteco.web.beans" />
 	
 	<bean id="jacksonMessageConverter"
 		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>

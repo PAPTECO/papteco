@@ -3,12 +3,15 @@ package com.papteco.web.utils;
 import java.io.File;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.papteco.web.beans.FolderBean;
 
+@Component
 public class FoldersUtils extends BaseUtils{
 	
 	// this is retry function
-	public static void createProjectFolders(String projectPath, List<FolderBean> folderList){
+	public void createProjectFolders(String projectPath, List<FolderBean> folderList){
 		if(!projectPath.endsWith("/") && !projectPath.endsWith("\\")){
 			projectPath = projectPath + "/";
 		}
@@ -39,8 +42,8 @@ public class FoldersUtils extends BaseUtils{
 		System.out.println("Folders creation finish.");
 	}
 	
-	public static String prepareProjectPath(String projectCode){
-		String rPath = props.getProperty("rootpath");
+	public String prepareProjectPath(String projectCode){
+		String rPath = rootpath;
 		if(!rPath.endsWith("/") && !rPath.endsWith("\\")){
 			rPath = rPath + "/";
 		}

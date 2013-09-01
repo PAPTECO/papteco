@@ -4,30 +4,31 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.ImmutableMap;
-import com.papteco.web.beans.CreateProjectFormBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.services.ProjectService;
 import com.papteco.web.utils.WebUtils;
 
 @Controller
 public class ProjectController extends BaseController {
-
+	@Autowired
 	private ProjectService projectService;
 
 	@RequestMapping(method = RequestMethod.POST, value = "createProject")
 	@ResponseBody
-	public Map createProject(@RequestBody CreateProjectFormBean bean)
+	public Map createProject()
 			throws Exception {
-
-		System.out.println(bean);
+		logger.info("Create Project!!!!!");
+		logger.debug("debug");
+		logger.error("error");
+//		System.out.println(bean);
 
 		ProjectBean project2 = new ProjectBean();
 		project2.setProjectId(110);
