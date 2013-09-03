@@ -6,12 +6,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.ImmutableMap;
+import com.papteco.web.beans.CreateProjectFormBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.services.ProjectService;
 import com.papteco.web.utils.WebUtils;
@@ -23,22 +25,22 @@ public class ProjectController extends BaseController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "createProject")
 	@ResponseBody
-	public Map createProject()
+	public Map createProject(@RequestBody CreateProjectFormBean bean)
 			throws Exception {
 		logger.info("Create Project!!!!!");
-		logger.debug("debug");
-		logger.error("error");
-//		System.out.println(bean);
-
-		ProjectBean project2 = new ProjectBean();
-		project2.setProjectId(110);
-		project2.setCreatedAt(new Date());
-		project2.setCreatedBy("ConyGA");
-		project2.setDescription("testing project");
-		project2.setFolderTree(this.sysConfig.prepareFolderStructure());
-		project2.setProjectCde("9910-1301-112");
+		ProjectBean tmpProject = new ProjectBean();
+		tmpProject.setProjectCde(bean.getClientno()+"-"+genProjectCreateDate(bean)+"-"+bean.getUniqueno());
+		tmpProject.setClientNo(bean.getClientno());
+		tmpProject.setCreateDate(genProjectCreateDate(bean));
+		tmpProject.setUniqueNo(bean.getUniqueno());
+		tmpProject.setCreatedAt(new Date());
+		tmpProject.setCreatedBy("wasadmin");
+		tmpProject.setShortDesc(bean.getShortdesc());
+		tmpProject.setLongDesc(bean.getLongdesc());
+		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
+		
 		try {
-			projectService.createProject(project2,
+			projectService.createProject(tmpProject,
 					this.sysConfig.prepareFolderStructure());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -57,17 +59,19 @@ public class ProjectController extends BaseController {
 		System.out.println(searchClinetno);
 		System.out.println(searchAnykey);
 
-		return WebUtils.toSearchGrid();
+		return WebUtils.toSearchGrid(searchClinetno, searchAnykey);
  
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "getProject")
 	@ResponseBody
 	public Map getProject(@RequestParam String projectId) throws Exception {
-
 		System.out.println(projectId);
+		return WebUtils.toProjectSummaries(Integer.valueOf(projectId));
 
-		return WebUtils.toProjectSummaries();
-
+	}
+	
+	private String genProjectCreateDate(CreateProjectFormBean bean){
+		return bean.getCreateDate().substring(2, 6);
 	}
 }

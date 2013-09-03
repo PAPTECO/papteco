@@ -29,22 +29,19 @@ public class PropertiesController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getPredefineStructureFolders")
 	@ResponseBody
 	public Map getPredefineStructureFolders() {
-		System.out.println(this.sysConfig.prepareFolderStructure().size());
 		return WebUtils.toTreeJson(this.sysConfig.prepareFolderStructure());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "getClientInfo")
 	@ResponseBody
 	public Map getClientInfo() {
-		System.out.println(this.sysConfig.prepareClientsInfo().size());
 		return WebUtils.toClientJson(this.sysConfig.prepareClientsInfo());
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "getUniqueNo")
 	@ResponseBody
 	public Map getUniqueNo() {
-		
-		return WebUtils.toUniqueJson(6);
+		return WebUtils.toUniqueJson();
 	}
 
 	/* mandatory constructor method */

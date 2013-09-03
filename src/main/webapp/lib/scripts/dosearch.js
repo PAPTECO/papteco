@@ -14,7 +14,7 @@ require([ 'dojox/grid/EnhancedGrid', 'dojox/grid/enhanced/plugins/Pagination',
 
 	/* set up layout */
 	var layout = [ [ {
-		name : 'Project ID',
+		name : 'Project Code',
 		field : 'col1',
 		width : "150px"
 	}, {
@@ -115,7 +115,8 @@ function refreshProjectBroad(projectId) {
 				xhr("getProject", {
 					handleAs : "json",
 					query : dataset,
-					method : "get"
+					method : "get",
+					preventCache : true
 				}).then(function(datas) {
 
 					console.log("projectsummary",datas);
@@ -158,7 +159,8 @@ function doSearch() {
 				xhr("doSearch", {
 					handleAs : "json",
 					query : dataset,
-					method : "get"
+					method : "get",
+					preventCache : true
 				}).then(function(datas) {
 
 					data.items = datas;

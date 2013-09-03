@@ -8,6 +8,7 @@ import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.dbs.DBCacheDAO;
 import com.papteco.web.utils.FSUtils;
+import com.sleepycat.persist.EntityCursor;
 
 @Service
 public class ProjectServiceImpl extends BaseService implements ProjectService {
@@ -19,10 +20,17 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 
 	public void createProject(ProjectBean project, List<FolderBean> folderList) throws Exception {
 //		FSUtils.putFile(null, null);
+		project.setProjectId(DBCacheDAO.getMaxProjectId());
 		foldersUtils.createProjectFolders(foldersUtils.prepareProjectPath(project.getProjectCde()), folderList);
 		DBCacheDAO.saveProjectTree(project);
-		System.out.println(project.getProjectId());
-		System.out.println(DBCacheDAO.getProjectTree(project.getProjectId()));
+		
+//		System.out.println(DBCacheDAO.getMaxProjectId());
+//		System.out.println(project.getProjectCde());
+//		System.out.println(DBCacheDAO.getProjectTree(project.getProjectId()));
+//		EntityCursor<ProjectBean> list = DBCacheDAO.getAllProjectBeans();
+//		for (ProjectBean bean : list){
+//			System.out.println(bean.getClientNo());
+//		}
 	}
 
 	/* mandatory constructor method */
