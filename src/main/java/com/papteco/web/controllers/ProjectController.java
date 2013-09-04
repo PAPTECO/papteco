@@ -104,7 +104,6 @@ public class ProjectController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getProject")
 	@ResponseBody
 	public Map getProject(@RequestParam String projectId) throws Exception {
-
 		System.out.println(projectId);
 		return WebUtils.toProjectSummaries(Integer.valueOf(projectId));
 

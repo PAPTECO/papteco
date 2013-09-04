@@ -1,7 +1,6 @@
 package com.papteco.web.utils;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +74,6 @@ public class WebUtils {
 
 		List<ProjectBean> searchResult = DBCacheDAO.getProjectBeansByFilter(searchClinetno, searchAnykey);
 		List datalist = Lists.newArrayList();
-		
 
 		for(int i = 0; i< searchResult.size(); i++){
 			ProjectBean bean = searchResult.get(i);
