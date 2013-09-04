@@ -5,12 +5,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.papteco.web.beans.ClientBean;
 import com.papteco.web.beans.FolderBean;
-import com.papteco.web.beans.FolderTreeBean;
+import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.dbs.DBCacheDAO;
 
 public class WebUtils {
 
@@ -32,6 +35,19 @@ public class WebUtils {
 
 		return result;
 	}
+	
+	public static Map toDocJson(List<FolderBean> beans) {
+
+		Map result = Maps.newHashMap();
+		
+		List resultList = Lists.newArrayList();
+		for (FolderBean bean : beans) {
+			resultList.add(ImmutableMap.of("id", bean.getDocType(),
+					"name", bean.getFolderName()));
+		}
+		result.put("data", resultList);
+		return result;
+	}
 
 	public static Map toClientJson(List<ClientBean> prepareClientsInfo) {
 		Map result = Maps.newHashMap();
@@ -50,46 +66,61 @@ public class WebUtils {
 		return result;
 	}
 
-	public static Map toUniqueJson(int maxno) {
-		return ImmutableMap.of("max", maxno);
+	public static Map toUniqueJson() {
+		System.out.println(DBCacheDAO.getMaxProjectId());
+		return ImmutableMap.of("max", DBCacheDAO.getMaxProjectId());
 	}
 
-	public static List toSearchGrid() {
+	public static List toSearchGrid(String searchClinetno, String searchAnykey) {
 
+		List<ProjectBean> searchResult = DBCacheDAO.getProjectBeansByFilter(searchClinetno, searchAnykey);
 		List datalist = Lists.newArrayList();
-		Map data = ImmutableMap
-				.of("col1",
-						"E9970-130310-136",
-						"col2",
-						"7 May 2013 13:25:59",
-						"col3",
-						"Short description",
-						"col4",
-						"E9970-130310-136-Carbide knife grinder - Specifications.doc\n E9970-130310-136-Project2-Specifications.doc",
-						"col5", "James");
+		
 
-		Map testdata = Maps.newHashMap();
-		testdata.put("id", "1");
-		testdata.putAll(data);
-		datalist.add(testdata);
-
-		testdata = Maps.newHashMap();
-		testdata.put("id", "2");
-		testdata.putAll(data);
-		datalist.add(testdata);
-
-		testdata = Maps.newHashMap();
-		testdata.put("id", "3");
-		testdata.putAll(data);
-		datalist.add(testdata);
-
+		for(int i = 0; i< searchResult.size(); i++){
+			ProjectBean bean = searchResult.get(i);
+			Map data = ImmutableMap
+					.of("col1",
+							bean.getProjectCde(),
+							"col2",
+							bean.getCreatedAt().toLocaleString(),
+							"col3",
+							bean.getShortDesc(),
+							"col4",
+							"E9970-130310-136-Carbide knife grinder - Specifications.doc\n E9970-130310-136-Project2-Specifications.doc",
+							"col5",
+							bean.getCreatedBy());
+			Map testdata = Maps.newHashMap();
+			testdata.put("id", i+1);
+			testdata.putAll(data);
+			datalist.add(testdata);
+		}
 		return datalist;
 	}
 
-	public static Map toProjectSummaries() {
-		return ImmutableMap.of("projectIndentify", "xxx-xxx-sample", "createdBy",
-				"John", "createdAt", "7 May 2013 13:25:59", "description",
-				"description");
+	public static Map toProjectSummaries(int projectId) {
+		ProjectBean bean = DBCacheDAO.getProjectTree(projectId);
+		
+		return ImmutableMap.of("projectIndentify", bean.getProjectCde(), "createdBy",
+				bean.getCreatedBy(), "createdAt", bean.getCreatedAt().toLocaleString(), "description",
+				bean.getLongDesc());
+		
+	}
+	
+	public static Map toDocsSummaries() {
+		return ImmutableMap.of("id", "AF", "name",
+				"Africa", "type", "continent", "children",
+				Lists.newArrayList());
+		
+	}
+	
+	public static Map responseWithStatusCode() {
+		return responseWithStatusCode(true,"None");
+		
+	}
+	
+	public static Map responseWithStatusCode(boolean status,String errmsg) {
+		return ImmutableMap.of("status",status,"err",StringUtils.isEmpty(errmsg)?"None":errmsg);
 		
 	}
 }

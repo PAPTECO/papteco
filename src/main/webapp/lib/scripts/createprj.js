@@ -52,8 +52,11 @@ function loadingClients(tagid) {
 				name : "state",
 				value : "",
 				store : clientStore,
-				searchAttr : "name",
-				style : "width:340px;"
+				searchAttr : "id",
+				labelAttr: 'name',
+				style : "width:340px;",
+				required : true,
+				autoComplete : false
 			}, tagid);
 
 		}, function(err) {
@@ -90,13 +93,12 @@ function loadingdate(tagid) {
 }
 
 function loadinguniqueno(tagid) {
-
 	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
 			function(dom, xhr, JSON, parser) {
 				xhr.get("getUniqueNo", {
-					handleAs : "json"
+					handleAs : "json",
+					preventCache : true
 				}).then(function(datas) {
-
 					console.log("datas", datas);
 
 					var node = dom.byId(tagid);
@@ -156,13 +158,16 @@ function submitCreateProject() {
 					handleAs : "json",
 					data : JSON.stringify(dataset),
 					method : "post",
+					preventCache : true,
 					headers : {
 						'Content-Type' : 'application/json'
 					}
 				}).then(function(datas) {
 
 					console.log("datas", datas);
-
+					dom.byId("clientSelect").value = "";
+					dom.byId("prjshortdesc").value = "";
+					dom.byId("prjlongdesc").value = "";
 				}, function(err) {
 					// Handle the error condition
 					console.log(err);

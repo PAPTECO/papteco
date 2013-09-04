@@ -1,20 +1,16 @@
 package com.papteco.web.utils;
 
-import java.io.IOException;
-import java.util.Properties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BaseUtils {
 
-	protected static Properties props;
+	/* properties value; */
+	@Value("#{settings['rootpath']}")
+	protected String rootpath;
+	
+	@Value("#{settings[datapath]}")
+	protected String datapath;
 
-	static {
-		props = new Properties();
-		try {
-			props.load(BaseUtils.class.getClassLoader().getResourceAsStream(
-					"environment.properties"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

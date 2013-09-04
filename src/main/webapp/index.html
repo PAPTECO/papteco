@@ -71,34 +71,6 @@
 	/** for folder tree*/
 	require([ "dojo/parser", "dojo/data/ItemFileReadStore", "dijit/Tree" ]);
 
-	require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
-			"dijit/tree/ForestStoreModel", "dojo/store/Memory",
-			"dijit/tree/ObjectStoreModel", "dojo/domReady!" ], function(Tree,
-			ItemFileReadStore, ForestStoreModel, Memory, ObjectStoreModel) {
-
-		var store = new ItemFileReadStore({
-			url : "folders.json"
-		});
-
-		var treeModel = new ForestStoreModel({
-			store : store,
-			query : {
-				"type" : "continent"
-			},
-			rootId : "root",
-			rootLabel : "Continents",
-			childrenAttrs : [ "children" ],
-			openOnClick : true
-		});
-
-		var myTree = new Tree({
-			model : treeModel,
-			showRoot : false
-		}, "treeOne");
-		myTree.startup();
-
-	});
-
 	require([ "dojo/parser", "dojo/store/Memory", "dojo/query!css2",
 			"dijit/Menu", "dijit/MenuItem", "dijit/tree/ObjectStoreModel",
 			"dijit/Tree" ]);
@@ -156,6 +128,8 @@
 <script type="text/javascript" src="lib/scripts/core.js"></script>
 <script type="text/javascript" src="lib/scripts/createprj.js"></script>
 <script type="text/javascript" src="lib/scripts/dosearch.js"></script>
+<script type="text/javascript" src="lib/scripts/docopr.js"></script>
+<script type="text/javascript" src="lib/scripts/uploadfile.js"></script>
 <!-- End of Libraries -->
 </head>
 <body class="claro">
@@ -330,19 +304,19 @@
 					</div>
 					<div style="padding: 30, 0, 30, 0">
 						<label for="sf" class="labelstyle">Creator: </label><label
-							for="sf" class="labelContentstyle" id="prj_creator">John</label> <label for="sf" >Last
-							Modification At: </label> <label for="sf"
-							class="notext_wrap labelContentstyle" id="prj_modify"><b>07 May 2013
-								12:59:80</b></label>
+							for="sf" class="labelContentstyle" id="prj_creator">John</label>
+						<label for="sf">Last Modification At: </label> <label for="sf"
+							class="notext_wrap labelContentstyle" id="prj_modify"><b>07
+								May 2013 12:59:80</b></label>
 						<div class="blank_interrupt"></div>
-						<span style="width: auto;" id="prj_desc">Here's an example of creating a
-							Tree in markup. It's not wrapping the store in Observable(), so
-							that store updates won't be reflected into the tree. (Wrapping
-							the store in Observable is not easy to do through markup. If you
-							need the functionality, we suggest creating the store in
-							JavaScript, or create your own custom store. In any case, the
-							dijit.tree.Model and dijit.Tree themselves can still be created
-							in markup.) </span>
+						<span style="width: auto;" id="prj_desc">Here's an example
+							of creating a Tree in markup. It's not wrapping the store in
+							Observable(), so that store updates won't be reflected into the
+							tree. (Wrapping the store in Observable is not easy to do through
+							markup. If you need the functionality, we suggest creating the
+							store in JavaScript, or create your own custom store. In any
+							case, the dijit.tree.Model and dijit.Tree themselves can still be
+							created in markup.) </span>
 					</div>
 				</fieldset>
 				<div class="bgray1">
@@ -363,6 +337,8 @@
 										Only</a>&nbsp;&nbsp;&nbsp; <a id="EditDoc"
 										onClick="backtosearch();"
 										class="insideFont bgray notext_wrap " title="" href="#">Edit
+										Doc</a> <a id="UploadDoc" onClick="uploadFileFormShow();"
+										class="insideFont bGold notext_wrap " title="" href="#">Upload
 										Doc</a>
 								</p>
 								<hr />
@@ -377,12 +353,12 @@
 								</p>
 								<p>
 									<label for="sf">Initial upload at: </label> <span
-										class="field_desc" id="doc_last_modi_at">19 May 2013
+										class="field_desc" id="doc_init_upload_at">19 May 2013
 										22:12</span>
 								</p>
 								<p>
 									<label for="sf">Initial upload by: </label> <span
-										class="field_desc" id="doc_last_modi_by">Alan Copar</span>
+										class="field_desc" id="doc_init_upload_by">Alan Copar</span>
 								</p>
 
 							</fieldset>
@@ -393,11 +369,11 @@
 					<div data-dojo-id="sectioncp2"
 						data-dojo-type="dijit/layout/ContentPane" title="Projects"
 						style="width: 400px">
-						<div id="treeOne"></div>
+						<div id="doctree"></div>
 					</div>
 				</div>
 				<ul id="menuTree_menu" data-dojo-type="dijit/Menu"
-					data-dojo-props='style:"display: none;", targetNodeIds: ["treeOne"], selector: ".dijitTreeNode"'>
+					data-dojo-props='style:"display: none;", targetNodeIds: ["doctree"], selector: ".dijitTreeNode"'>
 					<li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
                             // get a hold of the dijit.TreeNode that was the source of this open event
@@ -405,76 +381,108 @@
 
                             // now print the data store item that backs the tree node
                             console.debug("menu click for item: ", tn.item.name);
-documentFormDialog.show();
-                    </script> Upload</li>
-					<li data-dojo-type="dijit/MenuItem"><script
-							type="dojo/connect" data-dojo-event="onClick">
-                            // get a hold of the dijit.TreeNode that was the source of this open event
-                            var tn = dijit.byNode(this.getParent().currentTarget);
+alert("deleting"+tn.item.id);
+							require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
+			function(dom, xhr, JSON, parser) {
 
-                            // now print the data store item that backs the tree node
-                            console.debug("menu click for item: ", tn.item.name);
-                    </script> View</li>
+				dataset = {
+						"projectId" : tn.item.id
+				};
+
+				xhr("deleteDocs", {
+					handleAs : "json",
+					query : dataset,
+					method : "get"
+				}).then(function(datas) {
+
+					console.log("deleted",datas);
+					
+					//refreshDocBroad(projectId);
+				}, function(err) {
+					// Handle the error condition
+					console.log(err);
+				}, function(evt) {
+					// Handle a progress event from the request if the
+					// browser supports XHR2
+					console.log(evt);
+				});
+
+			});
+
+							
+
+                    </script>Delete</li>
 				</ul>
 
 
 			</div>
 
 
-			<div data-dojo-type="dijit/Dialog" data-dojo-id="documentFormDialog"
-				title="Upload documents"
+			<div data-dojo-type="dijit/Dialog"
+				data-dojo-id="uploadFileFormDialog" title="Upload documents"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
-				<div class="dijitDialogPaneContentArea">
-					<table class="dijitdialog_index">
-						<tr>
-							<td><label for="name">Target File Name: </label></td>
-							<td><input data-dojo-type="dijit/form/TextBox" type="text"
-								id="name1" value="D6606" class="dialogNum">- <input
-								data-dojo-type="dijit/form/TextBox" type="text" id="name2"
-								value="M010" class="dialogNum">- <input
-								data-dojo-type="dijit/form/TextBox" type="text" id="name3"
-								value="0110" class="dialogNum">- <input
-								data-dojo-type="dijit/form/TextBox" type="text" id="name4"
-								value="003-Message plate Rev03.doc" class="dialogText"></td>
-						</tr>
-						<tr>
-							<td><label for="name">Upload to folder: </label></td>
-							<td><input data-dojo-type="dijit/form/TextBox" type="text"
-								name="name" id="name" value="--Quotation"></td>
-						</tr>
-						<tr>
-							<td><label for="loc">File Name: </label></td>
-							<td><input data-dojo-type="dijit/form/TextBox" type="text"
-								name="loc" id="loc" value="003-Message plate Rev03"></td>
-						</tr>
-						<tr>
-							<td><label for="date">Numbering format: </label></td>
-							<td><select data-dojo-type="dijit/form/ComboBox" id="fruit"
-								name="fruit">
-									<option>xxx-yyyy-xxx</option>
-									<option selected>xxxx-zzz-bbb</option>
-									<option>xyx-www-pppp</option>
-							</select></td>
-						</tr>
-						<tr>
-							<td><label for="desc">Description: </label></td>
-							<td><textarea id="textarea2" name="textarea2"
-									data-dojo-type="dijit/form/Textarea" style="width: 200px;">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</textarea></td>
-						</tr>
-						<tr>
-							<td><label for="desc">Local path</label></td>
-							<td><input type="file" /></td>
-						</tr>
-					</table>
-				</div>
+				<form method="post" action="submitUploadFile" id="myForm"
+					enctype="multipart/form-data">
+					<div class="dijitDialogPaneContentArea">
+						<table class="dijitdialog_index">
+							<tr>
+								<td><label for="date">Document Type: </label></td>
+								<td><input id="upload_doctype">
+									</td>
+							</tr>
+							<tr>
+								<td><label for="name">Field1: </label></td>
+								<td><input data-dojo-type="dijit/form/TextBox" type="text"
+									name="upload_f1" id="upload_f1" value="upload_f1"></td>
+							</tr>
+							<tr>
+								<td><label for="name">Field2: </label></td>
+								<td><input data-dojo-type="dijit/form/TextBox" type="text"
+									name="upload_f2" id="upload_f2" value="upload_f2"></td>
+							</tr>
+							<tr>
+								<td><label for="name">Field3: </label></td>
+								<td><input data-dojo-type="dijit/form/TextBox" type="text"
+									name="upload_f3" id="upload_f3" value="upload_f3"></td>
+							</tr>
+							<tr>
+								<td><label for="name">Field4: </label></td>
+								<td><input data-dojo-type="dijit/form/TextBox" type="text"
+									name="upload_f4" id="upload_f4" value="upload_f4"></td>
+							</tr>
+							<tr>
+								<td><label for="name">Field5: </label></td>
+								<td><input data-dojo-type="dijit/form/TextBox" type="text"
+									name="upload_f5" id="upload_f5" value="upload_f5"></td>
+							</tr>
+							<tr>
+								<td><label for="name">Field6: </label></td>
+								<td><input data-dojo-type="dijit/form/TextBox" type="text"
+									name="upload_f6" id="upload_f6" value="upload_f6"></td>
+							</tr>
+							<tr>
+								<td><label for="name">Field7: </label></td>
+								<td><input data-dojo-type="dijit/form/TextBox" type="text"
+									name="upload_f7" id="upload_f7" value="upload_f7"></td>
+							</tr>
+							<tr>
+								<td><label for="desc">Local path</label></td>
+								<td><input onChange="console.log(this.firstChild.value)"
+									name="uploadfile" multiple="false" type="file"
+									data-dojo-type="dojox/form/Uploader" label="Select a document"
+									id="uploader" /><span id="uploadfilename"></span></td>
+							</tr>
+						</table>
+					</div>
 
-				<div class="dijitDialogPaneActionBar">
-					<button data-dojo-type="dijit/form/Button" type="submit"
-						onClick="return myFormDialog.isValid();">OK</button>
-					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="myFormDialog.hide()">Cancel</button>
-				</div>
+					<div class="dijitDialogPaneActionBar">
+						<input type="submit" label="Upload"
+							data-dojo-type="dijit/form/Button" />
+						<button data-dojo-type="dijit/form/Button" type="button"
+							onClick="uploadFileFormDialog.hide()">Cancel</button>
+					</div>
+				</form>
 			</div>
 
 

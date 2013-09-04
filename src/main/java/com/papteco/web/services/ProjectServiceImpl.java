@@ -2,14 +2,17 @@ package com.papteco.web.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.ProjectBean;
-import com.papteco.web.dbs.CacheDB;
+import com.papteco.web.dbs.DBCacheDAO;
 import com.papteco.web.utils.FSUtils;
-import com.papteco.web.utils.FoldersUtils;
+import com.sleepycat.persist.EntityCursor;
 
-public class ProjectServiceImpl implements ProjectService {
-
+@Service
+public class ProjectServiceImpl extends BaseService implements ProjectService {
+	
 	public ProjectServiceImpl(String projectPath) {
 		super();
 		FSUtils.glanceToCache(projectPath);
@@ -17,10 +20,17 @@ public class ProjectServiceImpl implements ProjectService {
 
 	public void createProject(ProjectBean project, List<FolderBean> folderList) throws Exception {
 //		FSUtils.putFile(null, null);
-		FoldersUtils.createProjectFolders(FoldersUtils.prepareProjectPath(project.getProjectCde()), folderList);
-		CacheDB.saveProjectTree(project);
-		System.out.println(project.getProjectId());
-		System.out.println(CacheDB.getProjectTree(project.getProjectId()));
+		project.setProjectId(DBCacheDAO.getMaxProjectId());
+		foldersUtils.createProjectFolders(foldersUtils.prepareProjectPath(project.getProjectCde()), folderList);
+		DBCacheDAO.saveProjectTree(project);
+		
+//		System.out.println(DBCacheDAO.getMaxProjectId());
+//		System.out.println(project.getProjectCde());
+//		System.out.println(DBCacheDAO.getProjectTree(project.getProjectId()));
+//		EntityCursor<ProjectBean> list = DBCacheDAO.getAllProjectBeans();
+//		for (ProjectBean bean : list){
+//			System.out.println(bean.getClientNo());
+//		}
 	}
 
 	/* mandatory constructor method */
