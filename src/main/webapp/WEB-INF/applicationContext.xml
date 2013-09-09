@@ -4,4 +4,5 @@
 	<import resource="classpath:SystemConfiguration.xml"/>
 	<import resource="classpath:FolderStructure.xml"/>
 	<import resource="classpath:ClientsInfo.xml"/>
+	<import resource="classpath:Formating.xml"/>
 </beans>

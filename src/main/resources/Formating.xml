@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="D_A" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_B" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="suppliedBy" value="autoFillCanOverwrite" />
+		<property name="estimatedCost" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_C" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="amount" value="keyedInByUser" />
+		<property name="suppliedBy" value="keyedInByUser" />
+
+	</bean>
+
+	<bean id="D_D" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="certDate" value="keyedInByUser" />
+		<property name="drawnBy" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_E" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith6digs" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_F" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="amount" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_G" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="amount" value="keyedInByUser" />
+		<property name="suppliedBy" value="keyedInByUser" />
+
+	</bean>
+
+	<bean id="D_H" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith6digs" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_J" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="certDate" value="keyedInByUser" />
+
+	</bean>
+
+	<bean id="D_K" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="estimatedCost" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_L" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith6digs" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_M" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith6digs" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_N" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="certDate" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_P" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="amount" value="keyedInByUser" />
+		<property name="paymentDueDate" value="keyedInByUser" />
+		<property name="requestedBy" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_Q" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="orderedDate" value="keyedInByUser" />
+		<property name="completedDate" value="keyedInByUser" />
+		<property name="suppliedBy" value="keyedInByUser" />
+
+		<property name="typeOfConfirmation" value="keyedInByUser" />
+		<property name="formalPrice" value="keyedInByUser" />
+		<property name="estimatedCost" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_R" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_S" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith6digs" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_T" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith6digs" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_U" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith6digs" value="keyedInByUser" />
+		<property name="certDate" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_V" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="amount" value="keyedInByUser" />
+		<property name="paymentDueDate" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_W" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="certDate" value="keyedInByUser" />
+		<property name="drawnBy" value="keyedInByUser" />
+	</bean>
+
+	<bean id="D_Z" class="com.papteco.web.beans.FormatItem">
+		<property name="dateWith4digs" value="keyedInByUser" />
+	</bean>
+</beans>

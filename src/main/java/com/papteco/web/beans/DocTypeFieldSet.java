@@ -5,13 +5,26 @@ import org.springframework.web.multipart.MultipartFile;
 public class DocTypeFieldSet {
 
 	private String upload_doctype;
-	private String upload_f1;
-	private String upload_f2;
-	private String upload_f3;
-	private String upload_f4;
-	private String upload_f5;
-	private String upload_f6;
-	private String upload_f7;
+	private String clientNo;
+	private String dateWith4digs;
+	private String dateWith6digs;
+	private String description;
+	private String dateCreated;
+	private String ref;
+	private String certDate;
+	private String drawnBy;
+	private String uploadedBy;
+	private String amount;
+	private String paymentDueDate;
+	private String requestedBy;
+	private String orderedDate;
+	private String completedDate;
+	private String suppliedBy;
+	private String note;
+	private String typeOfConfirmation;
+	private String formalPrice;
+	private String estimatedCost;
+	private String rev;
 	private MultipartFile uploadfile;
 
 	public MultipartFile getUploadfile() {
@@ -30,70 +43,181 @@ public class DocTypeFieldSet {
 		this.upload_doctype = upload_doctype;
 	}
 
-	public String getUpload_f1() {
-		return upload_f1;
+	public String getClientNo() {
+		return clientNo;
 	}
 
-	public void setUpload_f1(String upload_f1) {
-		this.upload_f1 = upload_f1;
+	public void setClientNo(String clientNo) {
+		this.clientNo = clientNo;
 	}
 
-	public String getUpload_f2() {
-		return upload_f2;
+	public String getDateWith4digs() {
+		return dateWith4digs;
 	}
 
-	public void setUpload_f2(String upload_f2) {
-		this.upload_f2 = upload_f2;
+	public void setDateWith4digs(String dateWith4digs) {
+		this.dateWith4digs = dateWith4digs;
 	}
 
-	public String getUpload_f3() {
-		return upload_f3;
+	public String getDateWith6digs() {
+		return dateWith6digs;
 	}
 
-	public void setUpload_f3(String upload_f3) {
-		this.upload_f3 = upload_f3;
+	public void setDateWith6digs(String dateWith6digs) {
+		this.dateWith6digs = dateWith6digs;
 	}
 
-	public String getUpload_f4() {
-		return upload_f4;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setUpload_f4(String upload_f4) {
-		this.upload_f4 = upload_f4;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public String getUpload_f5() {
-		return upload_f5;
+	public String getDateCreated() {
+		return dateCreated;
 	}
 
-	public void setUpload_f5(String upload_f5) {
-		this.upload_f5 = upload_f5;
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
-	public String getUpload_f6() {
-		return upload_f6;
+	public String getRef() {
+		return ref;
 	}
 
-	public void setUpload_f6(String upload_f6) {
-		this.upload_f6 = upload_f6;
+	public void setRef(String ref) {
+		this.ref = ref;
 	}
 
-	public String getUpload_f7() {
-		return upload_f7;
+	public String getCertDate() {
+		return certDate;
 	}
 
-	public void setUpload_f7(String upload_f7) {
-		this.upload_f7 = upload_f7;
+	public void setCertDate(String certDate) {
+		this.certDate = certDate;
+	}
+
+	public String getDrawnBy() {
+		return drawnBy;
+	}
+
+	public void setDrawnBy(String drawnBy) {
+		this.drawnBy = drawnBy;
+	}
+
+	public String getUploadedBy() {
+		return uploadedBy;
+	}
+
+	public void setUploadedBy(String uploadedBy) {
+		this.uploadedBy = uploadedBy;
+	}
+
+	public String getAmount() {
+		return amount;
+	}
+
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+
+	public String getPaymentDueDate() {
+		return paymentDueDate;
+	}
+
+	public void setPaymentDueDate(String paymentDueDate) {
+		this.paymentDueDate = paymentDueDate;
+	}
+
+	public String getRequestedBy() {
+		return requestedBy;
+	}
+
+	public void setRequestedBy(String requestedBy) {
+		this.requestedBy = requestedBy;
+	}
+
+	public String getOrderedDate() {
+		return orderedDate;
+	}
+
+	public void setOrderedDate(String orderedDate) {
+		this.orderedDate = orderedDate;
+	}
+
+	public String getCompletedDate() {
+		return completedDate;
+	}
+
+	public void setCompletedDate(String completedDate) {
+		this.completedDate = completedDate;
+	}
+
+	public String getSuppliedBy() {
+		return suppliedBy;
+	}
+
+	public void setSuppliedBy(String suppliedBy) {
+		this.suppliedBy = suppliedBy;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public String getTypeOfConfirmation() {
+		return typeOfConfirmation;
+	}
+
+	public void setTypeOfConfirmation(String typeOfConfirmation) {
+		this.typeOfConfirmation = typeOfConfirmation;
+	}
+
+	public String getFormalPrice() {
+		return formalPrice;
+	}
+
+	public void setFormalPrice(String formalPrice) {
+		this.formalPrice = formalPrice;
+	}
+
+	public String getEstimatedCost() {
+		return estimatedCost;
+	}
+
+	public void setEstimatedCost(String estimatedCost) {
+		this.estimatedCost = estimatedCost;
+	}
+
+	public String getRev() {
+		return rev;
+	}
+
+	public void setRev(String rev) {
+		this.rev = rev;
 	}
 
 	@Override
 	public String toString() {
 		return "DocTypeFieldSet [upload_doctype=" + upload_doctype
-				+ ", upload_f1=" + upload_f1 + ", upload_f2=" + upload_f2
-				+ ", upload_f3=" + upload_f3 + ", upload_f4=" + upload_f4
-				+ ", upload_f5=" + upload_f5 + ", upload_f6=" + upload_f6
-				+ ", upload_f7=" + upload_f7 + ", uploadfile=" + uploadfile
-				+ "]";
+				+ ", clientNo=" + clientNo + ", dateWith4digs=" + dateWith4digs
+				+ ", dateWith6digs=" + dateWith6digs + ", description="
+				+ description + ", dateCreated=" + dateCreated + ", ref=" + ref
+				+ ", certDate=" + certDate + ", drawnBy=" + drawnBy
+				+ ", uploadedBy=" + uploadedBy + ", amount=" + amount
+				+ ", paymentDueDate=" + paymentDueDate + ", requestedBy="
+				+ requestedBy + ", orderedDate=" + orderedDate
+				+ ", completedDate=" + completedDate + ", suppliedBy="
+				+ suppliedBy + ", note=" + note + ", typeOfConfirmation="
+				+ typeOfConfirmation + ", formalPrice=" + formalPrice
+				+ ", estimatedCost=" + estimatedCost + ", rev=" + rev
+				+ ", uploadfile=" + uploadfile + "]";
 	}
 
 }

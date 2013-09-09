@@ -7,11 +7,253 @@
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd  
             http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd              
             http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
-	<!-- <bean id="cacheDB" class="com.papteco.web.dbs.CacheDB">
-		<property name="DATAPATH" value="tmp/data" />
-	</bean> -->
-	
+	<!-- <bean id="cacheDB" class="com.papteco.web.dbs.CacheDB"> <property name="DATAPATH" 
+		value="tmp/data" /> </bean> -->
+
 	<bean id="sysConfig" class="com.papteco.web.utils.SystemConfiguration">
+		<property name="formatSetting">
+			<map>
+				<entry key="Photographs and pictures" value-ref="D_A"></entry>
+				<entry key="Budget quotations" value-ref="D_B"></entry>
+				<entry key="Contracts" value-ref="D_C"></entry>
+				<entry key="Drawings" value-ref="D_D"></entry>
+				<entry key="Memo" value-ref="D_E"></entry>
+				<entry key="Request for funds" value-ref="D_F"></entry>
+				<entry key="Formal orders, Supplier contract" value-ref="D_G"></entry>
+				<entry key="Reports of technical information" value-ref="D_H"></entry>
+				<entry key="Plannings" value-ref="D_J"></entry>
+				<entry key="Cost estimates" value-ref="D_K"></entry>
+				<entry key="Open letters" value-ref="D_L"></entry>
+				<entry key="MOM" value-ref="D_M"></entry>
+				<entry key="BOM" value-ref="D_N"></entry>
+				<entry key="Internal payment request" value-ref="D_P"></entry>
+				<entry key="Quotations" value-ref="D_Q"></entry>
+				<entry key="Request for offer" value-ref="D_R"></entry>
+				<entry key="Material specifications" value-ref="D_S"></entry>
+				<entry key="Transmittal documents" value-ref="D_T"></entry>
+				<entry key="MOU" value-ref="D_U"></entry>
+				<entry key="Invoices" value-ref="D_V"></entry>
+				<entry key="Sketches" value-ref="D_W"></entry>
+				<entry key="Miscellaneous documents" value-ref="D_Z"></entry>
+			</map>
+		</property>
+		<property name="seqAndDesc">
+
+			<list>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="code">
+					</property>
+					<property name="fieldDesc" value="Code">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="clientNo">
+					</property>
+					<property name="fieldDesc" value="Client#">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="dateWith4digs">
+					</property>
+					<property name="fieldDesc" value="Date Ref(yymm)">
+					</property>
+					<property name="maxlength" value="4">
+					</property>
+					<property name="dataType" value="date">
+					</property>
+					<property name="uivalidatescript" value="chkvaldate4">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="dateWith6digs">
+					</property>
+					<property name="fieldDesc" value="Date Ref(yymmdd)">
+					</property>
+					<property name="maxlength" value="6">
+					</property>
+					<property name="dataType" value="date">
+					</property>
+					<property name="uivalidatescript" value="chkvaldate6">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="ref">
+					</property>
+					<property name="fieldDesc" value="Ref #">
+					</property>
+					<property name="maxlength" value="3">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="description">
+					</property>
+					<property name="fieldDesc" value="Description">
+					</property>
+					<property name="maxlength" value="30">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="rev">
+					</property>
+					<property name="fieldDesc" value="Rev.">
+					</property>
+					<property name="maxlength" value="3">
+					</property>
+					<property name="uivalidatescript" value="chkvaldrev">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="dateCreated">
+					</property>
+					<property name="fieldDesc" value="Date created">
+					</property>
+					<property name="dataType" value="date">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="certDate">
+					</property>
+					<property name="fieldDesc" value="Certified date">
+					</property>
+					<property name="dataType" value="date">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="drawnBy">
+					</property>
+					<property name="fieldDesc" value="Drawn by">
+					</property>
+					<property name="maxlength" value="30">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="uploadedBy">
+					</property>
+					<property name="fieldDesc" value="Uploaded by">
+					</property>
+					<property name="maxlength" value="30">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="amount">
+					</property>
+					<property name="fieldDesc" value="Amount">
+					</property>
+					<property name="maxlength" value="30">
+					</property>
+					<property name="dataType" value="number">
+					</property>
+					<property name="additional" value="true">
+					</property>
+					<property name="uivalidatescript" value="chkvaldnum">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="paymentDueDate">
+					</property>
+					<property name="fieldDesc" value="Payment due date">
+					</property>
+					<property name="dataType" value="date">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="requestedBy">
+					</property>
+					<property name="fieldDesc" value="Requested by">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="orderedDate">
+					</property>
+					<property name="fieldDesc" value="Ordered date">
+					</property>
+					<property name="dataType" value="date">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="completedDate">
+					</property>
+					<property name="fieldDesc" value="Completed Date">
+					</property>
+					<property name="dataType" value="date">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="suppliedBy">
+					</property>
+					<property name="fieldDesc" value="Supplied By">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="note">
+					</property>
+					<property name="fieldDesc" value="Note">
+					</property>
+					<property name="maxlength" value="300">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="typeOfConfirmation">
+					</property>
+					<property name="fieldDesc" value="Type of confirmation">
+					</property>
+					<property name="maxlength" value="100">
+					</property>
+					<property name="additional" value="true">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="formalPrice">
+					</property>
+					<property name="fieldDesc" value="Formal price">
+					</property>
+					<property name="maxlength" value="30">
+					</property>
+					<property name="dataType" value="number">
+					</property>
+					<property name="additional" value="true">
+					</property>
+					<property name="uivalidatescript" value="chkvaldnum">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="estimatedCost">
+					</property>
+					<property name="fieldDesc" value="Estimated cost">
+					</property>
+					<property name="maxlength" value="30">
+					</property>
+					<property name="dataType" value="number">
+					</property>
+					<property name="additional" value="true">
+					</property>
+					<property name="uivalidatescript" value="chkvaldnum">
+					</property>
+				</bean>
+			</list>
+
+		</property>
+
 		<property name="preDefineFolderStructure">
 			<list>
 				<ref bean="A" />

@@ -296,6 +296,7 @@
 
 					</legend>
 					<div style="float: left; padding: 30px">
+						<input type="hidden" id="prj_id"></input>
 						<h1 id="prj_name">Project Name</h1>
 						<div class="blank_interrupt"></div>
 						<a id="SearchButton2" onClick="backtosearch();"
@@ -422,63 +423,19 @@ alert("deleting"+tn.item.id);
 				data-dojo-id="uploadFileFormDialog" title="Upload documents"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
-				<form method="post" action="submitUploadFile" id="myForm"
+				<form method="post" action="submitUploadFile" id="uploadFileForm"
 					enctype="multipart/form-data">
 					<div class="dijitDialogPaneContentArea">
-						<table class="dijitdialog_index">
-							<tr>
-								<td><label for="date">Document Type: </label></td>
-								<td><input id="upload_doctype">
-									</td>
-							</tr>
-							<tr>
-								<td><label for="name">Field1: </label></td>
-								<td><input data-dojo-type="dijit/form/TextBox" type="text"
-									name="upload_f1" id="upload_f1" value="upload_f1"></td>
-							</tr>
-							<tr>
-								<td><label for="name">Field2: </label></td>
-								<td><input data-dojo-type="dijit/form/TextBox" type="text"
-									name="upload_f2" id="upload_f2" value="upload_f2"></td>
-							</tr>
-							<tr>
-								<td><label for="name">Field3: </label></td>
-								<td><input data-dojo-type="dijit/form/TextBox" type="text"
-									name="upload_f3" id="upload_f3" value="upload_f3"></td>
-							</tr>
-							<tr>
-								<td><label for="name">Field4: </label></td>
-								<td><input data-dojo-type="dijit/form/TextBox" type="text"
-									name="upload_f4" id="upload_f4" value="upload_f4"></td>
-							</tr>
-							<tr>
-								<td><label for="name">Field5: </label></td>
-								<td><input data-dojo-type="dijit/form/TextBox" type="text"
-									name="upload_f5" id="upload_f5" value="upload_f5"></td>
-							</tr>
-							<tr>
-								<td><label for="name">Field6: </label></td>
-								<td><input data-dojo-type="dijit/form/TextBox" type="text"
-									name="upload_f6" id="upload_f6" value="upload_f6"></td>
-							</tr>
-							<tr>
-								<td><label for="name">Field7: </label></td>
-								<td><input data-dojo-type="dijit/form/TextBox" type="text"
-									name="upload_f7" id="upload_f7" value="upload_f7"></td>
-							</tr>
-							<tr>
-								<td><label for="desc">Local path</label></td>
-								<td><input onChange="console.log(this.firstChild.value)"
-									name="uploadfile" multiple="false" type="file"
-									data-dojo-type="dojox/form/Uploader" label="Select a document"
-									id="uploader" /><span id="uploadfilename"></span></td>
-							</tr>
-						</table>
+						<span><label for="date">Document Type: </label><input
+							id="upload_doctype"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><label for="date" id="uploader_header">Upload File: </label><input
+							name="uploadfile" type="file" id="uploader" /></span>
+
+						<div id="insert_content"></div>
 					</div>
 
 					<div class="dijitDialogPaneActionBar">
-						<input type="submit" label="Upload"
-							data-dojo-type="dijit/form/Button" />
+						<input label="Upload" data-dojo-type="dijit/form/Button"
+							onClick="validateUploadForm();" type="button" />
 						<button data-dojo-type="dijit/form/Button" type="button"
 							onClick="uploadFileFormDialog.hide()">Cancel</button>
 					</div>

@@ -111,8 +111,8 @@ a {
 }
 
 .dijitDialogPaneContentArea {
-    width: 750px !important;
-    height: 500px !important;
+    width: 760px !important;
+    height: 520px !important;
 }
 
 .dialogNum{
@@ -217,4 +217,12 @@ color:white;
 
 .fileInfo fieldset p {
 	line-height:10px;
+}
+
+.errorcolor{
+	color:red;
+}
+
+.normalcolor{
+	color:black;
 }

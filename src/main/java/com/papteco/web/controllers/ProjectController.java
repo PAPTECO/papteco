@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.CreateProjectFormBean;
 import com.papteco.web.beans.DocTypeFieldSet;
+import com.papteco.web.beans.FieldDef;
+import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.services.ProjectService;
 import com.papteco.web.utils.WebUtils;
@@ -58,13 +60,13 @@ public class ProjectController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "submitUploadFile")
 	@ResponseBody
-	public Map createProject(DocTypeFieldSet bean,Model model)
+	public String submitUploadFile(DocTypeFieldSet bean,Model model)
 			throws Exception {
 
 		System.out.println(bean);
 		
 		bean.getUploadfile().transferTo(new File("C:\\"+bean.getUploadfile().getOriginalFilename()));
-		return ImmutableMap.of("type", "success");
+		return "success";
 
 	}
 	
@@ -106,6 +108,24 @@ public class ProjectController extends BaseController {
 	public Map getProject(@RequestParam String projectId) throws Exception {
 		System.out.println(projectId);
 		return WebUtils.toProjectSummaries(Integer.valueOf(projectId));
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "getNumberingFormat")
+	@ResponseBody
+	public Map getNumberingFormat(@RequestParam String docType,
+			@RequestParam String prjId) throws Exception {
+		System.out.println("project id is "+prjId);
+		System.out.println(this.sysConfig.getSeqAndDesc());
+		//#TODO get project information by prjId
+		
+		String shortCode = "D(?)"; // hardcode here, please change to D by docType
+		FormatItem formating = this.sysConfig.getFormatSetting().get(docType);
+		List<FieldDef> fieldSetting = this.sysConfig.getSeqAndDesc();
+		String clientno = "(?)"; // please change it by prjId
+		String ref = "(?)"; // please change it by prjId
+		return WebUtils.toNumberingFormat(shortCode,formating,fieldSetting,
+				clientno,ref);
 
 	}
 	
