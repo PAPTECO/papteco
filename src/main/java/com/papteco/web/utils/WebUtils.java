@@ -14,11 +14,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.papteco.web.beans.ActionEnum;
 import com.papteco.web.beans.ClientBean;
+import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FieldDef;
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.ProjectBean;
-import com.papteco.web.dbs.DBCacheDAO;
+import com.papteco.web.dbs.ProjectCacheDAO;
 
 public class WebUtils {
 
@@ -40,11 +41,11 @@ public class WebUtils {
 
 		return result;
 	}
-
+	
 	public static Map toDocJson(List<FolderBean> beans) {
 
 		Map result = Maps.newHashMap();
-
+		
 		List resultList = Lists.newArrayList();
 		for (FolderBean bean : beans) {
 			resultList.add(ImmutableMap.of("id", bean.getDocType(), "name",
@@ -72,17 +73,16 @@ public class WebUtils {
 	}
 
 	public static Map toUniqueJson() {
-		System.out.println(DBCacheDAO.getMaxProjectId());
-		return ImmutableMap.of("max", DBCacheDAO.getMaxProjectId());
+		System.out.println(ProjectCacheDAO.getMaxProjectId());
+		return ImmutableMap.of("max", ProjectCacheDAO.getMaxProjectId());
 	}
 
 	public static List toSearchGrid(String searchClinetno, String searchAnykey) {
 
-		List<ProjectBean> searchResult = DBCacheDAO.getProjectBeansByFilter(
-				searchClinetno, searchAnykey);
+		List<ProjectBean> searchResult = ProjectCacheDAO.getProjectBeansByFilter(searchClinetno, searchAnykey);
 		List datalist = Lists.newArrayList();
 
-		for (int i = 0; i < searchResult.size(); i++) {
+		for(int i = 0; i< searchResult.size(); i++){
 			ProjectBean bean = searchResult.get(i);
 			Map data = ImmutableMap
 					.of("col1",
@@ -93,9 +93,10 @@ public class WebUtils {
 							bean.getShortDesc(),
 							"col4",
 							"E9970-130310-136-Carbide knife grinder - Specifications.doc\n E9970-130310-136-Project2-Specifications.doc",
-							"col5", bean.getCreatedBy());
+							"col5",
+							bean.getCreatedBy());
 			Map testdata = Maps.newHashMap();
-			testdata.put("id", i + 1);
+			testdata.put("id", i+1);
 			testdata.putAll(data);
 			datalist.add(testdata);
 		}
@@ -103,7 +104,7 @@ public class WebUtils {
 	}
 
 	public static Map toProjectSummaries(int projectId) {
-		ProjectBean bean = DBCacheDAO.getProjectTree(projectId);
+		ProjectBean bean = ProjectCacheDAO.getProjectTree(projectId);
 
 		return ImmutableMap.of("projectIndentify", bean.getProjectCde(),
 				"createdBy", bean.getCreatedBy(), "createdAt", bean
@@ -236,20 +237,57 @@ public class WebUtils {
 
 	}
 
-	public static Map toDocsSummaries() {
-		return ImmutableMap.of("id", "AF", "name", "Africa", "type",
-				"continent", "children", Lists.newArrayList());
+	public static Map toDocsSummaries(int projectId) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("identifier", "id");
+		result.put("label", "name");
 
+		List<ImmutableMap> resultList = Lists.newArrayList();
+		ProjectBean project = ProjectCacheDAO.getProjectTree(projectId);
+		for(FolderBean folder : project.getFolderTree()){
+			List<FileBean> files = folder.getFileTree();
+			if(files == null || files.size()==0){
+				resultList.add(ImmutableMap.of(
+						"id" , folder.getDocType(),
+						"name" , folder.getFolderName(),
+						"type" , "continent",
+						"numformat" , folder.getNuberformat(),
+						"children", Lists.newArrayList()));
+			}else{
+				List<ImmutableMap> subList = Lists.newArrayList();
+				for(FileBean file : files){
+					subList.add(ImmutableMap.of(
+						"id" , file.getFileName(),
+						"name" , file.getFileName(),
+						"type" , "continent",
+						"lastmodat" , file.getLastModifiedAt(),
+						"lastmodby" , file.getLastModifiedBy()));
+				}
+				resultList.add(ImmutableMap.of(
+						"id" , folder.getDocType(),
+						"name" , folder.getFolderName(),
+						"type" , "continent",
+						"numformat" , folder.getNuberformat(),
+						"children", subList));
+			}
+			
+		}
+		result.put("items", resultList);
+		return result;
+		
 	}
-
+	
+	public static void saveUploadFile(int projectId, String docType, FileBean fileBean){
+		ProjectCacheDAO.saveFileBean(projectId, docType, fileBean);
+	}
+	
 	public static Map responseWithStatusCode() {
-		return responseWithStatusCode(true, "None");
-
+		return responseWithStatusCode(true,"None");
+		
 	}
-
-	public static Map responseWithStatusCode(boolean status, String errmsg) {
-		return ImmutableMap.of("status", status, "err",
-				StringUtils.isEmpty(errmsg) ? "None" : errmsg);
-
+	
+	public static Map responseWithStatusCode(boolean status,String errmsg) {
+		return ImmutableMap.of("status",status,"err",StringUtils.isEmpty(errmsg)?"None":errmsg);
+		
 	}
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.ProjectBean;
-import com.papteco.web.dbs.DBCacheDAO;
+import com.papteco.web.dbs.ProjectCacheDAO;
 import com.papteco.web.utils.FSUtils;
 import com.sleepycat.persist.EntityCursor;
 
@@ -20,9 +20,9 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 
 	public void createProject(ProjectBean project, List<FolderBean> folderList) throws Exception {
 //		FSUtils.putFile(null, null);
-		project.setProjectId(DBCacheDAO.getMaxProjectId());
+		project.setProjectId(ProjectCacheDAO.getMaxProjectId());
 		foldersUtils.createProjectFolders(foldersUtils.prepareProjectPath(project.getProjectCde()), folderList);
-		DBCacheDAO.saveProjectTree(project);
+		ProjectCacheDAO.saveProjectTree(project);
 		
 //		System.out.println(DBCacheDAO.getMaxProjectId());
 //		System.out.println(project.getProjectCde());

@@ -25,6 +25,10 @@
 		<property name="docType" value="E" />
 		<property name="folderName" value="Memo" />
 		<property name="nuberformat" value="xxx-zzz-fff" />
+		<property name="fileTree">
+			<list>
+			</list>
+		</property>
 	</bean>
 	<bean id="F" class="com.papteco.web.beans.FolderBean">
 		<property name="docType" value="F" />

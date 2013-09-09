@@ -1,6 +1,7 @@
 package com.papteco.web.dbs;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.papteco.web.beans.FileBean;
+import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.ProjectBean;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
@@ -19,7 +22,7 @@ import com.sleepycat.persist.PrimaryIndex;
 import com.sleepycat.persist.StoreConfig;
 
 @Component
-public class DBCacheDAO {
+public class ProjectCacheDAO {
 
 	@Value("#{settings[datapath]}")
 	protected String datapath;
@@ -32,10 +35,10 @@ public class DBCacheDAO {
 		if(!f.exists()){
 			f.mkdirs();
 		}
-		new DBCacheDAO(datapath);
+		new ProjectCacheDAO(datapath);
 	}  
 
-	public DBCacheDAO(String databasePath) {
+	public ProjectCacheDAO(String databasePath) {
 
 		// Open a transactional Berkeley DB engine environment.
 		//
@@ -89,8 +92,24 @@ public class DBCacheDAO {
 		return result;
 	}
 	
+	public static void saveFileBean(int projectId,String docType, FileBean fileBean){
+		ProjectBean project = projectIdIndex.get(projectId);
+		for(int i = 0; i < project.getFolderTree().size(); i++){
+			if(docType.equals(project.getFolderTree().get(i).getDocType())){
+				FolderBean folder = project.getFolderTree().get(i);
+				if(folder.getFileTree() == null){
+					folder.setFileTree(new ArrayList());
+				}
+				List<FileBean> fileList = project.getFolderTree().get(i).getFileTree();
+				fileList.add(fileBean);
+				project.getFolderTree().get(i).setFileTree(fileList);
+				break;
+			};
+		}
+		saveProjectTree(project);
+	}
 	/* mandatory constructor method */
-	public DBCacheDAO() {
+	public ProjectCacheDAO() {
 		
 	}
 }

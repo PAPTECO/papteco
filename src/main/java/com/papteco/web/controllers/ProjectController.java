@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.CreateProjectFormBean;
 import com.papteco.web.beans.DocTypeFieldSet;
+import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FieldDef;
 import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.ProjectBean;
@@ -62,10 +63,20 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public String submitUploadFile(DocTypeFieldSet bean,Model model)
 			throws Exception {
-
+		bean.setUpload_doctype("E");
 		System.out.println(bean);
-		
-		bean.getUploadfile().transferTo(new File("C:\\"+bean.getUploadfile().getOriginalFilename()));
+		File file = new File("C:\\cony\\files\\"+bean.getUploadfile().getOriginalFilename());
+		if(!file.exists()){
+			file.createNewFile();
+		}
+		bean.getUploadfile().transferTo(file);
+		FileBean fileBean = new FileBean();
+		fileBean.setFileName(bean.getUploadfile().getOriginalFilename());
+		fileBean.setInitUploadAt(new Date());
+		fileBean.setLastModifiedAt(new Date());
+		fileBean.setLastModifiedBy("wasadmin");
+		fileBean.setInitUploadBy("cony");
+		WebUtils.saveUploadFile(1, bean.getUpload_doctype(), fileBean);
 		return "success";
 
 	}
@@ -139,7 +150,7 @@ public class ProjectController extends BaseController {
 
 		System.out.println("getDocs:"+projectId);
 
-		return WebUtils.toDocsSummaries();
+		return WebUtils.toDocsSummaries(Integer.valueOf(projectId));
 
 	}
 	
