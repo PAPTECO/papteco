@@ -171,7 +171,7 @@ public class WebUtils {
 		}
 		sb.append("</table>");
 		sb.append("<input type='hidden' value='"+prjId+"' name='projectId'/>");
-		
+		sb.append("<input type='hidden' value='"+bean.getClientNo()+"' name='clientNo'/>");
 		sb.append("<input type='hidden' value='"+bean.getProjectCde()+"' name='projectCde'/>");
 		return ImmutableMap.of("data", sb.toString());
 

@@ -1,7 +1,6 @@
 package com.papteco.web.dbs;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -89,28 +88,21 @@ public class ProjectCacheDAO {
 				result.add(bean);
 			}
 		}
+		allProjects.close();
 		return result;
 	}
 	
 	public static void saveFileBean(int projectId,String docType, FileBean fileBean){
 		ProjectBean project = projectIdIndex.get(projectId);
-		for(int i = 0; i < project.getFolderTree().size(); i++){
-			if(docType.equals(project.getFolderTree().get(i).getDocType())){
-				FolderBean folder = project.getFolderTree().get(i);
-				if(folder.getFileTree() == null){
-					folder.setFileTree(new ArrayList());
-				}
-				List<FileBean> fileLinst = project.getFolderTree().get(i).getFileTree();
+		for(FolderBean folder : project.getFolderTree()){
+			if(docType.equals(folder.getDocType())){
+				List<FileBean> fileList = folder.getFileTree();
 				fileList.add(fileBean);
-				project.getFolderTree().get(i).setFileTree(fileList);
-				
+				folder.setFileTree(fileList);
 				break;
-			};
+			}
 		}
 		List<String> totalFileList = project.getTotalFileList();
-		if(totalFileList == null){
-			totalFileList = new ArrayList<String>();
-		}
 		totalFileList.add(fileBean.getFileName());
 		project.setTotalFileList(totalFileList);
 		saveProjectTree(project);

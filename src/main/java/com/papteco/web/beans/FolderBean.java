@@ -1,5 +1,6 @@
 package com.papteco.web.beans;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sleepycat.persist.model.Persistent;
@@ -10,7 +11,7 @@ public class FolderBean {
 	private String docType;
 	private String folderName;
 	private String nuberformat;
-	private List<FileBean> fileTree;
+	private List<FileBean> fileTree = new ArrayList<FileBean>();
 
 	public List<FileBean> getFileTree() {
 		return fileTree;

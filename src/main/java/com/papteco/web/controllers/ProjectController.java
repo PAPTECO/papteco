@@ -19,8 +19,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.CreateProjectFormBean;
 import com.papteco.web.beans.DocTypeFieldSet;
-import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FieldDef;
+import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.services.ProjectService;
@@ -50,12 +50,15 @@ public class ProjectController extends BaseController {
 		try {
 			projectService.createProject(tmpProject,
 					this.sysConfig.prepareFolderStructure());
+			
+			return ImmutableMap.of("type", "success","projectcode",tmpProject.getProjectCde());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return ImmutableMap.of("type", "failure","message",e.getMessage());
 		}
 
-		return ImmutableMap.of("type", "success");
+		
 
 	}
 	
@@ -78,14 +81,33 @@ public class ProjectController extends BaseController {
 		System.out.println(bean);
 		
 		String fileFolder = combineFolderPath(combineFolderPath(rootpath, bean.getProjectCde()),this.sysConfig.getFolderNameByFolderCde(bean.getUpload_doctype()));
-		String targetFileName = bean.getDescription()+bean.getUploadfile().getOriginalFilename().substring(bean.getUploadfile().getOriginalFilename().lastIndexOf("."));
-		File file = new File(fileFolder,targetFileName);
+		String descFileName = bean.getDescription();
+		
+		StringBuffer trgFileName = new StringBuffer();
+		trgFileName.append(bean.getUpload_doctype());
+		trgFileName.append(bean.getClientNo());
+		trgFileName.append("-");
+		if(bean.getDateWith4digs() != null){
+			trgFileName.append(bean.getDateWith4digs());
+		}else if(bean.getDateWith6digs() != null) {
+			trgFileName.append(bean.getDateWith6digs());
+		}
+		trgFileName.append("-");
+		trgFileName.append(bean.getRef());
+		trgFileName.append("-");
+		trgFileName.append(descFileName);
+		trgFileName.append(" - ");
+		trgFileName.append("Rev ");
+		trgFileName.append(bean.getRev());
+		trgFileName.append(bean.getUploadfile().getOriginalFilename().substring(bean.getUploadfile().getOriginalFilename().lastIndexOf(".")));
+		
+		File file = new File(fileFolder,trgFileName.toString());
 		if(!file.exists()){
 			file.createNewFile();
 		}
 		bean.getUploadfile().transferTo(file);
 		FileBean fileBean = new FileBean();
-		fileBean.setFileName(targetFileName);
+		fileBean.setFileName(trgFileName.toString());
 		fileBean.setInitUploadAt(new Date());
 		fileBean.setLastModifiedAt(new Date());
 		fileBean.setLastModifiedBy("wasadmin");
@@ -129,6 +151,33 @@ public class ProjectController extends BaseController {
  
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "saveSearch")
+	@ResponseBody
+	public Map saveSearch(@RequestParam String searchClinetno,
+			@RequestParam String searchAnykey,
+			@RequestParam String searchSavName) throws Exception {
+
+		System.out.println(searchClinetno);
+		System.out.println(searchAnykey);
+		System.out.println(searchSavName);
+
+		return ImmutableMap.of("type","success");
+ 
+	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "savePrjshortcut")
+	@ResponseBody
+	public Map saveSearch(@RequestParam String prjId,
+			@RequestParam String prjSavName) throws Exception {
+
+		System.out.println(prjId);
+		System.out.println(prjSavName);
+
+		return ImmutableMap.of("type","success");
+ 
+	}
+	
+	
 	@RequestMapping(method = RequestMethod.GET, value = "getProject")
 	@ResponseBody
 	public Map getProject(@RequestParam String projectId) throws Exception {

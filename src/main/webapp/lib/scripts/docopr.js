@@ -125,3 +125,36 @@ function refreshDocBroad(projectId) {
 	});
 
 }
+
+function submitPrjSaveSearch(){
+	
+	//searchSaveDialog.isValid();
+	
+	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
+			function(dom, xhr, JSON, parser) {
+
+				dataset = {
+						prjId : dom.byId("prj_id").value,
+						prjSavName : dom.byId("prj_sav_name").value
+					
+				};
+
+				xhr("savePrjshortcut", {
+					handleAs : "json",
+					query : dataset,
+					method : "get"
+				}).then(function(datas) {
+
+					alert("saved");
+					searchSaveDialog.hide();
+				}, function(err) {
+					// Handle the error condition
+					alert("saved fail." + err);
+				}, function(evt) {
+					// Handle a progress event from the request if the
+					// browser supports XHR2
+					alert("saved fail." + evt);
+				});
+
+			});
+}

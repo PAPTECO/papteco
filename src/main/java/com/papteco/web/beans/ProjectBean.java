@@ -1,6 +1,7 @@
 package com.papteco.web.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ProjectBean implements Serializable {
 	
 	private String longDesc;
 	
-	private List<String> totalFileList;
+	private List<String> totalFileList = new ArrayList<String>();
 
 	public List<String> getTotalFileList() {
 		return totalFileList;
