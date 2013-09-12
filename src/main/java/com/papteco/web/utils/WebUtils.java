@@ -14,8 +14,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.papteco.web.beans.ActionEnum;
 import com.papteco.web.beans.ClientBean;
-import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FieldDef;
+import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.ProjectBean;
@@ -139,9 +139,9 @@ public class WebUtils {
 		return null;
 	}
 
-	public static Map toNumberingFormat(String docType, FormatItem item,
+	public static Map toNumberingFormat(String prjId,String docType, FormatItem item,
 			List<FieldDef> seqAndDesc,String clientno, String ref) {
-
+		ProjectBean bean = ProjectCacheDAO.getProjectTree(Integer.valueOf(prjId));
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("<table class='dijitdialog_index'>");
@@ -155,7 +155,7 @@ public class WebUtils {
 		sb.append("<tr>");
 		for (FieldDef col : seqAndDesc) {
 			if (!col.isAdditional() && getValueByFieldName(col.getFieldName(),item) != ActionEnum.notApplicable)
-				sb.append(detailtd(col,docType,clientno, ref));
+				sb.append(detailtd(col,docType,bean.getClientNo(), bean.getUniqueNo()));
 		}
 		sb.append("</tr>");
 		sb.append("</table>");
@@ -170,6 +170,9 @@ public class WebUtils {
 			}
 		}
 		sb.append("</table>");
+		sb.append("<input type='hidden' value='"+prjId+"' name='projectId'/>");
+		
+		sb.append("<input type='hidden' value='"+bean.getProjectCde()+"' name='projectCde'/>");
 		return ImmutableMap.of("data", sb.toString());
 
 	}

@@ -26,7 +26,8 @@ function uploadFileFormShow() {
 					id : "upload_doctype_id",
 					name : "upload_doctype",
 					store : stateStore,
-					searchAttr : "name",
+					searchAttr : "id",
+					labelAttr: 'name',
 					onChange : setVal1
 				}, "upload_doctype");
 

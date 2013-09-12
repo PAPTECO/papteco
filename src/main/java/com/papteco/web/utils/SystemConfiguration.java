@@ -1,6 +1,5 @@
 package com.papteco.web.utils;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,4 +52,21 @@ public class SystemConfiguration extends BaseUtils {
 	public List<ClientBean> prepareClientsInfo() {
 		return preDefineClientsInfo;
 	}
+	
+	public String getRootpath(){
+		return rootpath;
+	}
+	
+	public String getDatapath(){
+		return datapath;
+	}
+	
+	public String getFolderNameByFolderCde(String folderCde){
+		for(FolderBean bean : preDefineFolderStructure){
+			if(folderCde.equals(bean.getDocType()))
+				return bean.getFolderName();
+		}
+		return "";
+	}
+	
 }

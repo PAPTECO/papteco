@@ -2,7 +2,5 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 	<import resource="classpath:SystemConfiguration.xml"/>
-	<import resource="classpath:FolderStructure.xml"/>
-	<import resource="classpath:ClientsInfo.xml"/>
 	<import resource="classpath:Formating.xml"/>
 </beans>

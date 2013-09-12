@@ -59,24 +59,39 @@ public class ProjectController extends BaseController {
 
 	}
 	
+	private String combineFolderPath(String path1, String path2){
+		File f = new File(path1, path2);
+		if(!f.exists()){
+			f.mkdirs();
+			f.setExecutable(true, false);
+			f.setReadable(true, false);
+			f.setWritable(true, false);
+		}
+		return f.getPath();
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "submitUploadFile")
 	@ResponseBody
 	public String submitUploadFile(DocTypeFieldSet bean,Model model)
 			throws Exception {
-		bean.setUpload_doctype("E");
+//		bean.setUpload_doctype("E");
 		System.out.println(bean);
-		File file = new File("C:\\cony\\files\\"+bean.getUploadfile().getOriginalFilename());
+		
+		String fileFolder = combineFolderPath(combineFolderPath(rootpath, bean.getProjectCde()),this.sysConfig.getFolderNameByFolderCde(bean.getUpload_doctype()));
+		String targetFileName = bean.getDescription()+bean.getUploadfile().getOriginalFilename().substring(bean.getUploadfile().getOriginalFilename().lastIndexOf("."));
+		File file = new File(fileFolder,targetFileName);
 		if(!file.exists()){
 			file.createNewFile();
 		}
 		bean.getUploadfile().transferTo(file);
 		FileBean fileBean = new FileBean();
-		fileBean.setFileName(bean.getUploadfile().getOriginalFilename());
+		fileBean.setFileName(targetFileName);
 		fileBean.setInitUploadAt(new Date());
 		fileBean.setLastModifiedAt(new Date());
 		fileBean.setLastModifiedBy("wasadmin");
 		fileBean.setInitUploadBy("cony");
-		WebUtils.saveUploadFile(1, bean.getUpload_doctype(), fileBean);
+		fileBean.setDescription(bean.getDescription());
+		WebUtils.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(), fileBean);
 		return "success";
 
 	}
@@ -130,12 +145,12 @@ public class ProjectController extends BaseController {
 		System.out.println(this.sysConfig.getSeqAndDesc());
 		//#TODO get project information by prjId
 		
-		String shortCode = "D(?)"; // hardcode here, please change to D by docType
+		String shortCode = docType + "(" +this.sysConfig.getFolderNameByFolderCde(docType)+")"; // hardcode here, please change to D by docType
 		FormatItem formating = this.sysConfig.getFormatSetting().get(docType);
 		List<FieldDef> fieldSetting = this.sysConfig.getSeqAndDesc();
 		String clientno = "(?)"; // please change it by prjId
 		String ref = "(?)"; // please change it by prjId
-		return WebUtils.toNumberingFormat(shortCode,formating,fieldSetting,
+		return WebUtils.toNumberingFormat(prjId, shortCode,formating,fieldSetting,
 				clientno,ref);
 
 	}

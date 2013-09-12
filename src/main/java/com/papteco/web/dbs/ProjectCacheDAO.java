@@ -100,12 +100,19 @@ public class ProjectCacheDAO {
 				if(folder.getFileTree() == null){
 					folder.setFileTree(new ArrayList());
 				}
-				List<FileBean> fileList = project.getFolderTree().get(i).getFileTree();
+				List<FileBean> fileLinst = project.getFolderTree().get(i).getFileTree();
 				fileList.add(fileBean);
 				project.getFolderTree().get(i).setFileTree(fileList);
+				
 				break;
 			};
 		}
+		List<String> totalFileList = project.getTotalFileList();
+		if(totalFileList == null){
+			totalFileList = new ArrayList<String>();
+		}
+		totalFileList.add(fileBean.getFileName());
+		project.setTotalFileList(totalFileList);
 		saveProjectTree(project);
 	}
 	/* mandatory constructor method */

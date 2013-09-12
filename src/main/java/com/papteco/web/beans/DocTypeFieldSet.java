@@ -4,6 +4,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class DocTypeFieldSet {
 
+	private int projectId;
+	private String projectCde;
 	private String upload_doctype;
 	private String clientNo;
 	private String dateWith4digs;
@@ -26,6 +28,22 @@ public class DocTypeFieldSet {
 	private String estimatedCost;
 	private String rev;
 	private MultipartFile uploadfile;
+
+	public int getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(int projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getProjectCde() {
+		return projectCde;
+	}
+
+	public void setProjectCde(String projectCde) {
+		this.projectCde = projectCde;
+	}
 
 	public MultipartFile getUploadfile() {
 		return uploadfile;
@@ -205,7 +223,7 @@ public class DocTypeFieldSet {
 
 	@Override
 	public String toString() {
-		return "DocTypeFieldSet [upload_doctype=" + upload_doctype
+		return "DocTypeFieldSet [projectId="+ projectId +", upload_doctype=" + upload_doctype
 				+ ", clientNo=" + clientNo + ", dateWith4digs=" + dateWith4digs
 				+ ", dateWith6digs=" + dateWith6digs + ", description="
 				+ description + ", dateCreated=" + dateCreated + ", ref=" + ref

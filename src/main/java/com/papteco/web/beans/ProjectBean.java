@@ -38,6 +38,16 @@ public class ProjectBean implements Serializable {
 	private String shortDesc;
 	
 	private String longDesc;
+	
+	private List<String> totalFileList;
+
+	public List<String> getTotalFileList() {
+		return totalFileList;
+	}
+
+	public void setTotalFileList(List<String> totalFileList) {
+		this.totalFileList = totalFileList;
+	}
 
 	public int getProjectId() {
 		return projectId;

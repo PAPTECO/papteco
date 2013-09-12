@@ -165,16 +165,30 @@ function submitCreateProject() {
 				}).then(function(datas) {
 
 					console.log("datas", datas);
-					dom.byId("clientSelect").value = "";
-					dom.byId("prjshortdesc").value = "";
-					dom.byId("prjlongdesc").value = "";
+					
+					if(datas.type == "success"){
+						alert("Project created success.Project Id is "+datas.projectcode);
+						createProjectDialog.hide();
+						refreshDocBroad(dom.byId("prjno").value);
+					
+						dom.byId("clientSelect").value = "";
+						dom.byId("prjshortdesc").value = "";
+						dom.byId("prjlongdesc").value = "";
+					}else{
+						alert("Project created fail."+datas.message);
+					}
+					
+					
+					refreshProjectBroad(dom.byId("prjno").value);
 				}, function(err) {
 					// Handle the error condition
 					console.log(err);
+					alert("Project created fail ."+err);
 				}, function(evt) {
 					// Handle a progress event from the request if the
 					// browser supports XHR2
 					console.log(evt);
+					alert("Project created fail ."+evt);
 				});
 			});
 }
