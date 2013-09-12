@@ -50,12 +50,15 @@ public class ProjectController extends BaseController {
 		try {
 			projectService.createProject(tmpProject,
 					this.sysConfig.prepareFolderStructure());
+			
+			return ImmutableMap.of("type", "success","projectcode",tmpProject.getProjectCde());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return ImmutableMap.of("type", "failure","message",e.getMessage());
 		}
 
-		return ImmutableMap.of("type", "success");
+		
 
 	}
 	
@@ -114,6 +117,33 @@ public class ProjectController extends BaseController {
  
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "saveSearch")
+	@ResponseBody
+	public Map saveSearch(@RequestParam String searchClinetno,
+			@RequestParam String searchAnykey,
+			@RequestParam String searchSavName) throws Exception {
+
+		System.out.println(searchClinetno);
+		System.out.println(searchAnykey);
+		System.out.println(searchSavName);
+
+		return ImmutableMap.of("type","success");
+ 
+	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "savePrjshortcut")
+	@ResponseBody
+	public Map saveSearch(@RequestParam String prjId,
+			@RequestParam String prjSavName) throws Exception {
+
+		System.out.println(prjId);
+		System.out.println(prjSavName);
+
+		return ImmutableMap.of("type","success");
+ 
+	}
+	
+	
 	@RequestMapping(method = RequestMethod.GET, value = "getProject")
 	@ResponseBody
 	public Map getProject(@RequestParam String projectId) throws Exception {

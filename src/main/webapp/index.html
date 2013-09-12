@@ -299,7 +299,7 @@
 						<input type="hidden" id="prj_id"></input>
 						<h1 id="prj_name">Project Name</h1>
 						<div class="blank_interrupt"></div>
-						<a id="SearchButton2" onClick="backtosearch();"
+						<a id="SearchButton2" onClick="projectstSaveDialog.show()"
 							class="insideFont bGreen notext_wrap " title="" href="#">+
 							Add To ShortCut</a>
 					</div>
@@ -452,16 +452,38 @@ alert("deleting"+tn.item.id);
 						<tr>
 							<td><label for="name">Search Name: </label></td>
 							<td><input data-dojo-type="dijit/form/TextBox" type="text"
-								id="name4" value="New searcher" class="dialogText"></td>
+								id="search_sav_name" value="New searcher" class="dialogText"></td>
 						</tr>
 					</table>
 				</div>
 
 				<div class="dijitDialogPaneActionBar">
-					<button data-dojo-type="dijit/form/Button" type="submit"
-						onClick="return myFormDialog.isValid();">Save</button>
 					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="myFormDialog.hide()">Cancel</button>
+						onClick="submitSaveSearch()">Save</button>
+					<button data-dojo-type="dijit/form/Button" type="button"
+						onClick="searchSaveDialog.hide()">Cancel</button>
+				</div>
+			</div>
+			
+			<div data-dojo-type="dijit/Dialog" data-dojo-id="projectstSaveDialog"
+				title="Project shortcut save"
+				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
+
+				<div>
+					<table class="dijitdialog_index">
+						<tr>
+							<td><label for="name">ShortCut Name: </label></td>
+							<td><input data-dojo-type="dijit/form/TextBox" type="text"
+								id="prj_sav_name" value="New shortcutname" class="dialogText"></td>
+						</tr>
+					</table>
+				</div>
+
+				<div class="dijitDialogPaneActionBar">
+					<button data-dojo-type="dijit/form/Button" type="button"
+						onClick="submitPrjSaveSearch()">Save</button>
+					<button data-dojo-type="dijit/form/Button" type="button"
+						onClick="projectstSaveDialog.hide()">Cancel</button>
 				</div>
 			</div>
 
