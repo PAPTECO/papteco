@@ -30,7 +30,7 @@ public class ProjectBean implements Serializable {
 //	@SecondaryKey(relate = Relationship.ONE_TO_ONE)
 	private String uniqueNo;
 
-	private List<FolderBean> folderTree;
+	private List<FolderBean> folderTree = new ArrayList<FolderBean>();
 
 	private String createdBy;
 
