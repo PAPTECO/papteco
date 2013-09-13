@@ -7,6 +7,17 @@ function uploadFileFormShow() {
 
 	tagid = "upload_doctype";
 
+	require([ "dojo/dom", "dojo/parser", "dojo/dom-class", "dojo/query",
+				"dojo/on", "dojo/request/iframe","dojo/json","dijit/registry" ], function(dom, parser, domClass,
+				query, on, iframe,json,registry) {
+			query("input,textarea", "uploadFileForm").forEach(function(node) {
+				
+				node.value = "";
+			});
+			
+			dom.byId("insert_content").innerHTML  = "";
+	});
+	
 	if (hasRegister(tagid))
 		return;
 

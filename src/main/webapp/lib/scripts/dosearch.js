@@ -74,37 +74,16 @@ require([ 'dojox/grid/EnhancedGrid', 'dojox/grid/enhanced/plugins/Pagination',
 		// alert("startPoint:"+selected.row[0].col3);
 		refreshProjectBroad(selected.row[0].id);
 
-		require([ "dojo/_base/fx", "dojo/dom-style" ], function(fx, style) {
-			// Function linked to the button to trigger the fade.
-			function fadeIt(tabname) {
-				style.set(tabname, "opacity", "1");
-				var fadeArgs = {
-					node : tabname
-				};
-				fx.fadeOut(fadeArgs).play();
-				style.set(tabname, "display", "none");
-			}
-			function fadeItShow(tabname) {
-				style.set(tabname, "opacity", "0");
-				style.set(tabname, "display", "block");
-				var fadeArgs = {
-					node : tabname
-				};
-				fx.fadeIn(fadeArgs).play();
-
-			}
-			fadeIt("MainSearchTab");
-			fadeItShow("DirectoryTab");
-
-		});
+		fadeIt("MainSearchTab");
+		fadeItShow("DirectoryTab");
 
 	});
 
 });
 
 function refreshProjectBroad(projectId) {
-	loadingDialog.closeButtonNode.hidden = true;
-	loadingDialog.show();
+	//loadingDialog.closeButtonNode.hidden = true;
+	//loadingDialog.show();
 	console.log("requesting",projectId);
 	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
 			function(dom, xhr, JSON, parser) {
@@ -140,7 +119,7 @@ function refreshProjectBroad(projectId) {
 
 			});
 
-	loadingDialog.hide();
+	//loadingDialog.hide();
 }
 
 function doSearch() {

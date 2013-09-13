@@ -291,7 +291,7 @@
 							class="insideFont bRed notext_wrap " title="" href="#">Back</a>
 						<div class="blank_interval notext_wrap">&nbsp;</div>
 						<a id="SearchButton3" class="insideFont bLightBlue notext_wrap"
-							title="" href="#">Refresh</a>
+							title="" href="#" onClick="refreshProjectBroad(getProjectId())">Refresh</a>
 
 
 					</legend>
@@ -398,7 +398,7 @@ alert("deleting"+tn.item.id);
 
 					console.log("deleted",datas);
 					
-					//refreshDocBroad(projectId);
+					refreshProjectBroad(getProjectId());
 				}, function(err) {
 					// Handle the error condition
 					console.log(err);

@@ -180,6 +180,10 @@ function submitCreateProject() {
 					
 					
 					refreshProjectBroad(dom.byId("prjno").value);
+					
+					fadeIt("MainSearchTab");
+					fadeItShow("DirectoryTab");
+					
 				}, function(err) {
 					// Handle the error condition
 					console.log(err);
