@@ -23,6 +23,7 @@ import com.papteco.web.beans.FieldDef;
 import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.beans.ProjectShortcutBean;
 import com.papteco.web.services.ProjectService;
 import com.papteco.web.utils.WebUtils;
 
@@ -160,7 +161,7 @@ public class ProjectController extends BaseController {
 		System.out.println(searchClinetno);
 		System.out.println(searchAnykey);
 		System.out.println(searchSavName);
-
+		projectService.saveSearchShortcut("conygychen", searchSavName, searchClinetno, searchAnykey);
 		return ImmutableMap.of("type","success");
  
 	}	
@@ -170,9 +171,7 @@ public class ProjectController extends BaseController {
 	public Map saveSearch(@RequestParam String prjId,
 			@RequestParam String prjSavName) throws Exception {
 
-		System.out.println(prjId);
-		System.out.println(prjSavName);
-
+		projectService.saveProjectShortcut("conygychen", prjSavName, prjId);
 		return ImmutableMap.of("type","success");
  
 	}

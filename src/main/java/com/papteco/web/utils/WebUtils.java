@@ -84,6 +84,31 @@ public class WebUtils {
 
 		for(int i = 0; i< searchResult.size(); i++){
 			ProjectBean bean = searchResult.get(i);
+			int countFiles = bean.getTotalFileList().size();
+			StringBuffer files = new StringBuffer();;
+			
+			if(StringUtils.isBlank(searchAnykey)){
+				if(countFiles >= 2){
+					files.append(bean.getTotalFileList().get(countFiles-1) + "; " + bean.getTotalFileList().get(countFiles-2) + ";");
+				}else if(countFiles == 1){
+					files.append(bean.getTotalFileList().get(countFiles-1) + "; ");
+				}else{
+					files.append("");
+				}
+			}else{
+				List<String> tolfiles = bean.getTotalFileList();
+				int index=0;
+				for(String file : tolfiles){
+					if(index >= 2){
+						break;
+					}
+					if(file.contains(searchAnykey)){
+						files.append(file + ";");
+						index++;
+					}
+				}
+			}
+			
 			Map data = ImmutableMap
 					.of("col1",
 							bean.getProjectCde(),
@@ -92,7 +117,7 @@ public class WebUtils {
 							"col3",
 							bean.getShortDesc(),
 							"col4",
-							"E9970-130310-136-Carbide knife grinder - Specifications.doc\n E9970-130310-136-Project2-Specifications.doc",
+							files,
 							"col5",
 							bean.getCreatedBy());
 			Map testdata = Maps.newHashMap();
@@ -282,6 +307,10 @@ public class WebUtils {
 	
 	public static void saveUploadFile(int projectId, String docType, FileBean fileBean){
 		ProjectCacheDAO.saveFileBean(projectId, docType, fileBean);
+	}
+	
+	public static void deleteFile(int projectId, String docType, String fileName){
+		
 	}
 	
 	public static Map responseWithStatusCode() {

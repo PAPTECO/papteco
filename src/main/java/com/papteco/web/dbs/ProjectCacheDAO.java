@@ -84,8 +84,28 @@ public class ProjectCacheDAO {
 		for (ProjectBean bean : allProjects){
 			if(StringUtils.isBlank(clientNo) && StringUtils.isBlank(anyKey)){
 				result.add(bean);
-			}else if(clientNo.trim().equals(bean.getClientNo().trim())){
-				result.add(bean);
+			}else if(StringUtils.isBlank(clientNo) && StringUtils.isNotBlank(anyKey)){
+				List<String> files = bean.getTotalFileList();
+				for(String file : files){
+					if(file.contains(anyKey)){
+						result.add(bean);
+						break;
+					}
+				}
+			}else if(StringUtils.isNotBlank(clientNo) && StringUtils.isBlank(anyKey)){
+				if(clientNo.trim().equals(bean.getClientNo().trim())){
+					result.add(bean);
+				}
+			}else{
+				if(clientNo.trim().equals(bean.getClientNo().trim())){
+					List<String> files = bean.getTotalFileList();
+					for(String file : files){
+						if(file.contains(anyKey)){
+							result.add(bean);
+							break;
+						}
+					}
+				}
 			}
 		}
 		allProjects.close();

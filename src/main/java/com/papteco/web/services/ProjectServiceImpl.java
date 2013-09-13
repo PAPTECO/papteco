@@ -6,9 +6,12 @@ import org.springframework.stereotype.Service;
 
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.beans.ProjectShortcutBean;
+import com.papteco.web.beans.SearchShortcutBean;
 import com.papteco.web.dbs.ProjectCacheDAO;
+import com.papteco.web.dbs.ProjectShortcutDAO;
+import com.papteco.web.dbs.SearchShortcutDAO;
 import com.papteco.web.utils.FSUtils;
-import com.sleepycat.persist.EntityCursor;
 
 @Service
 public class ProjectServiceImpl extends BaseService implements ProjectService {
@@ -19,20 +22,30 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 	}
 
 	public void createProject(ProjectBean project, List<FolderBean> folderList) throws Exception {
-//		FSUtils.putFile(null, null);
 		project.setProjectId(ProjectCacheDAO.getMaxProjectId());
 		foldersUtils.createProjectFolders(foldersUtils.prepareProjectPath(project.getProjectCde()), folderList);
 		ProjectCacheDAO.saveProjectTree(project);
-		
-//		System.out.println(DBCacheDAO.getMaxProjectId());
-//		System.out.println(project.getProjectCde());
-//		System.out.println(DBCacheDAO.getProjectTree(project.getProjectId()));
-//		EntityCursor<ProjectBean> list = DBCacheDAO.getAllProjectBeans();
-//		for (ProjectBean bean : list){
-//			System.out.println(bean.getClientNo());
-//		}
 	}
 
+	public void saveProjectShortcut(String usracct, String prjSavName, String prjId) throws Exception {
+		ProjectShortcutBean prjshortcut = ProjectShortcutDAO.getProjectShortcut(usracct);
+		if(prjshortcut == null){
+			prjshortcut = new ProjectShortcutBean();
+			prjshortcut.setUsracct(usracct);
+		}
+		prjshortcut.getPrjShortcuts().put(prjSavName, Integer.valueOf(prjId));
+		ProjectShortcutDAO.saveProjectShortcut(prjshortcut);
+	}
+	
+	public void saveSearchShortcut(String usracct, String searchSavName, String searchClinetno, String searchAnykey) throws Exception {
+		SearchShortcutBean searchShortcut = SearchShortcutDAO.getSearchShortcut(usracct);
+		if(searchShortcut == null){
+			searchShortcut = new SearchShortcutBean();
+			searchShortcut.setUsracct(usracct);
+		}
+		searchShortcut.getSearchShortcuts().put(searchSavName, new String[]{searchClinetno,searchAnykey});
+		SearchShortcutDAO.saveSearchShortcut(searchShortcut);
+	}
 	/* mandatory constructor method */
 	public ProjectServiceImpl() {
 	}
