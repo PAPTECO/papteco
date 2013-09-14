@@ -9,8 +9,8 @@
 <body>
     <div>
         
-<form action="createProject" method="post">
-            <input type="text" name="username">
+<form action="viewDocs" method="get">
+            <input type="projectId" name="1">
             <input type="submit" value="SUBMIT">
         </form>
     </div>

@@ -12,10 +12,6 @@ public class FoldersUtils extends BaseUtils{
 	
 	// this is retry function
 	public void createProjectFolders(String projectPath, List<FolderBean> folderList){
-//		if(!projectPath.endsWith("/") && !projectPath.endsWith("\\")){
-//			projectPath = projectPath + "/";
-//		}
-		
 		File f = new File(projectPath);
 		if(!f.exists()){
 			f.mkdirs();

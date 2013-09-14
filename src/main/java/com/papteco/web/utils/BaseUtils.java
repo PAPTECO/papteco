@@ -9,8 +9,24 @@ public class BaseUtils {
 	/* properties value; */
 	@Value("#{settings['rootpath']}")
 	protected String rootpath;
-	
+
 	@Value("#{settings[datapath]}")
 	protected String datapath;
 
+	public boolean isWindowsPlatform() {
+		String os = System.getProperty("os.name");
+		if (os != null && os.startsWith("Windows"))
+			return true;
+		else
+			return false;
+	}
+
+	public boolean isMacPlatform() {
+		String os = System.getProperty("os.name");
+
+		if (os != null && os.startsWith("Mac"))
+			return true;
+		else
+			return false;
+	}
 }

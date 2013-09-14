@@ -10,19 +10,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.papteco.web.beans.ClientBean;
 import com.papteco.web.beans.FolderBean;
-import com.papteco.web.services.ClientService;
 import com.papteco.web.utils.WebUtils;
 
 @Controller
 public class PropertiesController extends BaseController {
 
-	// protected List<FolderBean> folders;
-	// protected List<ClientBean> clients;
-	// @Autowired
-	protected ClientService clientService;
-
 	public int getIncreaseNumber() {
-
 		return 0;
 	}
 
@@ -31,7 +24,7 @@ public class PropertiesController extends BaseController {
 	public Map getPredefineStructureFolders() {
 		return WebUtils.toTreeJson(this.sysConfig.prepareFolderStructure());
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "getPredefineDocumentTypes")
 	@ResponseBody
 	public Map getPredefineDocumentTypes() {
@@ -43,7 +36,7 @@ public class PropertiesController extends BaseController {
 	public Map getClientInfo() {
 		return WebUtils.toClientJson(this.sysConfig.prepareClientsInfo());
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "getUniqueNo")
 	@ResponseBody
 	public Map getUniqueNo() {
@@ -57,7 +50,5 @@ public class PropertiesController extends BaseController {
 	public PropertiesController(List<FolderBean> folders,
 			List<ClientBean> clients) {
 		super();
-		// this.folders = folders;
-		// this.clients = clients;
 	}
 }
