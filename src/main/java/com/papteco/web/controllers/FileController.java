@@ -138,7 +138,9 @@ public class FileController extends BaseController {
 	public Map viewDocs(@RequestParam String projectId,
 			@RequestParam String filename,
 			HttpServletResponse response) throws Exception {
+
 		ProjectBean project = fileService.getProjectBeanByProjectId(Integer.valueOf(projectId));
+
 		
 		String fileFolder = combineFolderPath(
 				combineFolderPath(rootpath, project.getProjectCde()),
@@ -153,6 +155,7 @@ public class FileController extends BaseController {
 			System.out.println("no such file.");
 		}
 		System.out.println("viewDocs: " + filename);
+
 		return WebUtils.responseWithStatusCode();
 
 	}
