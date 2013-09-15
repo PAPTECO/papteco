@@ -163,6 +163,32 @@ public class WebUtils {
 
 		return null;
 	}
+	
+	public static String getValueByFieldName(String fieldName,
+			FileBean obj) {
+
+		Field field;
+		try {
+			field = FileBean.class.getDeclaredField(fieldName);
+			field.setAccessible(true);
+
+			return (String) field.get(obj);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 
 	public static Map toNumberingFormat(String prjId,String docType, FormatItem item,
 			List<FieldDef> seqAndDesc,String clientno, String ref) {
@@ -265,7 +291,7 @@ public class WebUtils {
 
 	}
 
-	public static Map toDocsSummaries(int projectId) {
+	public static Map toDocsSummaries(int projectId,SystemConfiguration sysConfig) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("identifier", "id");
 		result.put("label", "name");
@@ -288,8 +314,8 @@ public class WebUtils {
 						"id" , file.getFileName(),
 						"name" , file.getFileName(),
 						"type" , "continent",
-						"lastmodat" , file.getLastModifiedAt(),
-						"field_details" , file.toString()));
+						"projectId" , projectId,
+						"field_details" , displayUploadFileFields(file,sysConfig)));
 					
 				}
 				resultList.add(ImmutableMap.of(
@@ -304,6 +330,23 @@ public class WebUtils {
 		result.put("items", resultList);
 		return result;
 		
+	}
+	
+	public static String displayUploadFileFields(FileBean bean,SystemConfiguration sysConfig){
+		
+		FormatItem item = sysConfig.getFormatSetting().get(bean.getUpload_doctype());
+		
+		StringBuilder sb = new StringBuilder();
+		for (FieldDef col : sysConfig.getSeqAndDesc()) {
+			if (col.isAdditional() && getValueByFieldName(col.getFieldName(),item) != ActionEnum.notApplicable){
+				sb.append("<p><label for='sf'>");
+				sb.append(col.getFieldDesc());
+				sb.append("</label><span class='field_desc'>");
+				sb.append(getValueByFieldName(col.getFieldName(),bean));
+				sb.append("</span></p>");
+			}
+		}
+		return sb.toString();
 	}
 	
 	public static void saveUploadFile(int projectId, String docType, FileBean fileBean){

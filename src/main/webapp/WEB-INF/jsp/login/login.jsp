@@ -9,8 +9,9 @@
 <body>
     <div>
         
-<form action="viewDocs" method="get">
-            <input type="projectId" name="1">
+<form action="deleteDocs" method="GET">
+            <input name="projectId" value="1">
+            <input name="filename" value="1">
             <input type="submit" value="SUBMIT">
         </form>
     </div>

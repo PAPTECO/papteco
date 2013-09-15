@@ -42,8 +42,8 @@ public class FileController extends BaseController {
 		trgFileName.append(bean.getRef());
 		trgFileName.append("-");
 		trgFileName.append(bean.getDescription());
-		trgFileName.append(" - ");
-		trgFileName.append("Rev ");
+		trgFileName.append("-");
+		trgFileName.append("Rev");
 		trgFileName.append(bean.getRev());
 		trgFileName.append(bean
 				.getUploadfile()
@@ -110,7 +110,7 @@ public class FileController extends BaseController {
 	public Map getDocs(@RequestParam String projectId) throws Exception {
 		System.out.println("getDocs:"+projectId);
 
-		return WebUtils.toDocsSummaries(Integer.valueOf(projectId));
+		return WebUtils.toDocsSummaries(Integer.valueOf(projectId),this.sysConfig);
 
 	}
 	
@@ -118,13 +118,24 @@ public class FileController extends BaseController {
 	@ResponseBody
 	public Map deleteDocs(@RequestParam String projectId,
 			@RequestParam String filename) throws Exception {
-		System.out.println("deleting project id:" + projectId + " document name is "+filename);
+//		System.out.println("deleting project id:" + projectId + " document name is "+filename);
+		String fileFolder = combineFolderPath(
+				combineFolderPath(rootpath, "1000-1309-1"),
+				this.sysConfig.getFolderNameByFolderCde(filename.substring(0, 1)));
+		File file = new File(fileFolder, "E1000-130916-1-first pp - Rev 1.ppt");
+		if (file.exists()) {
+			file.delete();
+		}
+		
+		fileService.deleteFile(1, "E", "E1000-130916-1-first pp - Rev 1.ppt");
 		return WebUtils.responseWithStatusCode();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "viewDocs")
 	@ResponseBody
-	public Map viewDocs(HttpServletResponse response) throws Exception {
+	public Map viewDocs(@RequestParam String projectId,
+			@RequestParam String filename,
+			HttpServletResponse response) throws Exception {
 		String prjCde = "1000-1309-1";
 		String docType = "E";
 		String fileName = "E1000-130913-1-first memo - Rev 0.1.ppt";
@@ -135,7 +146,7 @@ public class FileController extends BaseController {
 		
 		response.setContentType("application/x-download");
 		response.setHeader("Content-disposition", "attachment; filename=" + fileName);
-		IOUtils.copy(fileService.getFileIs("C:/cony/tmp/1000-1309-1/Memo/E1000-130913-1-first memo - Rev 0.1.ppt"), response.getOutputStream());
+		IOUtils.copy(fileService.getFileIs("C:/water.php.jpg"), response.getOutputStream());
 	    response.flushBuffer();
 
 //		fileService.localOpenFile("C:/cony/tmpfile/abc.ppt");

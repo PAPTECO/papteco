@@ -35,15 +35,24 @@ require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
 	dojo.connect(docTree, 'onClick', function(item, node, evt) {
 		console.log("Item", item); // This gives you the object in your store
 		console.log("Node", node); // This gives you the dijit widget object
-									// (UI)
+		// (UI)
 		console.log("Event", evt); // This gives you the event object
 		console.log('identifier: ' + docTree.getLabel(item));
-		
-		dojo.byId("doc_name").innerHTML=docTree.getLabel(item);
-		dojo.byId("doc_last_modi_at").innerHTML=docTree.getLabel(item);
-		dojo.byId("field_details").innerHTML=item.field_details;
-		//dojo.byId("doc_init_upload_at").innerHTML=docTree.getLabel(item);
-		//dojo.byId("doc_init_upload_by").innerHTML=docTree.getLabel(item);
+
+		dojo.byId("doc_name").innerHTML = docTree.getLabel(item);
+		//dojo.byId("doc_last_modi_at").innerHTML = docTree.getLabel(item);
+		dojo.byId("field_details").innerHTML = item.field_details;
+		// dojo.byId("ViewDoc").onClick =
+		// "window.open('viewDocs?projectId=a;filename='"+docTree.getLabel(item)+"')";
+
+		console.log(dojo.byId("ViewDoc"));
+
+		dojo.byId("ViewDoc").onclick = function() {
+			window.open("viewDocs?projectId="+item.projectId+"&filename="+docTree.getLabel(item));
+					};
+
+		// dojo.byId("doc_init_upload_at").innerHTML=docTree.getLabel(item);
+		// dojo.byId("doc_init_upload_by").innerHTML=docTree.getLabel(item);
 	});
 
 });
@@ -126,17 +135,17 @@ function refreshDocBroad(projectId) {
 
 }
 
-function submitPrjSaveSearch(){
-	
-	//searchSaveDialog.isValid();
-	
+function submitPrjSaveSearch() {
+
+	// searchSaveDialog.isValid();
+
 	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
 			function(dom, xhr, JSON, parser) {
 
 				dataset = {
-						prjId : dom.byId("prj_id").value,
-						prjSavName : dom.byId("prj_sav_name").value
-					
+					prjId : dom.byId("prj_id").value,
+					prjSavName : dom.byId("prj_sav_name").value
+
 				};
 
 				xhr("savePrjshortcut", {

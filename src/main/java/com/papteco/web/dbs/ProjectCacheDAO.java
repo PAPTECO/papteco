@@ -127,6 +127,30 @@ public class ProjectCacheDAO {
 		project.setTotalFileList(totalFileList);
 		saveProjectTree(project);
 	}
+	
+	public static void deleteFileBean(int projectId,String docType, String fileName){
+		ProjectBean project = projectIdIndex.get(projectId);
+		for(FolderBean folder : project.getFolderTree()){
+			if(docType.equals(folder.getDocType())){
+				List<FileBean> fileList = folder.getFileTree();
+				FileBean removingfile = null;
+				for(FileBean file : fileList){
+					if(fileName.equals(file.getFileName())){
+						removingfile = file;
+						break;
+					}
+				}
+				fileList.remove(removingfile);
+				folder.setFileTree(fileList);
+				break;
+			}
+		}
+		List<String> totalFileList = project.getTotalFileList();
+		totalFileList.remove(fileName);
+		project.setTotalFileList(totalFileList);
+		saveProjectTree(project);
+	}
+	
 	/* mandatory constructor method */
 	public ProjectCacheDAO() {
 		
