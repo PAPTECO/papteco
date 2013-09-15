@@ -348,19 +348,7 @@
 										class="field_desc" id="doc_last_modi_at">13 May 2013
 										13:59</span>
 								</p>
-								<p>
-									<label for="sf">Last modified by: </label> <span
-										class="field_desc" id="doc_last_modi_by">John Painter</span>
-								</p>
-								<p>
-									<label for="sf">Initial upload at: </label> <span
-										class="field_desc" id="doc_init_upload_at">19 May 2013
-										22:12</span>
-								</p>
-								<p>
-									<label for="sf">Initial upload by: </label> <span
-										class="field_desc" id="doc_init_upload_by">Alan Copar</span>
-								</p>
+								<div id="field_details"></div>
 
 							</fieldset>
 
@@ -382,12 +370,18 @@
 
                             // now print the data store item that backs the tree node
                             console.debug("menu click for item: ", tn.item.name);
-alert("deleting"+tn.item.id);
+
+var r=confirm("Are you sure to delete "+tn.item.id +" ?");
+if (r==false)
+	return;
+
+//alert("deleting"+tn.item.id);
 							require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
 			function(dom, xhr, JSON, parser) {
 
 				dataset = {
-						"projectId" : tn.item.id
+						projectId:getProjectId(),
+						filename : tn.item.id
 				};
 
 				xhr("deleteDocs", {
@@ -397,7 +391,7 @@ alert("deleting"+tn.item.id);
 				}).then(function(datas) {
 
 					console.log("deleted",datas);
-					
+					alert(tn.item.id + " has been deleted.");
 					refreshProjectBroad(getProjectId());
 				}, function(err) {
 					// Handle the error condition
@@ -426,8 +420,9 @@ alert("deleting"+tn.item.id);
 				<form method="post" action="submitUploadFile" id="uploadFileForm"
 					enctype="multipart/form-data">
 					<div class="dijitDialogPaneContentArea">
-						<span><label for="date">Document Type: </label><input
-							id="upload_doctype"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><label for="date" id="uploader_header">Upload File: </label><input
+						<span><label for="date" id="upload_doctype_id_header">Document
+								Type: </label><input id="upload_doctype"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><label
+							for="date" id="uploader_header">Upload File: </label><input
 							name="uploadfile" type="file" id="uploader" /></span>
 
 						<div id="insert_content"></div>

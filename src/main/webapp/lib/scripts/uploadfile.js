@@ -94,6 +94,12 @@ function validateUploadForm() {
 		} else {
 			turnOffError(domClass, dojo.byId("uploader"));
 		}
+		
+		if (dojo.byId("upload_doctype_id").value == "") {
+			turnOnError(domClass, dojo.byId("upload_doctype_id"));
+		} else {
+			turnOffError(domClass, dojo.byId("upload_doctype_id"));
+		}
 
 		var hasErr=false;
 		query(".errorcolor", "uploadFileForm").forEach(function(node) {

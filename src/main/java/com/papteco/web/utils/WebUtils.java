@@ -289,7 +289,8 @@ public class WebUtils {
 						"name" , file.getFileName(),
 						"type" , "continent",
 						"lastmodat" , file.getLastModifiedAt(),
-						"lastmodby" , file.getLastModifiedBy()));
+						"field_details" , file.toString()));
+					
 				}
 				resultList.add(ImmutableMap.of(
 						"id" , folder.getDocType(),

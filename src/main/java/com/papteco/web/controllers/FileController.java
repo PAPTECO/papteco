@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,9 +74,12 @@ public class FileController extends BaseController {
 		fileBean.setFileName(fileName);
 		fileBean.setInitUploadAt(new Date());
 		fileBean.setLastModifiedAt(new Date());
-		fileBean.setLastModifiedBy("wasadmin");
+		fileBean.setLastModifiedBy("admin");
 		fileBean.setInitUploadBy("cony");
-		fileBean.setDescription(bean.getDescription());
+		
+		BeanUtils.copyProperties(fileBean, bean);
+		System.out.println(fileBean);
+
 		WebUtils.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
 				fileBean);
 		return "success";
@@ -112,8 +116,9 @@ public class FileController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "deleteDocs")
 	@ResponseBody
-	public Map deleteDocs(@RequestParam String projectId) throws Exception {
-		System.out.println("getDocs:" + projectId);
+	public Map deleteDocs(@RequestParam String projectId,
+			@RequestParam String filename) throws Exception {
+		System.out.println("deleting project id:" + projectId + " document name is "+filename);
 		return WebUtils.responseWithStatusCode();
 	}
 

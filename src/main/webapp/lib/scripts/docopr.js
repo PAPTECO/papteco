@@ -41,9 +41,9 @@ require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
 		
 		dojo.byId("doc_name").innerHTML=docTree.getLabel(item);
 		dojo.byId("doc_last_modi_at").innerHTML=docTree.getLabel(item);
-		dojo.byId("doc_last_modi_by").innerHTML=docTree.getLabel(item);
-		dojo.byId("doc_init_upload_at").innerHTML=docTree.getLabel(item);
-		dojo.byId("doc_init_upload_by").innerHTML=docTree.getLabel(item);
+		dojo.byId("field_details").innerHTML=item.field_details;
+		//dojo.byId("doc_init_upload_at").innerHTML=docTree.getLabel(item);
+		//dojo.byId("doc_init_upload_by").innerHTML=docTree.getLabel(item);
 	});
 
 });
