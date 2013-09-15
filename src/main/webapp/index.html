@@ -382,7 +382,8 @@ if (r==false)
 				xhr("deleteDocs", {
 					handleAs : "json",
 					query : dataset,
-					method : "get"
+					method : "get",
+					preventCache : true
 				}).then(function(datas) {
 
 					console.log("deleted",datas);

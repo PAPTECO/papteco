@@ -13,4 +13,5 @@ public interface ProjectService {
 	public void saveProjectShortcut(String usracct, String prjSavName, String prjId) throws Exception;
 	
 	public void saveSearchShortcut(String usracct, String searchSavName, String searchClinetno, String searchAnykey) throws Exception;
+	
 }

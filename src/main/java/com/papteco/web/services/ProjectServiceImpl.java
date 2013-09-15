@@ -46,6 +46,7 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 		searchShortcut.getSearchShortcuts().put(searchSavName, new String[]{searchClinetno,searchAnykey});
 		SearchShortcutDAO.saveSearchShortcut(searchShortcut);
 	}
+	
 	/* mandatory constructor method */
 	public ProjectServiceImpl() {
 	}

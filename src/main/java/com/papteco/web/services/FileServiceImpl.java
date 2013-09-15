@@ -5,6 +5,7 @@ import java.io.InputStream;
 
 import org.springframework.stereotype.Service;
 
+import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.dbs.ProjectCacheDAO;
 import com.papteco.web.utils.FSUtils;
 
@@ -30,6 +31,10 @@ public class FileServiceImpl extends BaseService {
 	
 	public void deleteFile(int prjId, String docType, String fileName) throws IOException{
 		ProjectCacheDAO.deleteFileBean(prjId, docType, fileName);
+	}
+	
+	public ProjectBean getProjectBeanByProjectId(int prjId){
+		return ProjectCacheDAO.getProjectTree(prjId);
 	}
 	
 	/* mandatory constructor method */
