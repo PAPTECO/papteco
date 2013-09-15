@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.Date;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -116,7 +119,7 @@ public class FileController extends BaseController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "viewDocs")
 	@ResponseBody
-	public Map viewDocs() throws Exception {
+	public Map viewDocs(HttpServletResponse response) throws Exception {
 		String prjCde = "1000-1309-1";
 		String docType = "E";
 		String fileName = "E1000-130913-1-first memo - Rev 0.1.ppt";
@@ -124,11 +127,13 @@ public class FileController extends BaseController {
 		String fileFolder = combineFolderPath(
 				combineFolderPath(rootpath, prjCde),
 				this.sysConfig.getFolderNameByFolderCde(docType));
-		fileService
-				.downloadFile(
-						"C:/cony/tmp/1000-1309-1/Memo/E1000-130913-1-first memo - Rev 0.1.ppt",
-						"C:/cony/tmpfile/abc.ppt");
-		fileService.localOpenFile("C:/cony/tmpfile/abc.ppt");
+		
+		response.setContentType("application/x-download");
+		response.setHeader("Content-disposition", "attachment; filename=" + fileName);
+		IOUtils.copy(fileService.getFileIs("C:/cony/tmp/1000-1309-1/Memo/E1000-130913-1-first memo - Rev 0.1.ppt"), response.getOutputStream());
+	    response.flushBuffer();
+
+//		fileService.localOpenFile("C:/cony/tmpfile/abc.ppt");
 		System.out.println("viewDocs: " + "C:/cony/tmpfile/abc.ppt");
 
 		return WebUtils.responseWithStatusCode();

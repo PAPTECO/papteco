@@ -27,6 +27,10 @@ public class FilesUtils extends BaseUtils{
 		
 	}
 	
+	public InputStream getFileInputStream(String fromFile) throws IOException {
+		return new BufferedInputStream(new FileInputStream(fromFile));
+	}
+	
 	public void localOpenFile(String file) throws IOException{
 		Runtime.getRuntime().exec("cmd /C Start " + file); 
 	}

@@ -1,17 +1,10 @@
 package com.papteco.web.services;
 
 import java.io.IOException;
-import java.util.List;
+import java.io.InputStream;
 
 import org.springframework.stereotype.Service;
 
-import com.papteco.web.beans.FolderBean;
-import com.papteco.web.beans.ProjectBean;
-import com.papteco.web.beans.ProjectShortcutBean;
-import com.papteco.web.beans.SearchShortcutBean;
-import com.papteco.web.dbs.ProjectCacheDAO;
-import com.papteco.web.dbs.ProjectShortcutDAO;
-import com.papteco.web.dbs.SearchShortcutDAO;
 import com.papteco.web.utils.FSUtils;
 
 @Service
@@ -28,6 +21,10 @@ public class FileServiceImpl extends BaseService {
 	
 	public void localOpenFile(String filepath) throws IOException{
 		filesUtils.localOpenFile(filepath);
+	}
+	
+	public InputStream getFileIs(String fromFile) throws IOException{
+		return filesUtils.getFileInputStream(fromFile);
 	}
 	
 	/* mandatory constructor method */
