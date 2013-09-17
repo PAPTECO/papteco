@@ -320,7 +320,7 @@ public class WebUtils {
 				}
 				resultList.add(ImmutableMap.of(
 						"id" , folder.getDocType(),
-						"name" , folder.getFolderName(),
+						"name" , folder.getFolderName() + "("+subList.size()+")",
 						"type" , "continent",
 						"numformat" , folder.getNuberformat(),
 						"children", subList));

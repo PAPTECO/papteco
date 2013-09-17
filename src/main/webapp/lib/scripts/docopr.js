@@ -39,17 +39,31 @@ require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
 		console.log("Event", evt); // This gives you the event object
 		console.log('identifier: ' + docTree.getLabel(item));
 
-		dojo.byId("doc_name").innerHTML = docTree.getLabel(item);
-		//dojo.byId("doc_last_modi_at").innerHTML = docTree.getLabel(item);
-		dojo.byId("field_details").innerHTML = item.field_details;
+		filename = docTree.getLabel(item);
+		toIndex = filename.indexOf("(") > 0 ? filename.indexOf("(")
+				: filename.length;
+		dojo.byId("doc_name").innerHTML = filename.substring(0, toIndex);
+		// dojo.byId("doc_last_modi_at").innerHTML = docTree.getLabel(item);
+		if (item.field_details) {
+			dojo.byId("field_details").innerHTML = item.field_details;
+		} else {
+			dojo.byId("field_details").innerHTML = "";
+		}
 		// dojo.byId("ViewDoc").onClick =
 		// "window.open('viewDocs?projectId=a;filename='"+docTree.getLabel(item)+"')";
 
 		console.log(dojo.byId("ViewDoc"));
 
 		dojo.byId("ViewDoc").onclick = function() {
-			window.open("viewDocs?projectId="+item.projectId+"&filename="+docTree.getLabel(item));
-					};
+
+			if (item.field_details) {
+				window.open("viewDocs?projectId=" + item.projectId
+						+ "&filename=" + docTree.getLabel(item));
+			} else {
+				alert('Please select file.');
+			}
+
+		}
 
 		// dojo.byId("doc_init_upload_at").innerHTML=docTree.getLabel(item);
 		// dojo.byId("doc_init_upload_by").innerHTML=docTree.getLabel(item);
@@ -135,35 +149,4 @@ function refreshDocBroad(projectId) {
 
 }
 
-function submitPrjSaveSearch() {
 
-	// searchSaveDialog.isValid();
-
-	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
-			function(dom, xhr, JSON, parser) {
-
-				dataset = {
-					prjId : dom.byId("prj_id").value,
-					prjSavName : dom.byId("prj_sav_name").value
-
-				};
-
-				xhr("savePrjshortcut", {
-					handleAs : "json",
-					query : dataset,
-					method : "get"
-				}).then(function(datas) {
-
-					alert("saved");
-					searchSaveDialog.hide();
-				}, function(err) {
-					// Handle the error condition
-					alert("saved fail." + err);
-				}, function(evt) {
-					// Handle a progress event from the request if the
-					// browser supports XHR2
-					alert("saved fail." + evt);
-				});
-
-			});
-}

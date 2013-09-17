@@ -7,7 +7,7 @@ function loadingFolders(tagid) {
 			"dijit/tree/ForestStoreModel", "dojo/domReady!" ], function(Tree,
 			ItemFileReadStore, ForestStoreModel) {
 		var store2 = new ItemFileReadStore({
-			url : "http://localhost:8080/Papteco/getPredefineStructureFolders"
+			url : "getPredefineStructureFolders"
 		});
 		console.log(store2);
 

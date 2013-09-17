@@ -130,6 +130,8 @@
 <script type="text/javascript" src="lib/scripts/dosearch.js"></script>
 <script type="text/javascript" src="lib/scripts/docopr.js"></script>
 <script type="text/javascript" src="lib/scripts/uploadfile.js"></script>
+<script type="text/javascript" src="lib/scripts/shortcut.js"></script>
+
 <!-- End of Libraries -->
 </head>
 <body class="claro">
@@ -225,7 +227,7 @@
 					<div data-dojo-id="maincp_tc_cp2"
 						data-dojo-type="dijit/layout/ContentPane" title="Projects">
 
-						<ul class="filesDown">
+						<ul class="filesDown" id="shortcut_ul">
 							<li><span class="fileSuccess"></span> 202-039-4056
 								SampleProject1 <span class="remove"></span></li>
 							<li><span class="fileSuccess"></span> 202-039-4056
@@ -237,7 +239,7 @@
 
 					<div data-dojo-id="maincp_tc_cp3"
 						data-dojo-type="dijit/layout/ContentPane" title="Search">
-						<ul class="filesDown">
+						<ul class="filesDown" id="prjshortcut_ul">
 							<li><span class="fileSearch"></span> Client is 203 <span
 								class="remove"></span></li>
 							<li><span class="fileSearch"></span> New searcher <span
@@ -327,22 +329,20 @@
 						<div class="fileInfo">
 							<fieldset>
 								<legend>Document Details</legend>
-								<p>
-									<b><span class="field_desc" id="doc_name"></span></b>
-								</p>
+								
 
-								<p>
+								<p style="float:right">
 									<a id="ViewDoc" onClick="alert('Please select file.')"
 										class="insideFont bGold notext_wrap " title="" href="#">View
-										Only</a>&nbsp;&nbsp;&nbsp; <a id="EditDoc"
-										onClick="backtosearch();"
-										class="insideFont bgray notext_wrap " title="" href="#">Edit
-										Doc</a> <a id="UploadDoc" onClick="uploadFileFormShow();"
-										class="insideFont bGold notext_wrap " title="" href="#">Upload
+										Only</a>&nbsp;&nbsp;&nbsp;  <a id="UploadDoc" onClick="uploadFileFormShow();"
+										class="insideFont bGreen notext_wrap " title="" href="#">Upload
 										Doc</a>
 								</p>
-								<hr />
 								
+								<hr />
+								<p>
+									<b><span id="doc_name"></span></b>
+								</p>
 								<div id="field_details"></div>
 
 							</fieldset>

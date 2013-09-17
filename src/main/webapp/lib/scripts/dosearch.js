@@ -164,36 +164,4 @@ function doSearch() {
 			});
 }
 
-function submitSaveSearch(){
-	
-	//searchSaveDialog.isValid();
-	
-	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
-			function(dom, xhr, JSON, parser) {
 
-				dataset = {
-					searchClinetno : dom.byId("search_clinetno").value,
-					searchAnykey : dom.byId("search_anykey").value,
-					searchSavName : dom.byId("search_sav_name").value
-					
-				};
-
-				xhr("saveSearch", {
-					handleAs : "json",
-					query : dataset,
-					method : "get"
-				}).then(function(datas) {
-
-					alert("saved");
-					searchSaveDialog.hide();
-				}, function(err) {
-					// Handle the error condition
-					alert("saved fail." + err);
-				}, function(evt) {
-					// Handle a progress event from the request if the
-					// browser supports XHR2
-					alert("saved fail." + evt);
-				});
-
-			});
-}

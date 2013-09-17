@@ -78,6 +78,35 @@ public class ProjectController extends BaseController {
 		return ImmutableMap.of("type", "success");
 
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "getSearchShortcut")
+	@ResponseBody
+	public Map getSearchShortcut() throws Exception {
+		
+		System.out.println("getSearchShortcut");
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<li><span class='fileSuccess'></span> 202-039-4056 SampleProject3 <span class='remove'></span></li>");
+		sb.append("<li><span class='fileSuccess'></span> 202-039-4056 SampleProject3 <span class='remove'></span></li>");
+		sb.append("<li><span class='fileSuccess'></span> 202-039-4056 SampleProject3 <span class='remove'></span></li>");
+
+		return ImmutableMap.of("data", sb.toString());
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "getPrjShortcut")
+	@ResponseBody
+	public Map getPrjShortcut() throws Exception {
+		
+		System.out.println("getPrjShortcut");
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<li><span class='fileSearch'></span> Last modified within 7days <span class='remove'></span></li>");
+
+
+		return ImmutableMap.of("data", sb.toString());
+
+	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "savePrjshortcut")
 	@ResponseBody
