@@ -86,9 +86,7 @@ public class ProjectController extends BaseController {
 		System.out.println("getSearchShortcut");
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("<li><span class='fileSuccess'></span> 202-039-4056 SampleProject3 <span class='remove'></span></li>");
-		sb.append("<li><span class='fileSuccess'></span> 202-039-4056 SampleProject3 <span class='remove'></span></li>");
-		sb.append("<li><span class='fileSuccess'></span> 202-039-4056 SampleProject3 <span class='remove'></span></li>");
+		sb.append("<li><span class='fileSearch'></span> <a href='#' onclick='changetosearch(1,2)' >Last modified within 7days</a> <span class='remove' onclick='deleteSearchshortcut(3);'></span></li>");
 
 		return ImmutableMap.of("data", sb.toString());
 
@@ -101,10 +99,35 @@ public class ProjectController extends BaseController {
 		System.out.println("getPrjShortcut");
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("<li><span class='fileSearch'></span> Last modified within 7days <span class='remove'></span></li>");
+
+		sb.append("<li><span class='fileSuccess'></span> <a href='#' onclick='changetoprj(1)' >202-039-4056 SampleProject3</a> <span class='remove' onclick='deleteprjshortcut(1);'></span></li>");
+		sb.append("<li><span class='fileSuccess'></span> 202-039-4056 SampleProject3 <span class='remove' onclick='deleteprjshortcut(2);'></span></li>");
+		sb.append("<li><span class='fileSuccess'></span> 202-039-4056 SampleProject3 <span class='remove' onclick='deleteprjshortcut(3);'></span></li>");
 
 
 		return ImmutableMap.of("data", sb.toString());
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "getPreserveNos")
+	@ResponseBody
+	public Map getPreserveNos() throws Exception {
+		
+		System.out.println("getPreserveNos");
+		
+
+		return ImmutableMap.of("from", 1,"to",2);
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "submitPresrvNos")
+	@ResponseBody
+	public Map submitPresrvNos() throws Exception {
+		
+		System.out.println("submitPresrvNos");
+		
+
+		return ImmutableMap.of("type","success");
 
 	}
 
@@ -114,6 +137,24 @@ public class ProjectController extends BaseController {
 			@RequestParam String prjSavName) throws Exception {
 
 		projectService.saveProjectShortcut("conygychen", prjSavName, prjId);
+		return ImmutableMap.of("type", "success");
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "deleteprjshortcut")
+	@ResponseBody
+	public Map deleteprjshortcut(@RequestParam String delId) throws Exception {
+		System.out.println("delId:"+delId);
+
+		return ImmutableMap.of("type", "success");
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "deleteSearchshortcut")
+	@ResponseBody
+	public Map deleteSearchshortcut(@RequestParam String delId) throws Exception {
+		System.out.println("delId:"+delId);
+
 		return ImmutableMap.of("type", "success");
 
 	}

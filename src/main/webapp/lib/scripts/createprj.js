@@ -29,7 +29,7 @@ function loadingFolders(tagid) {
 
 }
 
-function loadingClients(tagid) {
+function loadingClients(tagid,flag) {
 	if (hasRegister(tagid))
 		return;
 
@@ -47,18 +47,19 @@ function loadingClients(tagid) {
 
 			console.log("clientStore", clientStore);
 
-			var filteringSelect = new FilteringSelect({
+			new FilteringSelect({
 				id : tagid,
 				name : "state",
 				value : "",
 				store : clientStore,
 				searchAttr : "id",
-				labelAttr: 'name',
+				labelAttr : 'name',
 				style : "width:340px;",
-				required : true,
+				required : flag,
 				autoComplete : false
 			}, tagid);
 
+			
 		}, function(err) {
 			// Handle the error condition
 			alert(err);
@@ -103,8 +104,9 @@ function loadinguniqueno(tagid) {
 
 					var node = dom.byId(tagid);
 					console.log("tagid", node);
-					node.value = datas['max'];
-					node.readOnly = true;
+					node.value = datas.max;
+					dom.byId("prjPreserve").innerHTML = datas.preserve;
+					//node.readOnly = true;
 
 				}, function(err) {
 					// Handle the error condition
@@ -119,7 +121,7 @@ function loadinguniqueno(tagid) {
 
 function createProjectShowUp() {
 	loadingFolders("createProjectFolders");
-	loadingClients("clientSelect");
+	loadingClients("clientSelect",true);	
 	loadingdate("prjym");
 	loadinguniqueno("prjno");
 	createProjectDialog.show();
@@ -139,10 +141,10 @@ function currentYearMonth() {
 }
 
 function submitCreateProject() {
-	
-	if(!prjcreateform.validate())
+
+	if (!prjcreateform.validate())
 		return;
-	
+
 	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
 			function(dom, xhr, JSON, parser) {
 
@@ -162,37 +164,118 @@ function submitCreateProject() {
 					headers : {
 						'Content-Type' : 'application/json'
 					}
+				}).then(
+						function(datas) {
+
+							console.log("datas", datas);
+
+							if (datas.type == "success") {
+								alert("Project created success.Project Id is "
+										+ datas.projectcode);
+								createProjectDialog.hide();
+								refreshDocBroad(dom.byId("prjno").value);
+
+								dom.byId("clientSelect").value = "";
+								dom.byId("prjshortdesc").value = "";
+								dom.byId("prjlongdesc").value = "";
+							} else {
+								alert("Project created fail." + datas.message);
+							}
+
+							refreshProjectBroad(dom.byId("prjno").value);
+
+							fadeIt("MainSearchTab");
+							fadeItShow("DirectoryTab");
+
+						}, function(err) {
+							// Handle the error condition
+							console.log(err);
+							alert("Project created fail ." + err);
+						}, function(evt) {
+							// Handle a progress event from the request if the
+							// browser supports XHR2
+							console.log(evt);
+							alert("Project created fail ." + evt);
+						});
+			});
+}
+
+function preserveNos() {
+
+	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
+			function(dom, xhr, JSON, parser) {
+
+				dom.byId("presrv_from").value = "";
+				dom.byId("presrv_to").value = "";
+
+				xhr("getPreserveNos", {
+					handleAs : "json",
+					method : "get",
+					preventCache : true,
+					headers : {
+						'Content-Type' : 'application/json'
+					}
 				}).then(function(datas) {
 
-					console.log("datas", datas);
-					
-					if(datas.type == "success"){
-						alert("Project created success.Project Id is "+datas.projectcode);
-						createProjectDialog.hide();
-						refreshDocBroad(dom.byId("prjno").value);
-					
-						dom.byId("clientSelect").value = "";
-						dom.byId("prjshortdesc").value = "";
-						dom.byId("prjlongdesc").value = "";
-					}else{
-						alert("Project created fail."+datas.message);
-					}
-					
-					
-					refreshProjectBroad(dom.byId("prjno").value);
-					
-					fadeIt("MainSearchTab");
-					fadeItShow("DirectoryTab");
-					
+					dom.byId("presrv_from").value = datas.from;
+					dom.byId("presrv_to").value = datas.to;
+
 				}, function(err) {
 					// Handle the error condition
 					console.log(err);
-					alert("Project created fail ."+err);
+					alert("Get preserve number fail ." + err);
 				}, function(evt) {
 					// Handle a progress event from the request if the
 					// browser supports XHR2
 					console.log(evt);
-					alert("Project created fail ."+evt);
+					alert("Get preserve number fail ." + evt);
 				});
+
 			});
+	presrvDialog.show();
+}
+
+function submitPresrvNos() {
+
+	alert("hi");
+
+	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
+			function(dom, xhr, JSON, parser) {
+
+				datafrom = dom.byId("presrv_from").value;
+				datato = dom.byId("presrv_to").value;
+
+				if (datafrom && datato) {
+
+					xhr("submitPresrvNos", {
+						handleAs : "json",
+						method : "get",
+						preventCache : true,
+						headers : {
+							'Content-Type' : 'application/json'
+						}
+					}).then(
+							function(datas) {
+
+								alert(datafrom + " - " + datato
+										+ " has been preserved.");
+
+								presrvDialog.hide();
+							}, function(err) {
+								// Handle the error condition
+								console.log(err);
+								alert("Fail preserve ." + err);
+							}, function(evt) {
+								// Handle a progress event from the request if
+								// the
+								// browser supports XHR2
+								console.log(evt);
+								alert("Fail preserve ." + evt);
+							});
+
+				} else {
+					alert("Please input from or to completely.");
+				}
+			});
+
 }

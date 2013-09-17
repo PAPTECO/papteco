@@ -79,6 +79,7 @@ require([ 'dojox/grid/EnhancedGrid', 'dojox/grid/enhanced/plugins/Pagination',
 
 	});
 
+	loadingClients("searchclient",false);
 });
 
 function refreshProjectBroad(projectId) {
@@ -134,7 +135,7 @@ function doSearch() {
 				};
 
 				dataset = {
-					searchClinetno : dom.byId("search_clinetno").value,
+					searchClinetno : dom.byId("searchclient").value,
 					searchAnykey : dom.byId("search_anykey").value
 				};
 

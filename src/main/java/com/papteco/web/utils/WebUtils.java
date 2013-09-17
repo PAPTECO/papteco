@@ -74,7 +74,8 @@ public class WebUtils {
 
 	public static Map toUniqueJson() {
 		System.out.println(ProjectCacheDAO.getMaxProjectId());
-		return ImmutableMap.of("max", ProjectCacheDAO.getMaxProjectId());
+		return ImmutableMap.of("max", ProjectCacheDAO.getMaxProjectId(),
+				"preserve","Preserved from 101 to 205");
 	}
 
 	public static List toSearchGrid(String searchClinetno, String searchAnykey) {
