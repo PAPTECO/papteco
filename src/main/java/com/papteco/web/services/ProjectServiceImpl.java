@@ -47,6 +47,26 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 		SearchShortcutDAO.saveSearchShortcut(searchShortcut);
 	}
 	
+	public SearchShortcutBean getSearchShortcut(String usracct) throws Exception {
+		return SearchShortcutDAO.getSearchShortcut(usracct);
+	}
+	
+	public void deleteSearchShortcut(String usracct, String searchSavName) throws Exception {
+		 SearchShortcutBean shortcuts = SearchShortcutDAO.getSearchShortcut(usracct);
+		 shortcuts.getSearchShortcuts().remove(searchSavName);
+		 SearchShortcutDAO.saveSearchShortcut(shortcuts);
+	}
+	
+	public ProjectShortcutBean getPrjShortcut(String usracct) throws Exception {
+		return ProjectShortcutDAO.getProjectShortcut(usracct);
+	}
+	
+	public void deletePrjShortcut(String usracct, String searchSavName) throws Exception {
+		 ProjectShortcutBean prjshortcut = ProjectShortcutDAO.getProjectShortcut(usracct);
+		 prjshortcut.getPrjShortcuts().remove(searchSavName);
+		 ProjectShortcutDAO.saveProjectShortcut(prjshortcut);
+	}
+	
 	/* mandatory constructor method */
 	public ProjectServiceImpl() {
 	}

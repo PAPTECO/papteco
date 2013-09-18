@@ -1,6 +1,7 @@
 package com.papteco.web.controllers;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,8 @@ import com.papteco.web.beans.CreateProjectFormBean;
 import com.papteco.web.beans.FieldDef;
 import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.beans.ProjectShortcutBean;
+import com.papteco.web.beans.SearchShortcutBean;
 import com.papteco.web.services.ProjectService;
 import com.papteco.web.utils.WebUtils;
 
@@ -86,8 +89,17 @@ public class ProjectController extends BaseController {
 		System.out.println("getSearchShortcut");
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("<li><span class='fileSearch'></span> <a href='#' onclick='changetosearch(1,2)' >Last modified within 7days</a> <span class='remove' onclick='deleteSearchshortcut(3);'></span></li>");
+		SearchShortcutBean schShortcut = projectService.getSearchShortcut("conygychen");
+		if(schShortcut != null){
+			Iterator iter = schShortcut.getSearchShortcuts().entrySet().iterator();
+			while(iter.hasNext()){
+				Map.Entry sc = (Map.Entry)iter.next();
+				String key = sc.getKey().toString();
+				String[] value = (String[])sc.getValue();
+				sb.append("<li><span class='fileSearch'></span> <a href=\"#\" onclick=\"changetosearch('"+value[0]+"','"+value[1]+"')\" >"+key+"</a> <span class='remove' onclick=\"deleteSearchshortcut('"+key+"');\"></span></li>");
 
+			}
+		}
 		return ImmutableMap.of("data", sb.toString());
 
 	}
@@ -98,13 +110,17 @@ public class ProjectController extends BaseController {
 		
 		System.out.println("getPrjShortcut");
 		StringBuilder sb = new StringBuilder();
-		
-
-		sb.append("<li><span class='fileSuccess'></span> <a href='#' onclick='changetoprj(1)' >202-039-4056 SampleProject3</a> <span class='remove' onclick='deleteprjshortcut(1);'></span></li>");
-		sb.append("<li><span class='fileSuccess'></span> 202-039-4056 SampleProject3 <span class='remove' onclick='deleteprjshortcut(2);'></span></li>");
-		sb.append("<li><span class='fileSuccess'></span> 202-039-4056 SampleProject3 <span class='remove' onclick='deleteprjshortcut(3);'></span></li>");
-
-
+		ProjectShortcutBean prjShortcut = projectService.getPrjShortcut("conygychen");
+		if(prjShortcut != null){
+			Iterator iter = prjShortcut.getPrjShortcuts().entrySet().iterator();
+			while(iter.hasNext()){
+				Map.Entry sc = (Map.Entry)iter.next();
+				String key = sc.getKey().toString();
+				int value = Integer.valueOf(sc.getValue().toString());
+				sb.append("<li><span class='fileSuccess'></span> <a href='#' onclick='changetoprj("+value+")' >"+key+"</a> <span class='remove' onclick='deleteprjshortcut("+value+");'></span></li>");
+				
+			}
+		}
 		return ImmutableMap.of("data", sb.toString());
 
 	}
@@ -154,7 +170,7 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Map deleteSearchshortcut(@RequestParam String delId) throws Exception {
 		System.out.println("delId:"+delId);
-
+		projectService.deleteSearchShortcut("conygychen", delId);
 		return ImmutableMap.of("type", "success");
 
 	}

@@ -15,7 +15,8 @@ function submitSaveSearch() {
 				xhr("saveSearch", {
 					handleAs : "json",
 					query : dataset,
-					method : "get"
+					method : "get",
+					preventCache : true
 				}).then(function(datas) {
 
 					alert("saved");
@@ -53,7 +54,7 @@ function submitPrjSaveSearch() {
 				}).then(function(datas) {
 
 					alert("saved");
-					searchSaveDialog.hide();
+					projectstSaveDialog.hide();
 					refreshPrjShortCut();
 				}, function(err) {
 					// Handle the error condition
@@ -211,7 +212,7 @@ function deleteprjshortcut(id) {
 }
 
 function changetoprj(prjid){
-	refreshProjectBroad(1);
+	refreshProjectBroad(prjid);
 	fadeIt("MainSearchTab");
 	fadeItShow("DirectoryTab");
 }
