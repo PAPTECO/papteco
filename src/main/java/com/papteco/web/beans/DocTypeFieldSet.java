@@ -8,11 +8,15 @@ public class DocTypeFieldSet {
 	private String projectCde;
 	private String upload_doctype;
 	private String clientNo;
+	private String drawintType;
 	private String dateWith4digs;
 	private String dateWith6digs;
 	private String description;
 	private String dateCreated;
 	private String ref;
+	private String l1;
+	private String l2;
+	private String l3;
 	private String certDate;
 	private String drawnBy;
 	private String uploadedBy;
@@ -219,6 +223,38 @@ public class DocTypeFieldSet {
 
 	public void setRev(String rev) {
 		this.rev = rev;
+	}
+
+	public String getDrawintType() {
+		return drawintType;
+	}
+
+	public void setDrawintType(String drawintType) {
+		this.drawintType = drawintType;
+	}
+
+	public String getL1() {
+		return l1;
+	}
+
+	public void setL1(String l1) {
+		this.l1 = l1;
+	}
+
+	public String getL2() {
+		return l2;
+	}
+
+	public void setL2(String l2) {
+		this.l2 = l2;
+	}
+
+	public String getL3() {
+		return l3;
+	}
+
+	public void setL3(String l3) {
+		this.l3 = l3;
 	}
 
 	@Override

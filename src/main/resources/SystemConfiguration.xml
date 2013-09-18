@@ -70,6 +70,14 @@
 					</property>
 				</bean>
 				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="drawintType">
+					</property>
+					<property name="fieldDesc" value="Drawing Type">
+					</property>
+					<property name="maxlength" value="1">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
 					<property name="fieldName" value="dateWith4digs">
 					</property>
 					<property name="fieldDesc" value="Date Ref(yymm)">
@@ -97,6 +105,30 @@
 					<property name="fieldName" value="ref">
 					</property>
 					<property name="fieldDesc" value="Ref #">
+					</property>
+					<property name="maxlength" value="3">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="l1">
+					</property>
+					<property name="fieldDesc" value="L1">
+					</property>
+					<property name="maxlength" value="2">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="l2">
+					</property>
+					<property name="fieldDesc" value="L2">
+					</property>
+					<property name="maxlength" value="2">
+					</property>
+				</bean>
+				<bean class="com.papteco.web.beans.FieldDef">
+					<property name="fieldName" value="l3">
+					</property>
+					<property name="fieldDesc" value="L3">
 					</property>
 					<property name="maxlength" value="3">
 					</property>

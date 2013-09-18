@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,17 +32,36 @@ public class FileController extends BaseController {
 
 	private String prepareFileName(DocTypeFieldSet bean){
 		StringBuffer trgFileName = new StringBuffer();
+		
 		trgFileName.append(bean.getUpload_doctype());
 		trgFileName.append(bean.getClientNo());
 		trgFileName.append("-");
-		if (bean.getDateWith4digs() != null) {
-			trgFileName.append(bean.getDateWith4digs());
-		} else if (bean.getDateWith6digs() != null) {
-			trgFileName.append(bean.getDateWith6digs());
+		
+		if(StringUtils.isNotBlank(bean.getDrawintType())){
+			trgFileName.append(bean.getDrawintType());
+			trgFileName.append(bean.getRef());
+			trgFileName.append("-");
+			trgFileName.append(bean.getL1()+" ");
+			trgFileName.append(bean.getL2()+" ");
+			trgFileName.append(bean.getL3());
+			trgFileName.append("-");
 		}
-		trgFileName.append("-");
-		trgFileName.append(bean.getRef());
-		trgFileName.append("-");
+		
+		if(StringUtils.isNotBlank(bean.getDateWith4digs())){
+			trgFileName.append(bean.getDateWith4digs());
+			trgFileName.append("-");
+			trgFileName.append(bean.getRef());
+			trgFileName.append("-");
+			
+		}
+		
+		if(StringUtils.isNotBlank(bean.getDateWith6digs())){
+			trgFileName.append(bean.getDateWith6digs());
+			trgFileName.append("-");
+			trgFileName.append(bean.getRef());
+			trgFileName.append("-");
+		}
+		
 		trgFileName.append(bean.getDescription());
 		trgFileName.append("-");
 		trgFileName.append("Rev");

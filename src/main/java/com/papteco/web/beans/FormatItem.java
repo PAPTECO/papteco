@@ -11,8 +11,12 @@ public class FormatItem {
 
 	private ActionEnum code = ActionEnum.autoFillReadOnly;
 	private ActionEnum clientNo = ActionEnum.autoFillReadOnly;
+	private ActionEnum drawintType = ActionEnum.notApplicable;
 	private ActionEnum dateWith4digs = ActionEnum.notApplicable;
 	private ActionEnum dateWith6digs = ActionEnum.notApplicable;
+	private ActionEnum l1 = ActionEnum.notApplicable;
+	private ActionEnum l2 = ActionEnum.notApplicable;
+	private ActionEnum l3 = ActionEnum.notApplicable;
 	private ActionEnum description = ActionEnum.keyedInByUser;
 	private ActionEnum dateCreated = ActionEnum.autoFillCanOverwrite;
 	private ActionEnum ref = ActionEnum.autoFillCanOverwrite;
@@ -30,6 +34,38 @@ public class FormatItem {
 	private ActionEnum formalPrice = ActionEnum.notApplicable;
 	private ActionEnum estimatedCost = ActionEnum.notApplicable;
 	private ActionEnum rev = ActionEnum.autoFillCanOverwrite;
+
+	public ActionEnum getL1() {
+		return l1;
+	}
+
+	public void setL1(ActionEnum l1) {
+		this.l1 = l1;
+	}
+
+	public ActionEnum getL2() {
+		return l2;
+	}
+
+	public void setL2(ActionEnum l2) {
+		this.l2 = l2;
+	}
+
+	public ActionEnum getL3() {
+		return l3;
+	}
+
+	public void setL3(ActionEnum l3) {
+		this.l3 = l3;
+	}
+
+	public ActionEnum getDrawintType() {
+		return drawintType;
+	}
+
+	public void setDrawintType(ActionEnum drawintType) {
+		this.drawintType = drawintType;
+	}
 
 	public ActionEnum getDescription() {
 		return description;

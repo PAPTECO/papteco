@@ -2,7 +2,7 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 	<bean id="D_A" class="com.papteco.web.beans.FormatItem">
-		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="dateWith6digs" value="keyedInByUser" />
 	</bean>
 
 	<bean id="D_B" class="com.papteco.web.beans.FormatItem">
@@ -19,8 +19,11 @@
 	</bean>
 
 	<bean id="D_D" class="com.papteco.web.beans.FormatItem">
-		<property name="dateWith4digs" value="keyedInByUser" />
 		<property name="certDate" value="keyedInByUser" />
+		<property name="drawintType" value="keyedInByUser" />
+		<property name="l1" value="keyedInByUser" />
+		<property name="l2" value="keyedInByUser" />
+		<property name="l3" value="keyedInByUser" />
 		<property name="drawnBy" value="keyedInByUser" />
 	</bean>
 
@@ -64,7 +67,10 @@
 	</bean>
 
 	<bean id="D_N" class="com.papteco.web.beans.FormatItem">
-		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="drawintType" value="keyedInByUser" />
+		<property name="l1" value="keyedInByUser" />
+		<property name="l2" value="keyedInByUser" />
+		<property name="l3" value="keyedInByUser" />
 		<property name="certDate" value="keyedInByUser" />
 	</bean>
 
@@ -110,12 +116,15 @@
 	</bean>
 
 	<bean id="D_W" class="com.papteco.web.beans.FormatItem">
-		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="drawintType" value="keyedInByUser" />
+		<property name="l1" value="keyedInByUser" />
+		<property name="l2" value="keyedInByUser" />
+		<property name="l3" value="keyedInByUser" />
 		<property name="certDate" value="keyedInByUser" />
 		<property name="drawnBy" value="keyedInByUser" />
 	</bean>
 
 	<bean id="D_Z" class="com.papteco.web.beans.FormatItem">
-		<property name="dateWith4digs" value="keyedInByUser" />
+		<property name="dateWith6digs" value="keyedInByUser" />
 	</bean>
 </beans>
