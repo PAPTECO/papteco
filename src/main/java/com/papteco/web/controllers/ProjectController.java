@@ -117,7 +117,7 @@ public class ProjectController extends BaseController {
 				Map.Entry sc = (Map.Entry)iter.next();
 				String key = sc.getKey().toString();
 				int value = Integer.valueOf(sc.getValue().toString());
-				sb.append("<li><span class='fileSuccess'></span> <a href='#' onclick='changetoprj("+value+")' >"+key+"</a> <span class='remove' onclick='deleteprjshortcut("+value+");'></span></li>");
+				sb.append("<li><span class='fileSuccess'></span> <a href='#' onclick='changetoprj("+value+")' >"+key+"</a> <span class='remove' onclick=\"deleteprjshortcut(\'"+key+"');\"></span></li>");
 				
 			}
 		}
@@ -161,7 +161,7 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Map deleteprjshortcut(@RequestParam String delId) throws Exception {
 		System.out.println("delId:"+delId);
-
+		projectService.deletePrjShortcut("conygychen", delId);
 		return ImmutableMap.of("type", "success");
 
 	}
