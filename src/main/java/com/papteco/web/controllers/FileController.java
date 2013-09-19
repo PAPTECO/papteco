@@ -66,12 +66,15 @@ public class FileController extends BaseController {
 		trgFileName.append("-");
 		trgFileName.append("Rev");
 		trgFileName.append(bean.getRev());
-		trgFileName.append(bean
-				.getUploadfile()
-				.getOriginalFilename()
-				.substring(
-						bean.getUploadfile().getOriginalFilename()
-								.lastIndexOf(".")));
+		if(bean.getUploadfile().getOriginalFilename().contains(".")){
+			trgFileName.append(bean
+					.getUploadfile()
+					.getOriginalFilename()
+					.substring(
+							bean.getUploadfile().getOriginalFilename()
+									.lastIndexOf(".")));
+		}
+		
 		return trgFileName.toString();
 	}
 	
@@ -101,7 +104,7 @@ public class FileController extends BaseController {
 		BeanUtils.copyProperties(fileBean, bean);
 		System.out.println(fileBean);
 
-		WebUtils.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
+		fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
 				fileBean);
 		return "success";
 
@@ -131,7 +134,7 @@ public class FileController extends BaseController {
 	public Map getDocs(@RequestParam String projectId) throws Exception {
 		System.out.println("getDocs:"+projectId);
 
-		return WebUtils.toDocsSummaries(Integer.valueOf(projectId),this.sysConfig);
+		return WebUtils.toDocsSummaries(projectId,this.sysConfig);
 
 	}
 	
@@ -139,7 +142,7 @@ public class FileController extends BaseController {
 	@ResponseBody
 	public Map deleteDocs(@RequestParam String projectId,
 			@RequestParam String filename) throws Exception {
-		ProjectBean project = fileService.getProjectBeanByProjectId(Integer.valueOf(projectId));
+		ProjectBean project = fileService.getProjectBeanByProjectId(projectId);
 		
 		String fileFolder = combineFolderPath(
 				combineFolderPath(rootpath, project.getProjectCde()),
@@ -147,7 +150,7 @@ public class FileController extends BaseController {
 		File file = new File(fileFolder, filename);
 		if (file.exists()) {
 			file.delete();
-			fileService.deleteFile(Integer.valueOf(projectId), filename.substring(0, 1), filename);
+			fileService.deleteFile(projectId, filename.substring(0, 1), filename);
 		}
 		
 		return WebUtils.responseWithStatusCode();
@@ -159,7 +162,7 @@ public class FileController extends BaseController {
 			@RequestParam String filename,
 			HttpServletResponse response) throws Exception {
 
-		ProjectBean project = fileService.getProjectBeanByProjectId(Integer.valueOf(projectId));
+		ProjectBean project = fileService.getProjectBeanByProjectId(projectId);
 
 		
 		String fileFolder = combineFolderPath(

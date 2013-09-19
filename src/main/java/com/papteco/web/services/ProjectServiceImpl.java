@@ -14,7 +14,7 @@ import com.papteco.web.dbs.SearchShortcutDAO;
 import com.papteco.web.utils.FSUtils;
 
 @Service
-public class ProjectServiceImpl extends BaseService implements ProjectService {
+public class ProjectServiceImpl extends BaseService {
 	
 	public ProjectServiceImpl(String projectPath) {
 		super();
@@ -22,7 +22,6 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 	}
 
 	public void createProject(ProjectBean project, List<FolderBean> folderList) throws Exception {
-		project.setProjectId(ProjectCacheDAO.getMaxProjectId());
 		foldersUtils.createProjectFolders(foldersUtils.prepareProjectPath(project.getProjectCde()), folderList);
 		ProjectCacheDAO.saveProjectTree(project);
 	}
@@ -65,6 +64,15 @@ public class ProjectServiceImpl extends BaseService implements ProjectService {
 		 ProjectShortcutBean prjshortcut = ProjectShortcutDAO.getProjectShortcut(usracct);
 		 prjshortcut.getPrjShortcuts().remove(searchSavName);
 		 ProjectShortcutDAO.saveProjectShortcut(prjshortcut);
+	}
+	
+	public boolean isPrjIdExisting(String prjId){
+		ProjectBean prjBean = ProjectCacheDAO.getProjectTree(prjId);
+		if(prjBean == null){
+			return false;
+		}else{
+			return true;
+		}
 	}
 	
 	/* mandatory constructor method */

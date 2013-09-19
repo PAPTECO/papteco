@@ -2,9 +2,11 @@ package com.papteco.web.services;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.dbs.ProjectCacheDAO;
 import com.papteco.web.utils.FSUtils;
@@ -17,6 +19,10 @@ public class FileServiceImpl extends BaseService {
 		FSUtils.glanceToCache(projectPath);
 	}
 
+	public void saveUploadFile(String projectId, String docType, FileBean fileBean){
+		ProjectCacheDAO.saveFileBean(projectId, docType, fileBean);
+	}
+	
 	public void downloadFile(String fromFile, String toFile) throws IOException{
 		filesUtils.downloadFile(fromFile, toFile);
 	}
@@ -29,12 +35,22 @@ public class FileServiceImpl extends BaseService {
 		return filesUtils.getFileInputStream(fromFile);
 	}
 	
-	public void deleteFile(int prjId, String docType, String fileName) throws IOException{
+	public void deleteFile(String prjId, String docType, String fileName) throws IOException{
 		ProjectCacheDAO.deleteFileBean(prjId, docType, fileName);
 	}
 	
-	public ProjectBean getProjectBeanByProjectId(int prjId){
+	public ProjectBean getProjectBeanByProjectId(String prjId){
 		return ProjectCacheDAO.getProjectTree(prjId);
+	}
+	
+	public boolean isFileNameExisting(String projectId, String filename){
+		List<String> prjFileList =  ProjectCacheDAO.getProjectTree(projectId).getTotalFileList();
+		for(String fname : prjFileList){
+			if(filename.equals(fname)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/* mandatory constructor method */

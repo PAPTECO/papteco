@@ -17,7 +17,7 @@ public class ProjectBean implements Serializable {
 	private static final long serialVersionUID = 8155353323885191907L;
 
 	@PrimaryKey
-	private int projectId;
+	private String projectId;
 	
 	private String projectCde;
 	
@@ -50,11 +50,11 @@ public class ProjectBean implements Serializable {
 		this.totalFileList = totalFileList;
 	}
 
-	public int getProjectId() {
+	public String getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(int projectId) {
+	public void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
 

@@ -17,22 +17,28 @@ import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.CreateProjectFormBean;
 import com.papteco.web.beans.FieldDef;
 import com.papteco.web.beans.FormatItem;
+import com.papteco.web.beans.PreserveNosBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.beans.ProjectShortcutBean;
 import com.papteco.web.beans.SearchShortcutBean;
-import com.papteco.web.services.ProjectService;
+import com.papteco.web.services.PresNoServiceImpl;
+import com.papteco.web.services.ProjectServiceImpl;
 import com.papteco.web.utils.WebUtils;
 
 @Controller
 public class ProjectController extends BaseController {
 	@Autowired
-	private ProjectService projectService;
+	private ProjectServiceImpl projectService;
+	
+	@Autowired
+	private PresNoServiceImpl presNoService;
 
 	@RequestMapping(method = RequestMethod.POST, value = "createProject")
 	@ResponseBody
 	public Map createProject(@RequestBody CreateProjectFormBean bean)
 			throws Exception {
 		ProjectBean tmpProject = new ProjectBean();
+		tmpProject.setProjectId(bean.getUniqueno());
 		tmpProject.setProjectCde(bean.getClientno() + "-"
 				+ genProjectCreateDate(bean) + "-" + bean.getUniqueno());
 		tmpProject.setClientNo(bean.getClientno());
@@ -119,7 +125,7 @@ public class ProjectController extends BaseController {
 				int value = Integer.valueOf(sc.getValue().toString());
 				sb.append("<li><span class='fileSuccess'></span> <a href='#' onclick='changetoprj("+value+")' >"+key+"</a> <span class='remove' onclick=\"deleteprjshortcut(\'"+key+"');\"></span></li>");
 				
-			}
+			} 
 		}
 		return ImmutableMap.of("data", sb.toString());
 
@@ -130,9 +136,8 @@ public class ProjectController extends BaseController {
 	public Map getPreserveNos() throws Exception {
 		
 		System.out.println("getPreserveNos");
-		
-
-		return ImmutableMap.of("from", 1,"to",2);
+		PreserveNosBean presNoBean = presNoService.getPresNos();
+		return ImmutableMap.of("from", presNoBean.getPresNoFrom(),"to",presNoBean.getPresNoTo());
 
 	}
 	
@@ -141,8 +146,7 @@ public class ProjectController extends BaseController {
 	public Map submitPresrvNos() throws Exception {
 		
 		System.out.println("submitPresrvNos");
-		
-
+		presNoService.savePresNos(new PreserveNosBean(200,250));
 		return ImmutableMap.of("type","success");
 
 	}
@@ -179,7 +183,7 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Map getProject(@RequestParam String projectId) throws Exception {
 		System.out.println(projectId);
-		return WebUtils.toProjectSummaries(Integer.valueOf(projectId));
+		return WebUtils.toProjectSummaries(projectId);
 
 	}
 

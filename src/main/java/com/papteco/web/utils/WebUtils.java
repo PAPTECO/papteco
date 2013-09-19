@@ -122,14 +122,14 @@ public class WebUtils {
 							"col5",
 							bean.getCreatedBy());
 			Map testdata = Maps.newHashMap();
-			testdata.put("id", i+1);
+			testdata.put("id", bean.getProjectId());
 			testdata.putAll(data);
 			datalist.add(testdata);
 		}
 		return datalist;
 	}
 
-	public static Map toProjectSummaries(int projectId) {
+	public static Map toProjectSummaries(String projectId) {
 		ProjectBean bean = ProjectCacheDAO.getProjectTree(projectId);
 
 		return ImmutableMap.of("projectIndentify", bean.getProjectCde(),
@@ -193,7 +193,7 @@ public class WebUtils {
 
 	public static Map toNumberingFormat(String prjId,String docType, FormatItem item,
 			List<FieldDef> seqAndDesc,String clientno, String ref) {
-		ProjectBean bean = ProjectCacheDAO.getProjectTree(Integer.valueOf(prjId));
+		ProjectBean bean = ProjectCacheDAO.getProjectTree(prjId);
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("<table class='dijitdialog_index'>");
@@ -292,7 +292,7 @@ public class WebUtils {
 
 	}
 
-	public static Map toDocsSummaries(int projectId,SystemConfiguration sysConfig) {
+	public static Map toDocsSummaries(String projectId,SystemConfiguration sysConfig) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("identifier", "id");
 		result.put("label", "name");
@@ -348,14 +348,6 @@ public class WebUtils {
 			}
 		}
 		return sb.toString();
-	}
-	
-	public static void saveUploadFile(int projectId, String docType, FileBean fileBean){
-		ProjectCacheDAO.saveFileBean(projectId, docType, fileBean);
-	}
-	
-	public static void deleteFile(int projectId, String docType, String fileName){
-		
 	}
 	
 	public static Map responseWithStatusCode() {

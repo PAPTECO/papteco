@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class DocTypeFieldSet {
 
-	private int projectId;
+	private String projectId;
 	private String projectCde;
 	private String upload_doctype;
 	private String clientNo;
@@ -33,11 +33,11 @@ public class DocTypeFieldSet {
 	private String rev;
 	private MultipartFile uploadfile;
 
-	public int getProjectId() {
+	public String getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(int projectId) {
+	public void setProjectId(String projectId) {
 		this.projectId = projectId;
 	}
 

@@ -26,7 +26,7 @@ public class ProjectCacheDAO {
 	@Value("#{settings[datapath]}")
 	protected String datapath;
 	
-	private static PrimaryIndex<Integer, ProjectBean> projectIdIndex;
+	private static PrimaryIndex<String, ProjectBean> projectIdIndex;
 
 	@PostConstruct
 	public void init() {
@@ -53,7 +53,7 @@ public class ProjectCacheDAO {
 		storeConfig.setTransactional(true);
 		EntityStore store = new EntityStore(env, "ProjectStore", storeConfig);
 
-		projectIdIndex = store.getPrimaryIndex(Integer.class,
+		projectIdIndex = store.getPrimaryIndex(String.class,
 				ProjectBean.class);
 	}
 
@@ -62,20 +62,40 @@ public class ProjectCacheDAO {
 		projectIdIndex.put(project);
 	}
 	
-	public static ProjectBean getProjectTree(int id) {
+	public static ProjectBean getProjectTree(String id) {
 		return projectIdIndex.get(id);
 	}
 
-	public static int getMaxProjectId(){
+	public static String getMaxProjectId(){
 		if(projectIdIndex != null && projectIdIndex.count() == 0){
-			return 1;
+			return "001";
 		}else{
-			return projectIdIndex.sortedMap().lastKey()+1;
+			return getIncreaseNumberBylatestKey(projectIdIndex.sortedMap().lastKey());
 		}
 	}
 	
-	public static EntityCursor<ProjectBean> getAllProjectBeans(){
-		return projectIdIndex.entities();
+	public static String getIncreaseNumberBylatestKey(String key){
+		Integer intKey = Integer.valueOf(key);
+		return formatIncreaseNumber(String.valueOf(intKey+1), 3);
+	}
+	
+	public static String formatIncreaseNumber(String num, int digs){
+		StringBuffer result = new StringBuffer();
+		for(int i = 0; i < digs-num.length(); i++){
+			result.append("0");
+		}
+		result.append(num);
+		return result.toString();
+	}
+	
+	public static List<ProjectBean> getAllProjectBeans(){
+		EntityCursor<ProjectBean> allProjects = projectIdIndex.entities();
+		List<ProjectBean> result = new LinkedList<ProjectBean>();
+		for (ProjectBean bean : allProjects){
+			result.add(bean);
+		}
+		allProjects.close();
+		return result;
 	}
 	
 	public static List<ProjectBean> getProjectBeansByFilter(String clientNo, String anyKey){
@@ -112,7 +132,7 @@ public class ProjectCacheDAO {
 		return result;
 	}
 	
-	public static void saveFileBean(int projectId,String docType, FileBean fileBean){
+	public static void saveFileBean(String projectId,String docType, FileBean fileBean){
 		ProjectBean project = projectIdIndex.get(projectId);
 		for(FolderBean folder : project.getFolderTree()){
 			if(docType.equals(folder.getDocType())){
@@ -128,7 +148,7 @@ public class ProjectCacheDAO {
 		saveProjectTree(project);
 	}
 	
-	public static void deleteFileBean(int projectId,String docType, String fileName){
+	public static void deleteFileBean(String projectId,String docType, String fileName){
 		ProjectBean project = projectIdIndex.get(projectId);
 		for(FolderBean folder : project.getFolderTree()){
 			if(docType.equals(folder.getDocType())){
