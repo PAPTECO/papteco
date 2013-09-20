@@ -41,3 +41,34 @@ function fadeItShow(tabname) {
 	});
 
 }
+
+function currentYearMonth() {
+
+	var dateobj = new Date();
+	var m = dateobj.getMonth() + 1;
+	var rst = ""
+	if (m < 10)
+		rst = dateobj.getFullYear() + "0" + m;
+	else
+		rst = dateobj.getFullYear() + "" + m;
+
+	return rst;
+}
+
+function currentYearMonthDay() {
+
+	var dateobj = new Date();
+	var m = dateobj.getMonth() + 1;
+	var d = dateobj.getDay();
+	var rst = ""
+	if (m < 10)
+		rst = dateobj.getFullYear() + "0" + m;
+	else
+		rst = dateobj.getFullYear() + "" + m;
+	if (d < 10)
+		rst = rst + "0" + d;
+	else
+		rst = rst + "" + d;
+
+	return rst;
+}

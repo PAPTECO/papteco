@@ -61,6 +61,12 @@ function uploadFileFormShow() {
 
 						console.log("datas", datas);
 						dom.byId("insert_content").innerHTML = datas.data;
+						placeAtDate("dateCreated");
+						placeAtDate("certDate");
+						placeAtDate("paymentDueDate");
+						placeAtDate("orderedDate");
+						placeAtDate("completedDate");
+						
 					}, function(err) {
 						// Handle the error condition
 						console.log(err);
@@ -73,6 +79,33 @@ function uploadFileFormShow() {
 				}
 			});
 
+}
+
+function placeAtDate(tagid) {
+
+
+	console.log("begin placeAtDate");
+
+	require([ "dojo/dom","dijit/registry","dojo/parser", "dijit/form/DateTextBox" ], function(dom,registry,parser,
+			DateTextBox) {
+
+		
+		if(hasRegister(tagid)){
+			rst = registry.byId(tagid);
+			rst.destroy();
+		}
+		
+		rst = new DateTextBox({
+			id : tagid,
+			displayedValue : currentYearMonthDay(),
+			name : tagid,
+			constraints : {
+				datePattern : 'yyyyMMdd'
+			}
+
+		},tagid);
+		
+	});
 }
 
 function validateUploadForm() {

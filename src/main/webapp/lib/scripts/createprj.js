@@ -127,18 +127,7 @@ function createProjectShowUp() {
 	createProjectDialog.show();
 }
 
-function currentYearMonth() {
 
-	var dateobj = new Date();
-	var m = dateobj.getMonth() + 1;
-	var rst = ""
-	if (m < 10)
-		rst = dateobj.getFullYear() + "0" + m;
-	else
-		rst = dateobj.getFullYear() + "" + m;
-
-	return rst;
-}
 
 function submitCreateProject() {
 
@@ -236,8 +225,6 @@ function preserveNos() {
 }
 
 function submitPresrvNos() {
-
-	alert("hi");
 
 	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
 			function(dom, xhr, JSON, parser) {
