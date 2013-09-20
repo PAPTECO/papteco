@@ -45,7 +45,7 @@ public class ProjectController extends BaseController {
 		tmpProject.setCreateDate(genProjectCreateDate(bean));
 		tmpProject.setUniqueNo(bean.getUniqueno());
 		tmpProject.setCreatedAt(new Date());
-		tmpProject.setCreatedBy("wasadmin");
+		tmpProject.setCreatedBy("admin");
 		tmpProject.setShortDesc(bean.getShortdesc());
 		tmpProject.setLongDesc(bean.getLongdesc());
 		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
