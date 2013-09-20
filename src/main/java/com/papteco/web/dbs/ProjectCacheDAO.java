@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FolderBean;
+import com.papteco.web.beans.PreserveNosBean;
 import com.papteco.web.beans.ProjectBean;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
@@ -75,8 +76,13 @@ public class ProjectCacheDAO {
 	}
 	
 	public static String getIncreaseNumberBylatestKey(String key){
-		Integer intKey = Integer.valueOf(key);
-		return formatIncreaseNumber(String.valueOf(intKey+1), 3);
+		Integer intKey = Integer.valueOf(key)+1;
+		
+		PreserveNosBean presNo = PreserveNosDAO.getPresNosBean(PreserveNosDAO.PRES_NO_CDE);
+		while(intKey >= presNo.getPresNoFrom() && intKey <= presNo.getPresNoTo()){
+			intKey = intKey+1;
+		}
+		return formatIncreaseNumber(String.valueOf(intKey), 3);
 	}
 	
 	public static String formatIncreaseNumber(String num, int digs){

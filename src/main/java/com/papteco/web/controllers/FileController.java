@@ -104,10 +104,13 @@ public class FileController extends BaseController {
 		BeanUtils.copyProperties(fileBean, bean);
 		System.out.println(fileBean);
 
-		fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
-				fileBean);
-		return "success";
-
+		if(fileService.isFileNameExisting(bean.getProjectId(), fileBean.getFileName())){
+			return "fail";
+		}else{
+			fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
+					fileBean);
+			return "success";
+		}
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "uploadfile.do")

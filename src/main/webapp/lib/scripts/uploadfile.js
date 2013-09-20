@@ -53,6 +53,7 @@ function uploadFileFormShow() {
 						handleAs : "json",
 						query : dataset,
 						method : "get",
+						preventCache : true,
 						headers : {
 							'Content-Type' : 'application/json'
 						}
@@ -119,6 +120,7 @@ function validateUploadForm() {
 			  }, function(err){
 			    // Handle the error condition
 				  alert("Your document has been uploaded.");
+				  dom.byId("uploadFileForm").reset();
 				  uploadFileFormDialog.hide();
 				  refreshProjectBroad(getProjectId());
 				  //registry.byId("upload_doctype_id").value="";

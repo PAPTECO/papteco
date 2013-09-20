@@ -179,7 +179,7 @@ function submitCreateProject() {
 								dom.byId("prjshortdesc").value = "";
 								dom.byId("prjlongdesc").value = "";
 							} else {
-								alert("Project created fail." + datas.message);
+								alert("Project created fail. " + datas.message);
 							}
 
 							refreshProjectBroad(dom.byId("prjno").value);

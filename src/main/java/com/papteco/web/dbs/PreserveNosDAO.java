@@ -51,8 +51,9 @@ public class PreserveNosDAO {
 
 		presNosIndex = store.getPrimaryIndex(String.class,
 				PreserveNosBean.class);
-		
-		presNosIndex.put(new PreserveNosBean(PRES_NO_CDE,0,0));
+		if(presNosIndex.get(PRES_NO_CDE) == null){
+			presNosIndex.put(new PreserveNosBean(PRES_NO_CDE,0,0));
+		}
 	}
 
 	// this is retry function

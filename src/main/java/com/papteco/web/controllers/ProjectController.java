@@ -51,11 +51,16 @@ public class ProjectController extends BaseController {
 		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
 
 		try {
-			projectService.createProject(tmpProject,
-					this.sysConfig.prepareFolderStructure());
+			if(projectService.isPrjIdExisting(bean.getUniqueno())){
+				return ImmutableMap.of("type", "failure", "message",
+						"The Unique No. was existing : "+bean.getUniqueno());
+			}else{
+				projectService.createProject(tmpProject,
+						this.sysConfig.prepareFolderStructure());
 
-			return ImmutableMap.of("type", "success", "projectcode",
-					tmpProject.getProjectCde());
+				return ImmutableMap.of("type", "success", "projectcode",
+						tmpProject.getProjectCde());
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -146,7 +151,7 @@ public class ProjectController extends BaseController {
 	public Map submitPresrvNos() throws Exception {
 		
 		System.out.println("submitPresrvNos");
-		presNoService.savePresNos(new PreserveNosBean(200,250));
+		presNoService.savePresNos(new PreserveNosBean(3,5));
 		return ImmutableMap.of("type","success");
 
 	}
