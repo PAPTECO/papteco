@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,33 @@ import com.papteco.web.dbs.ProjectCacheDAO;
 
 public class WebUtils {
 
+	private static Map<String,String> drawingType = new LinkedHashMap<String,String>();
+	private static String drawingtypeSelect = "";
+	static{
+		drawingType.put("A","HVAC");
+		drawingType.put("B","BOM");
+		drawingType.put("C","Civil");
+		drawingType.put("D","P&ID");
+		drawingType.put("E","Electrical Schemes");
+		drawingType.put("F","Fire Protection Documentation");
+		drawingType.put("G","Overall Plans");
+		drawingType.put("H","Hydraulic Drawing");
+		drawingType.put("M","Mechanical");
+		drawingType.put("N","Pneumatic Drawing");
+		drawingType.put("P","Piping");
+		drawingType.put("W","Plumbing");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<td><select style='width:45px;' class='uploadfileqryonly' id='drawintType' name='drawintType'>");
+		for(String key:drawingType.keySet()){
+			sb.append("<option value='"+key+"'>"+key+"-");
+			sb.append(drawingType.get(key));
+			sb.append("</option>");
+		}
+		sb.append("</select></td>");
+		drawingtypeSelect = sb.toString();
+	}
+	
 	public static Map toTreeJson(List<FolderBean> beans) {
 
 		Map result = Maps.newHashMap();
@@ -266,7 +294,9 @@ public class WebUtils {
 			result = "<td>"+clientno+"</td>";
 		}else if ("note".equals(col.getFieldName())) {
 			result = "<td><textarea class='uploadfileqryonly' id='note' name='note' cols ='10' rows = '2' onkeyup='chkvaldpty(this)'></textarea></td>" ;
-		}else {
+		}else if ("drawintType".equals(col.getFieldName())) {
+			result = drawingtypeSelect;
+		} else {
 			
 			if ("ref".equals(col.getFieldName())) {
 				defaultValue = ref;

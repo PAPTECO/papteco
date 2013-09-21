@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.DocTypeFieldSet;
 import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.ProjectBean;
@@ -108,11 +109,11 @@ public class FileController extends BaseController {
 		System.out.println(fileBean);
 
 		if(fileService.isFileNameExisting(bean.getProjectId(), fileBean.getFileName())){
-			return "fail";
+			return null;
 		}else{
 			fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
 					fileBean);
-			return "success";
+			return fileBean.getFileName();
 		}
 	}
 

@@ -8,16 +8,19 @@ function uploadFileFormShow() {
 	tagid = "upload_doctype";
 
 	require([ "dojo/dom", "dojo/parser", "dojo/dom-class", "dojo/query",
-				"dojo/on", "dojo/request/iframe","dojo/json","dijit/registry" ], function(dom, parser, domClass,
-				query, on, iframe,json,registry) {
-			query("input,textarea", "uploadFileForm").forEach(function(node) {
+			"dojo/on", "dojo/request/iframe", "dojo/json", "dijit/registry" ],
+			function(dom, parser, domClass, query, on, iframe, json, registry) {
+				query("input,textarea", "uploadFileForm").forEach(
+						function(node) {
+
+							node.value = "";
+							
+						});
 				
-				node.value = "";
+				
+				dom.byId("insert_content").innerHTML = "";
 			});
-			
-			dom.byId("insert_content").innerHTML  = "";
-	});
-	
+
 	if (hasRegister(tagid))
 		return;
 
@@ -38,7 +41,7 @@ function uploadFileFormShow() {
 					name : "upload_doctype",
 					store : stateStore,
 					searchAttr : "id",
-					labelAttr: 'name',
+					labelAttr : 'name',
 					onChange : setVal1
 				}, "upload_doctype");
 
@@ -66,7 +69,7 @@ function uploadFileFormShow() {
 						placeAtDate("paymentDueDate");
 						placeAtDate("orderedDate");
 						placeAtDate("completedDate");
-						
+
 					}, function(err) {
 						// Handle the error condition
 						console.log(err);
@@ -83,18 +86,17 @@ function uploadFileFormShow() {
 
 function placeAtDate(tagid) {
 
-
 	console.log("begin placeAtDate");
 
-	require([ "dojo/dom","dijit/registry","dojo/parser", "dijit/form/DateTextBox" ], function(dom,registry,parser,
+	require([ "dojo/dom", "dijit/registry", "dojo/parser",
+			"dijit/form/DateTextBox" ], function(dom, registry, parser,
 			DateTextBox) {
 
-		
-		if(hasRegister(tagid)){
+		if (hasRegister(tagid)) {
 			rst = registry.byId(tagid);
 			rst.destroy();
 		}
-		
+
 		rst = new DateTextBox({
 			id : tagid,
 			displayedValue : currentYearMonthDay(),
@@ -103,66 +105,90 @@ function placeAtDate(tagid) {
 				datePattern : 'yyyyMMdd'
 			}
 
-		},tagid);
-		
+		}, tagid);
+
 	});
 }
 
 function validateUploadForm() {
 
-	require([ "dojo/dom", "dojo/parser", "dojo/dom-class", "dojo/query",
-			"dojo/on", "dojo/request/iframe","dojo/json","dijit/registry" ], function(dom, parser, domClass,
-			query, on, iframe,json,registry) {
-		query("input,textarea", "uploadFileForm").forEach(function(node) {
-			
-			// trim
-			//node.value = node.value.replace(/^\s*/, "").replace(/\s*$/);
-					
-			on.emit(node, "keyup", {
-				bubbles : true,
-				cancelable : true
-			});
-		});
-		if (dojo.byId("uploader").value == "") {
-			turnOnError(domClass, dojo.byId("uploader"));
-		} else {
-			turnOffError(domClass, dojo.byId("uploader"));
-		}
-		
-		if (dojo.byId("upload_doctype_id").value == "") {
-			turnOnError(domClass, dojo.byId("upload_doctype_id"));
-		} else {
-			turnOffError(domClass, dojo.byId("upload_doctype_id"));
-		}
+	require(
+			[ "dojo/dom", "dojo/parser", "dojo/dom-class", "dojo/query",
+					"dojo/on", "dojo/request/iframe", "dojo/json",
+					"dijit/registry" ],
+			function(dom, parser, domClass, query, on, iframe, json, registry) {
+				query("input,textarea", "uploadFileForm").forEach(
+						function(node) {
 
-		var hasErr=false;
-		query(".errorcolor", "uploadFileForm").forEach(function(node) {
-			
-			hasErr = true;
-		});
-		
-		if (hasErr){
-			alert("Please input all the mandatory field highline in red.");
-		}
-		else{
-			iframe("submitUploadFile", {
-				form : "uploadFileForm",
-			    handleAs: "json"
-			  }).then(function(xmldoc){
-			   // alert(xmldoc);
-			  }, function(err){
-			    // Handle the error condition
-				  alert("Your document has been uploaded.");
-				  dom.byId("uploadFileForm").reset();
-				  uploadFileFormDialog.hide();
-				  refreshProjectBroad(getProjectId());
-				  //registry.byId("upload_doctype_id").value="";
-			  });
-			
-			
-			
-		}
-	});
+							// trim
+							// node.value = node.value.replace(/^\s*/,
+							// "").replace(/\s*$/);
+
+							on.emit(node, "keyup", {
+								bubbles : true,
+								cancelable : true
+							});
+						});
+				if (dojo.byId("uploader").value == "") {
+					turnOnError(domClass, dojo.byId("uploader"));
+				} else {
+					turnOffError(domClass, dojo.byId("uploader"));
+				}
+
+				if (dojo.byId("upload_doctype_id").value == "") {
+					turnOnError(domClass, dojo.byId("upload_doctype_id"));
+				} else {
+					turnOffError(domClass, dojo.byId("upload_doctype_id"));
+				}
+
+				var hasErr = false;
+				query(".errorcolor", "uploadFileForm").forEach(function(node) {
+
+					hasErr = true;
+				});
+
+				if (hasErr) {
+					alert("Please input all the mandatory field highline in red.");
+				} else {
+
+					sethiddenValue(query, dom, "dateCreated");
+					sethiddenValue(query, dom, "certDate");
+					sethiddenValue(query, dom, "paymentDueDate");
+					sethiddenValue(query, dom, "orderedDate");
+					sethiddenValue(query, dom, "completedDate");
+
+					iframe("submitUploadFile", {
+						form : "uploadFileForm",
+						handleAs : "html"
+					}).then(function(xmldoc) {
+						console.log(xmldoc);
+						data = xmldoc.body.textContent;
+						console.log(data);
+						if(data){
+							alert(data + " has been uploaded.");
+							dom.byId("uploadFileForm").reset();
+							uploadFileFormDialog.hide();
+							refreshProjectBroad(getProjectId());
+						}else{
+							alert("File already exists. Please change file name.");
+						}
+					}, function(err) {
+						alert("Error occurs " + err);
+
+					});
+
+				}
+			});
+
+}
+
+function sethiddenValue(query, dom, tagid) {
+
+	query("input[name='" + tagid + "']", "uploadFileForm").forEach(
+			function(node) {
+
+				node.value = dom.byId(tagid).value;
+			});
 
 }
 
