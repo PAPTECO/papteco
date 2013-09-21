@@ -36,4 +36,13 @@ public class BaseController {
 		}
 		return f.getPath();
 	}
+	
+	protected String formatedNumber(String num, int digs){
+		StringBuffer result = new StringBuffer();
+		for(int i = 0; i < digs-num.length(); i++){
+			result.append("0");
+		}
+		result.append(num);
+		return result.toString();
+	}
 }

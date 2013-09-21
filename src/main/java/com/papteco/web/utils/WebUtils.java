@@ -18,7 +18,9 @@ import com.papteco.web.beans.FieldDef;
 import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.FormatItem;
+import com.papteco.web.beans.PreserveNosBean;
 import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.dbs.PreserveNosDAO;
 import com.papteco.web.dbs.ProjectCacheDAO;
 
 public class WebUtils {
@@ -74,8 +76,9 @@ public class WebUtils {
 
 	public static Map toUniqueJson() {
 		System.out.println(ProjectCacheDAO.getMaxProjectId());
+		PreserveNosBean presNo = PreserveNosDAO.getPresNosBean(PreserveNosDAO.PRES_NO_CDE);
 		return ImmutableMap.of("max", ProjectCacheDAO.getMaxProjectId(),
-				"preserve","Preserved from 101 to 205");
+				"preserve","Preserved from "+presNo.getPresNoFrom()+" to "+presNo.getPresNoTo()+"");
 	}
 
 	public static List toSearchGrid(String searchClinetno, String searchAnykey) {
@@ -271,6 +274,14 @@ public class WebUtils {
 				defaultValue = getDateYYMM();
 			}else if ("dateWith6digs".equals(col.getFieldName())) {
 				defaultValue = getDateYYMMDD();
+			}else if("rev".equals(col.getFieldName())){
+				defaultValue = "001";
+			}else if("l1".equals(col.getFieldName())){
+				defaultValue = "00";
+			}else if("l2".equals(col.getFieldName())){
+				defaultValue = "00";
+			}else if("l3".equals(col.getFieldName())){
+				defaultValue = "000";
 			}
 			
 			result = new StringBuilder()

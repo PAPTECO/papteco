@@ -232,10 +232,16 @@ function submitPresrvNos() {
 				datafrom = dom.byId("presrv_from").value;
 				datato = dom.byId("presrv_to").value;
 
+				dataset = {
+						datafrom : datafrom,
+						datato : datato
+					};
+				
 				if (datafrom && datato) {
 
 					xhr("submitPresrvNos", {
 						handleAs : "json",
+						query : dataset,
 						method : "get",
 						preventCache : true,
 						headers : {
@@ -243,11 +249,14 @@ function submitPresrvNos() {
 						}
 					}).then(
 							function(datas) {
-
-								alert(datafrom + " - " + datato
-										+ " has been preserved.");
-
-								presrvDialog.hide();
+								if(datas.type == "success"){
+									alert(datafrom + " - " + datato
+											+ " has been preserved.");
+									presrvDialog.hide();
+								}else{
+									alert(datas.msg);
+								}
+								
 							}, function(err) {
 								// Handle the error condition
 								console.log(err);

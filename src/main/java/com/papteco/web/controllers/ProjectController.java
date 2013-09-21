@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -127,8 +128,8 @@ public class ProjectController extends BaseController {
 			while(iter.hasNext()){
 				Map.Entry sc = (Map.Entry)iter.next();
 				String key = sc.getKey().toString();
-				int value = Integer.valueOf(sc.getValue().toString());
-				sb.append("<li><span class='fileSuccess'></span> <a href='#' onclick='changetoprj("+value+")' >"+key+"</a> <span class='remove' onclick=\"deleteprjshortcut(\'"+key+"');\"></span></li>");
+				String value = sc.getValue().toString();
+				sb.append("<li><span class='fileSuccess'></span> <a href='#' onclick=\"changetoprj('"+value+"')\" >"+key+"</a> <span class='remove' onclick=\"deleteprjshortcut(\'"+key+"');\"></span></li>");
 				
 			} 
 		}
@@ -148,12 +149,20 @@ public class ProjectController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "submitPresrvNos")
 	@ResponseBody
-	public Map submitPresrvNos() throws Exception {
+	public Map submitPresrvNos(@RequestParam String datafrom,
+			@RequestParam String datato) throws Exception {
 		
-		System.out.println("submitPresrvNos");
-		presNoService.savePresNos(new PreserveNosBean(3,5));
+		System.out.println("submitPresrvNos - "+datafrom + " to " + datato);
+		int presNoFrom = Integer.valueOf(datafrom);
+		int presNoTo = Integer.valueOf(datato);
+		String issuecases = presNoService.isPresNoValidationPassed(presNoFrom, presNoTo);
+		if(StringUtils.isBlank(issuecases)){
+			presNoService.savePresNos(new PreserveNosBean(presNoFrom,presNoTo));
+		}else{
+			return ImmutableMap.of("type","fail","msg","Cannot save the preserve numbers. ProjectId ["+issuecases+"] was existing.");
+		}
+		
 		return ImmutableMap.of("type","success");
-
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "savePrjshortcut")

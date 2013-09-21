@@ -280,7 +280,7 @@
 							title="" href="#" onClick="doSearch()">Search</a>
 						<div class="blank_interval notext_wrap">&nbsp;</div>
 						<a id="SearchButton1" class="insideFont bGreen notext_wrap"
-							title="" href="#" onclick="searchSaveDialog.show()">+Add to
+							title="" href="#" onclick="initSearchShortcutName();searchSaveDialog.show()">+Add to
 							Custom Filters</a>
 						<div id="result1">
 						</div>
@@ -305,9 +305,10 @@
 					</legend>
 					<div style="float: left; padding: 30px">
 						<input type="hidden" id="prj_id"></input>
+						<input type="hidden" id="prj_cde"></input>
 						<h1 id="prj_name">Project Name</h1>
 						<div class="blank_interrupt"></div>
-						<a id="SearchButton2" onClick="projectstSaveDialog.show()"
+						<a id="SearchButton2" onClick="initProjectShortcutName();projectstSaveDialog.show()"
 							class="insideFont bGreen notext_wrap " title="" href="#">+
 							Add To ShortCut</a>
 					</div>

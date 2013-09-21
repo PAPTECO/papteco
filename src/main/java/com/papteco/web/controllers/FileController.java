@@ -65,7 +65,10 @@ public class FileController extends BaseController {
 		trgFileName.append(bean.getDescription());
 		trgFileName.append("-");
 		trgFileName.append("Rev");
-		trgFileName.append(bean.getRev());
+		if(bean.getRev().length() < 3)
+			trgFileName.append(formatedNumber(bean.getRev(), 3));
+		else
+			trgFileName.append(bean.getRev());
 		if(bean.getUploadfile().getOriginalFilename().contains(".")){
 			trgFileName.append(bean
 					.getUploadfile()

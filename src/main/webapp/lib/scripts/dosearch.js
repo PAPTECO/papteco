@@ -103,6 +103,7 @@ function refreshProjectBroad(projectId) {
 					console.log("projectsummary",datas);
 					
 					dojo.byId("prj_id").value=projectId;
+					dojo.byId("prj_cde").value=datas["projectIndentify"];
 					dojo.byId("prj_name").innerHTML=datas["projectIndentify"];
 					dojo.byId("prj_creator").innerHTML=datas["createdBy"];
 					dojo.byId("prj_modify").innerHTML=datas["createdAt"];

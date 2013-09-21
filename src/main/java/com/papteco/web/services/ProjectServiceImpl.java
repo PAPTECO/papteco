@@ -32,7 +32,7 @@ public class ProjectServiceImpl extends BaseService {
 			prjshortcut = new ProjectShortcutBean();
 			prjshortcut.setUsracct(usracct);
 		}
-		prjshortcut.getPrjShortcuts().put(prjSavName, Integer.valueOf(prjId));
+		prjshortcut.getPrjShortcuts().put(prjSavName, prjId);
 		ProjectShortcutDAO.saveProjectShortcut(prjshortcut);
 	}
 	

@@ -223,3 +223,22 @@ function changetosearch(client,anykey){
 		dom.byId("search_anykey").value = anykey;
 	});
 }
+
+function initSearchShortcutName(){
+	require([ "dojo/dom"], function(dom) {
+		var clientno = dom.byId("searchclient").value;
+		var anykey = dom.byId("search_anykey").value;
+		var shortname = "SC:";
+		if(clientno != "")
+			shortname = shortname+"ClientNo="+clientno+";";
+		if(anykey != "")
+			shortname = shortname+"AnyKey="+anykey+";";
+		dom.byId("search_sav_name").value = shortname;
+	});
+}
+
+function initProjectShortcutName(){
+	require([ "dojo/dom"], function(dom) {
+		dom.byId("prj_sav_name").value = "PRJ:" + dojo.byId("prj_cde").value;
+	});
+}

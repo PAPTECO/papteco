@@ -1,8 +1,8 @@
 package com.papteco.web.services;
 
 import java.io.IOException;
-import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.papteco.web.beans.PreserveNosBean;
@@ -28,14 +28,17 @@ public class PresNoServiceImpl extends BaseService {
 		PreserveNosDAO.savePresNosBean(presNoBean);
 	}
 	
-	public boolean isPresNoValidationPassed(PreserveNosBean presNoBean){
+	public String isPresNoValidationPassed(int presNoFrom, int presNoTo){
+		StringBuffer result = new StringBuffer();
 		for(ProjectBean prj : ProjectCacheDAO.getAllProjectBeans()){
 			int prjId = Integer.valueOf(prj.getProjectId());
-			if(prjId >= presNoBean.getPresNoFrom() && prjId <= presNoBean.getPresNoTo()){
-				return false;
+			if(prjId >= presNoFrom && prjId <= presNoTo){
+				result.append(prjId + ",");
 			}
 		}
-		return true;
+		if(StringUtils.isNotBlank(result.toString()))
+			result.replace(result.lastIndexOf(","), result.length(), "");
+		return result.toString();
 	}
 	
 	/* mandatory constructor method */

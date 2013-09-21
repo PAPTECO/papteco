@@ -18,7 +18,7 @@ public class ProjectShortcutBean implements Serializable {
 	@PrimaryKey
 	private String usracct;
 	
-	private Map<String, Integer> prjShortcuts = new LinkedHashMap<String, Integer>();
+	private Map<String, String> prjShortcuts = new LinkedHashMap<String, String>();
 	
 	public String getUsracct() {
 		return usracct;
@@ -28,11 +28,11 @@ public class ProjectShortcutBean implements Serializable {
 		this.usracct = usracct;
 	}
 
-	public Map<String, Integer> getPrjShortcuts() {
+	public Map<String, String> getPrjShortcuts() {
 		return prjShortcuts;
 	}
 
-	public void setPrjShortcuts(Map<String, Integer> prjShortcuts) {
+	public void setPrjShortcuts(Map<String, String> prjShortcuts) {
 		this.prjShortcuts = prjShortcuts;
 	}
 	
