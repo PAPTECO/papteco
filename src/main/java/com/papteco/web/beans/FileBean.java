@@ -1,11 +1,17 @@
 package com.papteco.web.beans;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.sleepycat.persist.model.Persistent;
 
 @Persistent
-public class FileBean {
+public class FileBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3007977589740195080L;
 
 	private String fileName;
 

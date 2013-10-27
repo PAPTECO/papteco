@@ -9,7 +9,7 @@
 <body>
     <div>
         
-<form action="deleteDocs" method="GET">
+<form action="openfile" method="GET">
             <input name="projectId" value="1">
             <input name="filename" value="1">
             <input type="submit" value="SUBMIT">

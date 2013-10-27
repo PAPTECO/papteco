@@ -1,6 +1,7 @@
 package com.papteco.web.dbs;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -104,6 +105,20 @@ public class ProjectCacheDAO {
 		return result;
 	}
 	
+	public static ProjectBean getProjectBeanByFilterProjectCde(String prjCde){
+		EntityCursor<ProjectBean> allProjects = projectIdIndex.entities();
+		ProjectBean project = new ProjectBean();
+		for (ProjectBean bean : allProjects){
+			if(prjCde.equals(bean.getProjectCde())){
+				project = bean;
+				allProjects.close();
+				return project;
+			}
+		}
+		allProjects.close();
+		return null;
+	}
+	
 	public static List<ProjectBean> getProjectBeansByFilter(String clientNo, String anyKey){
 		EntityCursor<ProjectBean> allProjects = projectIdIndex.entities();
 		List<ProjectBean> result = new LinkedList<ProjectBean>();
@@ -142,7 +157,7 @@ public class ProjectCacheDAO {
 		ProjectBean project = projectIdIndex.get(projectId);
 		for(FolderBean folder : project.getFolderTree()){
 			if(docType.equals(folder.getDocType())){
-				List<FileBean> fileList = folder.getFileTree();
+				ArrayList<FileBean> fileList = folder.getFileTree();
 				fileList.add(fileBean);
 				folder.setFileTree(fileList);
 				break;
@@ -158,7 +173,7 @@ public class ProjectCacheDAO {
 		ProjectBean project = projectIdIndex.get(projectId);
 		for(FolderBean folder : project.getFolderTree()){
 			if(docType.equals(folder.getDocType())){
-				List<FileBean> fileList = folder.getFileTree();
+				ArrayList<FileBean> fileList = folder.getFileTree();
 				FileBean removingfile = null;
 				for(FileBean file : fileList){
 					if(fileName.equals(file.getFileName())){

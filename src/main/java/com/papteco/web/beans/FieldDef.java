@@ -1,7 +1,13 @@
 package com.papteco.web.beans;
 
-public class FieldDef {
+import java.io.Serializable;
 
+public class FieldDef implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6204285762681960938L;
 	private String fieldName;
 	private String fieldDesc;
 	private int maxlength;

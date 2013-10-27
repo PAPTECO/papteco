@@ -9,7 +9,7 @@ import com.sleepycat.persist.model.Entity;
 import com.sleepycat.persist.model.PrimaryKey;
 
 @Entity
-public class ProjectBean implements Serializable {
+public class ProjectBean implements Serializable,Cloneable {
 
 	/**
 	 * 
@@ -130,4 +130,16 @@ public class ProjectBean implements Serializable {
 		this.longDesc = longDesc;
 	}
 
+//	public ProjectBean clone(){
+//		return this.clone();
+//	}
+	public ProjectBean clone(){ 
+		ProjectBean o = null; 
+		try{ 
+		o = (ProjectBean)super.clone(); 
+		}catch(CloneNotSupportedException e){ 
+		e.printStackTrace(); 
+		} 
+		return o; 
+		} 
 }

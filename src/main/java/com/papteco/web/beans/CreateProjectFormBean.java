@@ -1,7 +1,13 @@
 package com.papteco.web.beans;
 
-public class CreateProjectFormBean {
+import java.io.Serializable;
 
+public class CreateProjectFormBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 229980401777078388L;
 	private String clientno;
 	private String createDate;
 	private String uniqueno;

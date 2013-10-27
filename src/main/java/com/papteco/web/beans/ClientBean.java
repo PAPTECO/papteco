@@ -1,7 +1,13 @@
 package com.papteco.web.beans;
 
-public class ClientBean implements Comparable<ClientBean>{
+import java.io.Serializable;
 
+public class ClientBean implements Comparable<ClientBean>, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4148753755140742448L;
 	private String clientNo;
 	private String clientName;
 

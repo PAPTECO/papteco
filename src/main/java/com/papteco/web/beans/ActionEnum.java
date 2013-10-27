@@ -1,6 +1,8 @@
 package com.papteco.web.beans;
 
-public enum ActionEnum {
+import java.io.Serializable;
+
+public enum ActionEnum implements Serializable {
 
 	notApplicable,
 	keyedInByUser,

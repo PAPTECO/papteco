@@ -3,12 +3,18 @@
  */
 package com.papteco.web.beans;
 
+import java.io.Serializable;
+
 /**
  * @author Administrator
  * 
  */
-public class FormatItem {
+public class FormatItem implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1628828347300655771L;
 	private ActionEnum code = ActionEnum.autoFillReadOnly;
 	private ActionEnum clientNo = ActionEnum.autoFillReadOnly;
 	private ActionEnum drawintType = ActionEnum.notApplicable;
