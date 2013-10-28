@@ -87,6 +87,13 @@ public class FileController extends BaseController {
 	public String submitUploadFile(DocTypeFieldSet bean, Model model)
 			throws Exception {
 
+		//TODO Cony
+		
+		if(StringUtils.isNotBlank(bean.getUploadedCopyForm())){
+			// showing that copy from
+			System.out.println("Copy from:"+bean.getUploadedCopyForm());
+		}
+		
 		String fileFolder = combineFolderPath(
 				combineFolderPath(rootpath, bean.getProjectCde()),
 				this.sysConfig.getFolderNameByFolderCde(bean
@@ -108,6 +115,9 @@ public class FileController extends BaseController {
 		BeanUtils.copyProperties(fileBean, bean);
 		System.out.println(fileBean);
 
+		//TODO Cony
+		// Order client to open the file
+		
 		if(fileService.isFileNameExisting(bean.getProjectId(), fileBean.getFileName())){
 			return null;
 		}else{

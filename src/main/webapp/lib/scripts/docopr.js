@@ -42,12 +42,32 @@ require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
 		filename = docTree.getLabel(item);
 		toIndex = filename.indexOf("(") > 0 ? filename.indexOf("(")
 				: filename.length;
-		dojo.byId("doc_name").innerHTML = filename.substring(0, toIndex);
+		
+		//display docname
+		doc_name = filename.substring(0, toIndex);
+		dojo.byId("doc_name").innerHTML = doc_name;
+		
+		
 		// dojo.byId("doc_last_modi_at").innerHTML = docTree.getLabel(item);
-		if (item.field_details) {
+
+		if (item.ftype == "file") {
 			dojo.byId("field_details").innerHTML = item.field_details;
 		} else {
-			dojo.byId("field_details").innerHTML = "";
+			doc_type = item.docType;
+			fileList = templatesInfo[doc_type];
+			
+			console.log("doc_type",doc_type);
+			console.log(fileList);
+			
+			templatelink = "";
+			if(fileList){
+			for(var i=0;i<fileList.length;i++){
+				templatelink = templatelink +
+				"<div style=\"height:40px;\"><a onClick=\"uploadFileFormShow('"+doc_type+"','"+fileList[i]+"');\" class='insideFont bGreen notext_wrap' href='#'>Copy from "+fileList[i]+"</a></div>";
+				console.log(fileList[i]);
+			}
+			}
+			dojo.byId("field_details").innerHTML = templatelink;
 		}
 		// dojo.byId("ViewDoc").onClick =
 		// "window.open('viewDocs?projectId=a;filename='"+docTree.getLabel(item)+"')";

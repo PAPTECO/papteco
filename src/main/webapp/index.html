@@ -411,6 +411,58 @@ if (r==false)
 							
 
                     </script>Delete</li>
+                    <li data-dojo-type="dijit/MenuItem"><script
+							type="dojo/connect" data-dojo-event="onClick">
+                            // get a hold of the dijit.TreeNode that was the source of this open event
+                            var tn = dijit.byNode(this.getParent().currentTarget);
+
+                            // now print the data store item that backs the tree node
+                            console.debug("menu click for item: ", tn.item.name);
+console.debug("menu click for item: ", tn.item.docType);
+
+
+
+var r=confirm("Are you sure to add revision on "+tn.item.id +" ?");
+if (r==false)
+	return;
+
+uploadFileFormShow(tn.item.docType,tn.item.name);
+
+                    </script>Add Revision</li>
+                    <li data-dojo-type="dijit/MenuItem"><script
+							type="dojo/connect" data-dojo-event="onClick">
+                            // get a hold of the dijit.TreeNode that was the source of this open event
+                            var tn = dijit.byNode(this.getParent().currentTarget);
+
+                            // now print the data store item that backs the tree node
+                            console.debug("menu click for item: ", tn.item.name);
+console.debug("menu click for item: ", tn.item.docType);
+
+
+
+var r=confirm("Are you sure to edit on "+tn.item.id +" ?");
+if (r==false)
+	return;
+
+                    </script>Edit</li>
+                    <li data-dojo-type="dijit/MenuItem"><script
+							type="dojo/connect" data-dojo-event="onClick">
+                            // get a hold of the dijit.TreeNode that was the source of this open event
+                            var tn = dijit.byNode(this.getParent().currentTarget);
+
+                            // now print the data store item that backs the tree node
+                            console.debug("menu click for item: ", tn.item.name);
+console.debug("menu click for item: ", tn.item.docType);
+
+
+
+var r=confirm("Are you sure to release object on "+tn.item.id +" ?");
+if (r==false)
+	return;
+
+
+
+                    </script>Release Object</li>
 				</ul>
 
 
@@ -426,10 +478,11 @@ if (r==false)
 					<div class="dijitDialogPaneContentArea">
 						<span><label for="date" id="upload_doctype_id_header">Document
 								Type: </label><input id="upload_doctype"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><label
-							for="date" id="uploader_header">Upload File: </label><input
-							name="uploadfile" type="file" id="uploader" /></span>
+							for="date" id="uploader_header">From File: </label><input
+							name="uploadfile" type="file" id="uploader" style="display:none"/><input class="uploadfileqryonly" id="uploadedCopyForm" readOnly name="uploadedCopyForm" value="" size="30" style="display:none"/></span>
 
 						<div id="insert_content"></div>
+
 					</div>
 
 					<div class="dijitDialogPaneActionBar">

@@ -82,6 +82,9 @@ require([ 'dojox/grid/EnhancedGrid', 'dojox/grid/enhanced/plugins/Pagination',
 	loadingClients("searchclient",false);
 });
 
+
+var templatesInfo;
+
 function refreshProjectBroad(projectId) {
 	//loadingDialog.closeButtonNode.hidden = true;
 	//loadingDialog.show();
@@ -108,6 +111,7 @@ function refreshProjectBroad(projectId) {
 					dojo.byId("prj_creator").innerHTML=datas["createdBy"];
 					dojo.byId("prj_modify").innerHTML=datas["createdAt"];
 					dojo.byId("prj_desc").innerHTML=datas["description"];
+					templatesInfo = datas["templates"];
 					
 					refreshDocBroad(projectId);
 				}, function(err) {

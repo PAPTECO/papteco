@@ -1,12 +1,12 @@
 require("dojox/form/Uploader");
 require("dojox/form/uploader/plugins/IFrame");
 
-function uploadFileFormShow() {
+function uploadFileFormShow(foldertype, templatename) {
 
 	uploadFileFormDialog.show();
 
-	tagid = "upload_doctype";
-
+	tagid = "upload_doctype_id";
+	
 	require([ "dojo/dom", "dojo/parser", "dojo/dom-class", "dojo/query",
 			"dojo/on", "dojo/request/iframe", "dojo/json", "dijit/registry" ],
 			function(dom, parser, domClass, query, on, iframe, json, registry) {
@@ -14,74 +14,116 @@ function uploadFileFormShow() {
 						function(node) {
 
 							node.value = "";
-							
+
 						});
-				
-				
+
 				dom.byId("insert_content").innerHTML = "";
+				
+				dom.byId("uploadedCopyForm").value = templatename;
+			});
+	
+	
+	if (!hasRegister(tagid)) {
+		require([ "dojo/dom", "dojo/data/ItemFileReadStore",
+				"dijit/form/ComboBox",
+
+				"dojo/domReady!" ], function(dom, ItemFileReadStore, ComboBox) {
+
+			var stateStore = new ItemFileReadStore({
+				url : "getPredefineDocumentTypes"
 			});
 
-	if (hasRegister(tagid))
-		return;
+			console.log(stateStore);
 
-	require(
-			[ "dojo/dom", "dojo/data/ItemFileReadStore", "dijit/form/ComboBox",
-					"dijit/registry", "dojo/request/xhr", "dojo/json",
-					"dojo/domReady!" ], function(dom, ItemFileReadStore,
-					ComboBox, registry, xhr, json) {
+			comboBox = new ComboBox({
+				id : "upload_doctype_id",
+				name : "upload_doctype",
+				store : stateStore,
+				searchAttr : "id",
+				labelAttr : 'name',
+				value:foldertype,
+				onChange : setVal1
+			}, "upload_doctype");
 
-				var stateStore = new ItemFileReadStore({
-					url : "getPredefineDocumentTypes"
+			if (foldertype) {
+				comboBox.readOnly = "true";
+				comboBox.disable = "disabled";
+				console.log("set combox read only",comboBox);
+			}
+		});
+
+	}
+
+	require([ "dojo/dom", "dijit/registry", "dojo/query" ], function(dom,
+			registry, query) {
+		// is modify
+		if (foldertype) {
+			
+			if(registry.byId(tagid)){
+				registry.byId(tagid).value = foldertype;
+				// console.log("dijit",registry.byId(tagid));
+				registry.byId(tagid).readOnly = "true";
+				registry.byId(tagid).disable = "disabled";
+				dom.byId(tagid).value = foldertype;
+			}
+			
+			setVal1(foldertype);
+			
+			console.log("uploadformobj",dom.byId("uploadedCopyForm"));
+			console.log("templatename",templatename);
+
+			// show copy from file, hide uploader
+			query("#uploadedCopyForm").style("display", "inline");
+			query("#uploader").style("display", "none");
+		} else {
+			query("#uploadedCopyForm").style("display", "none");
+			query("#uploader").style("display", "inline");
+
+			dom.byId("uploadedCopyForm").value = "";
+			registry.byId(tagid).readOnly = "";
+			registry.byId(tagid).disable = "";
+		}
+
+	});
+
+}
+
+function setVal1(value) {
+	require([ "dojo/dom", "dijit/registry", "dojo/request/xhr", "dojo/json" ],
+			function(dom, registry, xhr, json) {
+
+				dataset = {
+					docType : value,
+					prjId : getProjectId()
+				};
+
+				xhr("getNumberingFormat", {
+					handleAs : "json",
+					query : dataset,
+					method : "get",
+					preventCache : true,
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).then(function(datas) {
+
+					console.log("datas", datas);
+					dom.byId("insert_content").innerHTML = datas.data;
+					placeAtDate("dateCreated");
+					placeAtDate("certDate");
+					placeAtDate("paymentDueDate");
+					placeAtDate("orderedDate");
+					placeAtDate("completedDate");
+
+				}, function(err) {
+					// Handle the error condition
+					console.log(err);
+				}, function(evt) {
+					// Handle a progress event from the request if the
+					// browser supports XHR2
+					console.log(evt);
 				});
-
-				console.log(stateStore);
-
-				var comboBox = new ComboBox({
-					id : "upload_doctype_id",
-					name : "upload_doctype",
-					store : stateStore,
-					searchAttr : "id",
-					labelAttr : 'name',
-					onChange : setVal1
-				}, "upload_doctype");
-
-				function setVal1(value) {
-
-					dataset = {
-						docType : value,
-						prjId : getProjectId()
-					};
-
-					xhr("getNumberingFormat", {
-						handleAs : "json",
-						query : dataset,
-						method : "get",
-						preventCache : true,
-						headers : {
-							'Content-Type' : 'application/json'
-						}
-					}).then(function(datas) {
-
-						console.log("datas", datas);
-						dom.byId("insert_content").innerHTML = datas.data;
-						placeAtDate("dateCreated");
-						placeAtDate("certDate");
-						placeAtDate("paymentDueDate");
-						placeAtDate("orderedDate");
-						placeAtDate("completedDate");
-
-					}, function(err) {
-						// Handle the error condition
-						console.log(err);
-					}, function(evt) {
-						// Handle a progress event from the request if the
-						// browser supports XHR2
-						console.log(evt);
-					});
-
-				}
 			});
-
 }
 
 function placeAtDate(tagid) {
@@ -129,7 +171,8 @@ function validateUploadForm() {
 								cancelable : true
 							});
 						});
-				if (dojo.byId("uploader").value == "") {
+				if (dojo.byId("uploader").value == ""
+						&& dojo.byId("uploadedCopyForm").value == "") {
 					turnOnError(domClass, dojo.byId("uploader"));
 				} else {
 					turnOffError(domClass, dojo.byId("uploader"));
@@ -160,22 +203,24 @@ function validateUploadForm() {
 					iframe("submitUploadFile", {
 						form : "uploadFileForm",
 						handleAs : "html"
-					}).then(function(xmldoc) {
-						console.log(xmldoc);
-						data = xmldoc.body.textContent;
-						console.log(data);
-						if(data){
-							alert(data + " has been uploaded.");
-							dom.byId("uploadFileForm").reset();
-							uploadFileFormDialog.hide();
-							refreshProjectBroad(getProjectId());
-						}else{
-							alert("File already exists. Please change file name.");
-						}
-					}, function(err) {
-						alert("Error occurs " + err);
+					})
+							.then(
+									function(xmldoc) {
+										console.log(xmldoc);
+										data = xmldoc.body.textContent;
+										console.log(data);
+										if (data) {
+											alert(data + " has been uploaded.");
+											dom.byId("uploadFileForm").reset();
+											uploadFileFormDialog.hide();
+											refreshProjectBroad(getProjectId());
+										} else {
+											alert("File already exists. Please change file name.");
+										}
+									}, function(err) {
+										alert("Error occurs " + err);
 
-					});
+									});
 
 				}
 			});

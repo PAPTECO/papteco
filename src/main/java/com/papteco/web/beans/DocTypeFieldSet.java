@@ -32,6 +32,7 @@ public class DocTypeFieldSet {
 	private String estimatedCost;
 	private String rev;
 	private MultipartFile uploadfile;
+	private String uploadedCopyForm;
 
 	public String getProjectId() {
 		return projectId;
@@ -257,21 +258,32 @@ public class DocTypeFieldSet {
 		this.l3 = l3;
 	}
 
+	public String getUploadedCopyForm() {
+		return uploadedCopyForm;
+	}
+
+	public void setUploadedCopyForm(String uploadedCopyForm) {
+		this.uploadedCopyForm = uploadedCopyForm;
+	}
+
 	@Override
 	public String toString() {
-		return "DocTypeFieldSet [projectId="+ projectId +", upload_doctype=" + upload_doctype
-				+ ", clientNo=" + clientNo + ", dateWith4digs=" + dateWith4digs
-				+ ", dateWith6digs=" + dateWith6digs + ", description="
-				+ description + ", dateCreated=" + dateCreated + ", ref=" + ref
-				+ ", certDate=" + certDate + ", drawnBy=" + drawnBy
-				+ ", uploadedBy=" + uploadedBy + ", amount=" + amount
-				+ ", paymentDueDate=" + paymentDueDate + ", requestedBy="
-				+ requestedBy + ", orderedDate=" + orderedDate
-				+ ", completedDate=" + completedDate + ", suppliedBy="
-				+ suppliedBy + ", note=" + note + ", typeOfConfirmation="
-				+ typeOfConfirmation + ", formalPrice=" + formalPrice
-				+ ", estimatedCost=" + estimatedCost + ", rev=" + rev
-				+ ", uploadfile=" + uploadfile + "]";
+		return "DocTypeFieldSet [projectId=" + projectId + ", projectCde="
+				+ projectCde + ", upload_doctype=" + upload_doctype
+				+ ", clientNo=" + clientNo + ", drawintType=" + drawintType
+				+ ", dateWith4digs=" + dateWith4digs + ", dateWith6digs="
+				+ dateWith6digs + ", description=" + description
+				+ ", dateCreated=" + dateCreated + ", ref=" + ref + ", l1="
+				+ l1 + ", l2=" + l2 + ", l3=" + l3 + ", certDate=" + certDate
+				+ ", drawnBy=" + drawnBy + ", uploadedBy=" + uploadedBy
+				+ ", amount=" + amount + ", paymentDueDate=" + paymentDueDate
+				+ ", requestedBy=" + requestedBy + ", orderedDate="
+				+ orderedDate + ", completedDate=" + completedDate
+				+ ", suppliedBy=" + suppliedBy + ", note=" + note
+				+ ", typeOfConfirmation=" + typeOfConfirmation
+				+ ", formalPrice=" + formalPrice + ", estimatedCost="
+				+ estimatedCost + ", rev=" + rev + ", uploadfile=" + uploadfile
+				+ ", uploadedCopyForm=" + uploadedCopyForm + "]";
 	}
 
 }
