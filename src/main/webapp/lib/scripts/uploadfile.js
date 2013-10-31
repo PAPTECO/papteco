@@ -1,6 +1,74 @@
 require("dojox/form/Uploader");
 require("dojox/form/uploader/plugins/IFrame");
 
+function editFile(foldertype, editfilename) {
+	
+	require([ "dojo/dom", "dijit/registry", "dojo/request/xhr", "dojo/json" ],
+			function(dom, registry, xhr, json) {
+
+				dataset = {
+						docType : foldertype,
+						filename : editfilename
+				};
+
+				xhr("editFile", {
+					handleAs : "json",
+					query : dataset,
+					method : "get",
+					preventCache : true,
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).then(function(datas) {
+
+					console.log("datas", datas);
+
+				}, function(err) {
+					// Handle the error condition
+					console.log(err);
+				}, function(evt) {
+					// Handle a progress event from the request if the
+					// browser supports XHR2
+					console.log(evt);
+				});
+			});
+	
+}
+
+function releaseFile(foldertype, editfilename) {
+	
+	require([ "dojo/dom", "dijit/registry", "dojo/request/xhr", "dojo/json" ],
+			function(dom, registry, xhr, json) {
+
+				dataset = {
+						docType : foldertype,
+						filename : editfilename
+				};
+
+				xhr("releaseFile", {
+					handleAs : "json",
+					query : dataset,
+					method : "get",
+					preventCache : true,
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).then(function(datas) {
+
+					console.log("datas", datas);
+
+				}, function(err) {
+					// Handle the error condition
+					console.log(err);
+				}, function(evt) {
+					// Handle a progress event from the request if the
+					// browser supports XHR2
+					console.log(evt);
+				});
+			});
+	
+}
+
 function uploadFileFormShow(foldertype, templatename) {
 
 	uploadFileFormDialog.show();

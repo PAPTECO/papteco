@@ -426,7 +426,7 @@ var r=confirm("Are you sure to add revision on "+tn.item.id +" ?");
 if (r==false)
 	return;
 
-uploadFileFormShow(tn.item.docType,tn.item.name);
+uploadFileFormShow(tn.item.docType,tn.item.id);
 
                     </script>Add Revision</li>
                     <li data-dojo-type="dijit/MenuItem"><script
@@ -444,6 +444,8 @@ var r=confirm("Are you sure to edit on "+tn.item.id +" ?");
 if (r==false)
 	return;
 
+editFile(tn.item.docType,tn.item.id);
+
                     </script>Edit</li>
                     <li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
@@ -459,7 +461,7 @@ console.debug("menu click for item: ", tn.item.docType);
 var r=confirm("Are you sure to release object on "+tn.item.id +" ?");
 if (r==false)
 	return;
-
+releaseFile(tn.item.docType,tn.item.id);
 
 
                     </script>Release Object</li>

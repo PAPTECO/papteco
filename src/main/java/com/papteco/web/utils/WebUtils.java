@@ -337,7 +337,9 @@ public class WebUtils {
 			} else if ("dateWith6digs".equals(col.getFieldName())) {
 				defaultValue = getDateYYMMDD();
 			} else if ("rev".equals(col.getFieldName())) {
-				defaultValue = "001";
+				//TODO Cony
+				//search current doc and recommend the new rev
+				defaultValue = "recommend";
 			} else if ("l1".equals(col.getFieldName())) {
 				defaultValue = "00";
 			} else if ("l2".equals(col.getFieldName())) {
@@ -394,18 +396,22 @@ public class WebUtils {
 						"children",
 						Lists.newArrayList()));
 			} else {
+				//TODO Cony
+				// please replace function on (locked by ?) if this file is locked.
 				List<Map> subList = Lists.newArrayList();
 				for (FileBean file : files) {
 					subList.add(of("id", file.getFileName(), "name",
-							file.getFileName(), "type", "continent",
+							file.getFileName()+" (locked by ?)", "type", "continent",
 							"projectId", projectId, "field_details",
 							displayUploadFileFields(file, sysConfig),
 							"docType",folder.getDocType(),
 							"ftype","file"));
 
 				}
+				//TODO Cony
+				// please replace function on (contain X, N is locked)
 				resultList.add(of("id", folder.getDocType(), "name",
-						folder.getFolderName() + "(" + subList.size() + ")",
+						folder.getFolderName() + "(contain " + subList.size() + ", 2 locked)",
 						"type", "continent", 
 						"ftype","folder",
 						"docType",folder.getDocType(),
