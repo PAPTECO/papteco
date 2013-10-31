@@ -88,6 +88,10 @@ function uploadFileFormShow(foldertype, templatename) {
 				dom.byId("insert_content").innerHTML = "";
 				
 				dom.byId("uploadedCopyForm").value = templatename;
+				
+				if(registry.byId(tagid)){
+					registry.byId(tagid)._lastValueReported ="";
+				}
 			});
 	
 	
