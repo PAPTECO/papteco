@@ -19,17 +19,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.DocTypeFieldSet;
 import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.beans.QueueItem;
+import com.papteco.web.dbs.UserIPDAO;
+import com.papteco.web.netty.OpenFileClientBuilder;
 import com.papteco.web.services.FileServiceImpl;
+import com.papteco.web.utils.FilesUtils;
 import com.papteco.web.utils.WebUtils;
 
 @Controller
 public class FileController extends BaseController {
 	@Autowired
 	private FileServiceImpl fileService;
+	
+	private String fileStructPath;
+	private String serverFilePath;
 
 	private String prepareFileName(DocTypeFieldSet bean){
 		StringBuffer trgFileName = new StringBuffer();
@@ -70,15 +76,21 @@ public class FileController extends BaseController {
 			trgFileName.append(formatedNumber(bean.getRev(), 3));
 		else
 			trgFileName.append(bean.getRev());
-		if(bean.getUploadfile().getOriginalFilename().contains(".")){
-			trgFileName.append(bean
-					.getUploadfile()
-					.getOriginalFilename()
-					.substring(
-							bean.getUploadfile().getOriginalFilename()
-									.lastIndexOf(".")));
-		}
 		
+		if(StringUtils.isNotBlank(bean.getUploadedCopyForm()) && bean.getUploadedCopyForm().contains(".")){
+			trgFileName.append(bean.getUploadedCopyForm().substring(
+					bean.getUploadedCopyForm()
+									.lastIndexOf(".")));
+		}else {
+			if(bean.getUploadfile().getOriginalFilename().contains(".")){
+				trgFileName.append(bean
+						.getUploadfile()
+						.getOriginalFilename()
+						.substring(
+								bean.getUploadfile().getOriginalFilename()
+										.lastIndexOf(".")));
+			}
+		}
 		return trgFileName.toString();
 	}
 	
@@ -101,10 +113,6 @@ public class FileController extends BaseController {
 		String fileName = prepareFileName(bean);
 		
 		File file = new File(fileFolder, fileName);
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-		bean.getUploadfile().transferTo(file);
 		FileBean fileBean = new FileBean();
 		fileBean.setFileName(fileName);
 		fileBean.setInitUploadAt(new Date());
@@ -114,17 +122,51 @@ public class FileController extends BaseController {
 		
 		BeanUtils.copyProperties(fileBean, bean);
 		System.out.println(fileBean);
-
-		//TODO Cony
-		// Order client to open the file
 		
 		if(fileService.isFileNameExisting(bean.getProjectId(), fileBean.getFileName())){
 			return null;
 		}else{
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			
+			if(StringUtils.isNotBlank(bean.getUploadedCopyForm())){
+				FilesUtils.copyFile(new File(file.getParent(), bean.getUploadedCopyForm()).getPath(), file.getPath());
+			}else{
+				bean.getUploadfile().transferTo(file);
+			}
+			
 			fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
 					fileBean);
+			
+			//TODO Cony
+			// Order client to open the file
+			if(StringUtils.isNotBlank(bean.getUploadedCopyForm())){
+				serverFilePath = file.getPath();
+				fileStructPath = combineFolderPath(bean.getProjectCde(),combineFolderPath(this.sysConfig.getFolderNameByFolderCde(bean
+						.getUpload_doctype()),fileBean.getFileName()));
+				
+				// push file to client
+				new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP()).pushFileToClient(file.getPath(), combineFolderPath(bean.getProjectCde(),combineFolderPath(this.sysConfig.getFolderNameByFolderCde(bean
+						.getUpload_doctype()),fileBean.getFileName())));
+				/*new Thread(new Runnable(){
+					public void run(){
+						new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP()).pushFileToClient(serverFilePath, fileStructPath);
+						}
+					}
+				).start();
+				Thread.sleep(1000);*/
+				
+				// open add rev file on local
+				QueueItem openfile = new QueueItem();
+				openfile.setActionType("OPENFILE");
+				openfile.setParam(fileStructPath);
+				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP(), openfile)).start();
+				System.out.println("::::"+UserIPDAO.getUserIPBean("conygychen").getPCIP());
+			}
 			return fileBean.getFileName();
 		}
+		
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "uploadfile.do")

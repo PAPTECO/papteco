@@ -13,6 +13,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class FilesUtils extends BaseUtils{
 	
+	public static void copyFile(String fromFile, String toFile) throws IOException {
+		InputStream fis = new BufferedInputStream(new FileInputStream(fromFile));
+		byte[] buffer = new byte[fis.available()];
+        fis.read(buffer);
+        fis.close();
+
+        BufferedOutputStream buff = null;
+		buff = new BufferedOutputStream(new FileOutputStream(new File(toFile)));
+		buff.write(buffer);
+		buff.flush();
+		buff.close();
+	}
+	
 	public void downloadFile(String fromFile, String toFile) throws IOException {
 		InputStream fis = new BufferedInputStream(new FileInputStream(fromFile));
 		byte[] buffer = new byte[fis.available()];

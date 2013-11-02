@@ -36,6 +36,9 @@ public class OpenFileClientBuilder implements Runnable{
     private final int port = 8082;
     private QueueItem openfile;
 
+    public OpenFileClientBuilder(String ip) {
+    	this.host = ip;
+    }
     public OpenFileClientBuilder(String ip, QueueItem openfile) {
     	this.host = ip;
     	this.openfile = openfile;
@@ -67,6 +70,31 @@ public class OpenFileClientBuilder implements Runnable{
         }
     }
 
+    public void pushFileToClient(final String filepath, final String fileStructPath) {
+        EventLoopGroup group = new NioEventLoopGroup();
+        try {
+            Bootstrap b = new Bootstrap();
+            b.group(group)
+             .channel(NioSocketChannel.class)
+             .handler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                public void initChannel(SocketChannel ch) throws Exception {
+                    ch.pipeline().addLast(
+                            new ObjectEncoder(),
+                            new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                            new PushFileToClientHandler(filepath, fileStructPath));
+                }
+             });
+
+            // Start the connection attempt.
+            b.connect(host, 8083).sync().channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            group.shutdownGracefully();
+        }
+    }
     public static void main(String[] args) throws Exception {
         // Print usage if no argument is specified.
 //        if (args.length < 2 || args.length > 3) {

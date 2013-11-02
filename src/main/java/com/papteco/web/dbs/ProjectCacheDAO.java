@@ -2,6 +2,8 @@ package com.papteco.web.dbs;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -159,6 +161,7 @@ public class ProjectCacheDAO {
 			if(docType.equals(folder.getDocType())){
 				ArrayList<FileBean> fileList = folder.getFileTree();
 				fileList.add(fileBean);
+				Collections.sort(fileList, new SortByFileName());
 				folder.setFileTree(fileList);
 				break;
 			}
@@ -195,5 +198,14 @@ public class ProjectCacheDAO {
 	/* mandatory constructor method */
 	public ProjectCacheDAO() {
 		
+	}
+
+	@SuppressWarnings("rawtypes")
+	static class SortByFileName implements Comparator {
+		public int compare(Object o1, Object o2) {
+			  FileBean file1 = (FileBean) o1;
+			  FileBean file2 = (FileBean) o2;
+			  return file1.getFileName().compareTo(file2.getFileName());
+			 }
 	}
 }
