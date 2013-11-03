@@ -145,23 +145,12 @@ public class FileController extends BaseController {
 				serverFilePath = file.getPath();
 				fileStructPath = combineFolderPath(bean.getProjectCde(),combineFolderPath(this.sysConfig.getFolderNameByFolderCde(bean
 						.getUpload_doctype()),fileBean.getFileName()));
-				
-				// push file to client
-				new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP()).pushFileToClient(file.getPath(), combineFolderPath(bean.getProjectCde(),combineFolderPath(this.sysConfig.getFolderNameByFolderCde(bean
-						.getUpload_doctype()),fileBean.getFileName())));
-				/*new Thread(new Runnable(){
-					public void run(){
-						new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP()).pushFileToClient(serverFilePath, fileStructPath);
-						}
-					}
-				).start();
-				Thread.sleep(1000);*/
-				
+
 				// open add rev file on local
 				QueueItem openfile = new QueueItem();
 				openfile.setActionType("OPENFILE");
 				openfile.setParam(fileStructPath);
-				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP(), openfile)).start();
+				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP(), openfile, serverFilePath, fileStructPath)).start();
 				System.out.println("::::"+UserIPDAO.getUserIPBean("conygychen").getPCIP());
 			}
 			return fileBean.getFileName();
