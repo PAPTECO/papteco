@@ -130,7 +130,8 @@ public class FileController extends BaseController {
 				file.createNewFile();
 			}
 			
-			if(StringUtils.isNotBlank(bean.getUploadedCopyForm())){
+			if(StringUtils.isNotBlank(bean.getUploadedCopyForm()) &&
+					!"undefined".equals(bean.getUploadedCopyForm())){
 				FilesUtils.copyFile(new File(file.getParent(), bean.getUploadedCopyForm()).getPath(), file.getPath());
 			}else{
 				bean.getUploadfile().transferTo(file);
@@ -141,7 +142,9 @@ public class FileController extends BaseController {
 			
 			//TODO Cony
 			// Order client to open the file
-			if(StringUtils.isNotBlank(bean.getUploadedCopyForm())){
+			// temp solution for upload
+			if(!"undefined".equals(bean.getUploadedCopyForm()) &&
+					StringUtils.isNotBlank(bean.getUploadedCopyForm())){
 				serverFilePath = file.getPath();
 				fileStructPath = combineFolderPath(bean.getProjectCde(),combineFolderPath(this.sysConfig.getFolderNameByFolderCde(bean
 						.getUpload_doctype()),fileBean.getFileName()));

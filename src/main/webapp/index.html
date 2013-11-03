@@ -172,7 +172,7 @@
 				<ul class="nav">
 					<li><a href="#">Dashboard</a></li>
 					<li><a href="#">Users</a></li>
-					<li><a href="#">Templates</a></li>
+					<li><a href="#" onClick="changetoprj(0)">Templates</a></li>
 					<li><a href="#">Members</a></li>
 					<li><a href="#">Clients</a></li>
 					<li><a href="#">Others</a>
@@ -426,7 +426,7 @@ var r=confirm("Are you sure to add revision on "+tn.item.id +" ?");
 if (r==false)
 	return;
 
-uploadFileFormShow(tn.item.docType,tn.item.id);
+uploadFileFormShow(tn.item.docType,tn.item.id,true);
 
                     </script>Add Revision</li>
                     <li data-dojo-type="dijit/MenuItem"><script
