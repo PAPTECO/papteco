@@ -56,6 +56,13 @@ public class ProjectController extends BaseController {
 				return ImmutableMap.of("type", "failure", "message",
 						"The Unique No. was existing : "+bean.getUniqueno());
 			}else{
+				//TODO Cony,
+				//Test only
+				if(!projectService.isPrjIdExisting(bean.getUniqueno())){
+					projectService.createProject(templateCreateSample(),
+							this.sysConfig.prepareFolderStructure());
+				}
+				
 				projectService.createProject(tmpProject,
 						this.sysConfig.prepareFolderStructure());
 
@@ -68,6 +75,21 @@ public class ProjectController extends BaseController {
 			return ImmutableMap
 					.of("type", "failure", "message", e.getMessage());
 		}
+	}
+	
+	public ProjectBean templateCreateSample(){
+		ProjectBean tmpProject = new ProjectBean();
+		tmpProject.setProjectId("0");
+		tmpProject.setProjectCde("Templates");
+		tmpProject.setClientNo("0");
+		tmpProject.setCreateDate("2010-02-09");
+		tmpProject.setUniqueNo("0");
+		tmpProject.setCreatedAt(new Date());
+		tmpProject.setCreatedBy("admin");
+		tmpProject.setShortDesc("");
+		tmpProject.setLongDesc("");
+		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
+		return tmpProject;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "doSearch")
@@ -196,16 +218,16 @@ public class ProjectController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getProject")
 	@ResponseBody
 	public Map getProject(@RequestParam String projectId) throws Exception {
-		System.out.println(projectId);
+		System.out.println("getProject : "+projectId);
 		return WebUtils.toProjectSummaries(projectId);
 
 	}
-
+	
 	@RequestMapping(method = RequestMethod.GET, value = "getNumberingFormat")
 	@ResponseBody
 	public Map getNumberingFormat(@RequestParam String docType,
-			@RequestParam String prjId) throws Exception {
-		System.out.println("doctype:"+docType+" prjId:"+prjId);
+			@RequestParam String prjId,@RequestParam String revFileName) throws Exception {
+		System.out.println("doctype:"+docType+" prjId:"+prjId + " revFileName:"+revFileName);
 		String shortCode = docType + "("
 				+ this.sysConfig.getFolderNameByFolderCde(docType) + ")";
 		FormatItem formating = this.sysConfig.getFormatSetting().get(docType);
@@ -213,7 +235,7 @@ public class ProjectController extends BaseController {
 		String clientno = "(?)"; // please change it by prjId
 		String ref = "(?)"; // please change it by prjId
 		return WebUtils.toNumberingFormat(prjId, shortCode, formating,
-				fieldSetting, clientno, ref);
+				fieldSetting, clientno, ref,revFileName);
 
 	}
 	

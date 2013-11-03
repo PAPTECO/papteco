@@ -2,8 +2,10 @@ package com.papteco.web.utils;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,16 +176,22 @@ public class WebUtils {
 	//TODO Cony
 	public static Map getProjectTemplate(){
 		
-		List dummy = Lists.newArrayList();
-		dummy.add("dummy1.xls");
-		dummy.add("dummy2.doc");
-		dummy.add("dummy3.csv");
-		dummy.add("dummy4.ppt");
+		ProjectBean templateBean = ProjectCacheDAO.getProjectTree("0");
 		
+		List<FolderBean> folders = templateBean.getFolderTree();
+		Map map = new HashMap();
 		
-		return of("A",dummy,
-				"B",dummy,
-				"C",dummy);
+		for(FolderBean f:folders){
+			
+			String docType = f.getDocType();
+			List lists = Lists.newArrayList();
+			for(FileBean file : f.getFileTree()){
+				lists.add(file.getFileName());
+			}
+			map.put(docType, lists);
+		}
+
+		return map;
 	}
 
 	public static ActionEnum getValueByFieldName(String fieldName,
@@ -237,9 +245,25 @@ public class WebUtils {
 		return null;
 	}
 
+	public static String[] interpreteProjectCode(String projectCode){
+		
+		List<String> result = new ArrayList<String>();
+		
+		if(StringUtils.isNotBlank(projectCode)){
+			for(String str: projectCode.split("-")){
+				result.add(str);
+			}
+			result.add(0, result.get(0).substring(0,1));
+			result.set(1, result.get(1).substring(1));
+		}
+		
+		return result.size()==0?null:result.toArray(new String[result.size()]);
+		
+	}
+	
 	public static Map toNumberingFormat(String prjId, String docType,
 			FormatItem item, List<FieldDef> seqAndDesc, String clientno,
-			String ref) {
+			String ref,String preFileName) {
 		ProjectBean bean = ProjectCacheDAO.getProjectTree(prjId);
 		StringBuilder sb = new StringBuilder();
 
@@ -253,11 +277,20 @@ public class WebUtils {
 		sb.append("</tr>");
 		// details
 		sb.append("<tr>");
+		
+		String[] values = null;
+		
+		if(StringUtils.isNotBlank(preFileName))
+			values = interpreteProjectCode(preFileName);
+		int vCt = 0;
 		for (FieldDef col : seqAndDesc) {
 			if (!col.isAdditional()
-					&& getValueByFieldName(col.getFieldName(), item) != ActionEnum.notApplicable)
+					&& getValueByFieldName(col.getFieldName(), item) != ActionEnum.notApplicable){
 				sb.append(detailtd(col, docType, bean.getClientNo(),
-						bean.getUniqueNo()));
+						bean.getUniqueNo(),values==null?null:values[vCt]));
+				vCt++;
+			}
+				
 		}
 		sb.append("</tr>");
 		sb.append("</table>");
@@ -291,7 +324,7 @@ public class WebUtils {
 	}
 
 	private static Object additionalfieldtd(FieldDef col) {
-		return headertd(col, "td") + detailtd(col, null, null, null);
+		return headertd(col, "td") + detailtd(col, null, null, null,null);
 	}
 
 	public static String headertd(FieldDef col, String tag) {
@@ -316,7 +349,7 @@ public class WebUtils {
 	}
 
 	public static String detailtd(FieldDef col, String docType,
-			String clientno, String ref) {
+			String clientno, String ref, String overwriteValue) {
 
 		String result = "";
 		String defaultValue = "";
@@ -336,18 +369,24 @@ public class WebUtils {
 				defaultValue = getDateYYMM();
 			} else if ("dateWith6digs".equals(col.getFieldName())) {
 				defaultValue = getDateYYMMDD();
-			} else if ("rev".equals(col.getFieldName())) {
-				//TODO Cony
-				//search current doc and recommend the new rev
-				defaultValue = "recommend";
-			} else if ("l1".equals(col.getFieldName())) {
+			}  else if ("l1".equals(col.getFieldName())) {
 				defaultValue = "00";
 			} else if ("l2".equals(col.getFieldName())) {
 				defaultValue = "00";
 			} else if ("l3".equals(col.getFieldName())) {
 				defaultValue = "000";
 			}
-
+			
+			if(StringUtils.isNotBlank(overwriteValue)){
+				defaultValue= overwriteValue;
+			}
+			
+			if ("rev".equals(col.getFieldName())) {
+				//TODO Cony
+				//search current doc and recommend the new rev
+				defaultValue = "recommend";
+			}
+			
 			result = new StringBuilder()
 					.append("<td><input class='uploadfileqryonly' id='")
 					.append(col.getFieldName())
@@ -360,7 +399,8 @@ public class WebUtils {
 					.append(StringUtils.isNotBlank(col.getUivalidatescript()) ? " onkeyup='"
 							+ col.getUivalidatescript() + "(this)' "
 							: " onkeyup='chkvaldpty(this)' ")
-					.append(" value='" + defaultValue + "'")
+					.append(" value='" + defaultValue + "' ")
+					.append(StringUtils.isNotBlank(overwriteValue)?" readOnly ":"")
 					.append(col.getFieldName()).append("></td>").toString();
 		}
 		return result;

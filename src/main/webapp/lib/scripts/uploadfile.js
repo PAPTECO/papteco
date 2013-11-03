@@ -69,7 +69,7 @@ function releaseFile(foldertype, editfilename) {
 	
 }
 
-function uploadFileFormShow(foldertype, templatename) {
+function uploadFileFormShow(foldertype, templatename, addrev) {
 
 	uploadFileFormDialog.show();
 
@@ -139,7 +139,7 @@ function uploadFileFormShow(foldertype, templatename) {
 				dom.byId(tagid).value = foldertype;
 			}
 			
-			setVal1(foldertype);
+			setVal2(foldertype,addrev?templatename:"");
 			
 			console.log("uploadformobj",dom.byId("uploadedCopyForm"));
 			console.log("templatename",templatename);
@@ -161,15 +161,20 @@ function uploadFileFormShow(foldertype, templatename) {
 }
 
 function setVal1(value) {
+	setVal2(value,"");
+}
+
+function setVal2(value,previouslyFileName) {
 	require([ "dojo/dom", "dijit/registry", "dojo/request/xhr", "dojo/json" ],
 			function(dom, registry, xhr, json) {
 
 				dataset = {
 					docType : value,
-					prjId : getProjectId()
+					prjId : getProjectId(),
+					revFileName : previouslyFileName
 				};
 
-				xhr("getNumberingFormat", {
+				xhr("getNumberingFormat", { 
 					handleAs : "json",
 					query : dataset,
 					method : "get",
