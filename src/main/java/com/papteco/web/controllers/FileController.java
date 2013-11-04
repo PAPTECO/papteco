@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.DocTypeFieldSet;
 import com.papteco.web.beans.FileBean;
+import com.papteco.web.beans.FileLockBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.beans.QueueItem;
 import com.papteco.web.dbs.UserIPDAO;
+import com.papteco.web.netty.ReleaseFileClientBuilder;
 import com.papteco.web.netty.OpenFileClientBuilder;
 import com.papteco.web.services.FileServiceImpl;
 import com.papteco.web.utils.FilesUtils;
@@ -114,14 +117,13 @@ public class FileController extends BaseController {
 		
 		File file = new File(fileFolder, fileName);
 		FileBean fileBean = new FileBean();
+		fileBean.setFileId(FilesUtils.genFileId());
 		fileBean.setFileName(fileName);
 		fileBean.setInitUploadAt(new Date());
 		fileBean.setLastModifiedAt(new Date());
 		fileBean.setLastModifiedBy("admin");
 		fileBean.setInitUploadBy("cony");
-		
 		BeanUtils.copyProperties(fileBean, bean);
-		System.out.println(fileBean);
 		
 		if(fileService.isFileNameExisting(bean.getProjectId(), fileBean.getFileName())){
 			return null;
@@ -140,6 +142,8 @@ public class FileController extends BaseController {
 			fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
 					fileBean);
 			
+			fileService.saveFileLock(new FileLockBean(fileBean.getFileId(), false));
+			
 			//TODO Cony
 			// Order client to open the file
 			// temp solution for upload
@@ -153,8 +157,8 @@ public class FileController extends BaseController {
 				QueueItem openfile = new QueueItem();
 				openfile.setActionType("OPENFILE");
 				openfile.setParam(fileStructPath);
+				fileService.lockFile(fileBean.getFileId(), "conygychen");
 				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP(), openfile, serverFilePath, fileStructPath)).start();
-				System.out.println("::::"+UserIPDAO.getUserIPBean("conygychen").getPCIP());
 			}
 			return fileBean.getFileName();
 		}
@@ -232,5 +236,48 @@ public class FileController extends BaseController {
 
 		return WebUtils.responseWithStatusCode();
 
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "editFile")
+	@ResponseBody
+	public Map editFile(@RequestParam String docType,
+			@RequestParam String filename) throws Exception {
+		System.out.println("doctype:"+docType+" filename:"+filename);
+		
+		//TODO Cony
+		// order client to open doc locally and locked this file
+		if(true){
+			return ImmutableMap.of("open","succ");
+		}else{
+			return ImmutableMap.of("open","fail");
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "releaseFile")
+	@ResponseBody
+	public Map releaseFile(@RequestParam String docType,
+			@RequestParam String filename) throws Exception {
+		System.out.println("doctype:"+docType+" filename:"+filename);
+		
+		//TODO Cony
+		// order client upload file and release this file
+		
+		if(fileService.isFileLocked("")){
+			String fileFolder = combineFolderPath(
+					combineFolderPath(rootpath, bean.getProjectCde()),
+					this.sysConfig.getFolderNameByFolderCde(docType));
+			
+			File file = new File(fileFolder, filename);
+			
+			serverFilePath = file.getPath();
+			fileStructPath = combineFolderPath(bean.getProjectCde(),combineFolderPath(this.sysConfig.getFolderNameByFolderCde(docType),filename));
+			new Thread(new ReleaseFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP(), serverFilePath, fileStructPath)).start();
+		}
+		
+		if(true){
+			return ImmutableMap.of("open","succ");
+		}else{
+			return ImmutableMap.of("open","fail");
+		}
 	}
 }

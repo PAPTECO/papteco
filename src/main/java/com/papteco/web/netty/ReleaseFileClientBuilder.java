@@ -25,25 +25,21 @@ import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 
-import com.papteco.web.beans.QueueItem;
-
 /**
  * Modification of {@link EchoClient} which utilizes Java object serialization.
  */
-public class OpenFileClientBuilder implements Runnable{
+public class ReleaseFileClientBuilder implements Runnable{
 
     private final String host;
-    private final int port = 8082;
-    private QueueItem openfile;
+    private final int port = 8083;
     private String filepath;
     private String fileStructPath;
 
-    public OpenFileClientBuilder(String ip) {
+    public ReleaseFileClientBuilder(String ip) {
     	this.host = ip;
     }
-    public OpenFileClientBuilder(String ip, QueueItem openfile, String filepath, String fileStructPath) {
+    public ReleaseFileClientBuilder(String ip, String filepath, String fileStructPath) {
     	this.host = ip;
-    	this.openfile = openfile;
     	this.filepath = filepath;
     	this.fileStructPath = fileStructPath;
     }
@@ -60,7 +56,7 @@ public class OpenFileClientBuilder implements Runnable{
                     ch.pipeline().addLast(
                             new ObjectEncoder(),
                             new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new OpenFileClientHandler(openfile, filepath, fileStructPath));
+                            new ReleaseFileClientHandler(filepath, fileStructPath));
                 }
              });
 

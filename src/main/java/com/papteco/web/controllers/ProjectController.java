@@ -239,36 +239,6 @@ public class ProjectController extends BaseController {
 
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "editFile")
-	@ResponseBody
-	public Map editFile(@RequestParam String docType,
-			@RequestParam String filename) throws Exception {
-		System.out.println("doctype:"+docType+" filename:"+filename);
-		
-		//TODO Cony
-		// order client to open doc locally and locked this file
-		if(true){
-			return ImmutableMap.of("open","succ");
-		}else{
-			return ImmutableMap.of("open","fail");
-		}
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "releaseFile")
-	@ResponseBody
-	public Map releaseFile(@RequestParam String docType,
-			@RequestParam String filename) throws Exception {
-		System.out.println("doctype:"+docType+" filename:"+filename);
-		
-		//TODO Cony
-		// order client upload file and release this file
-		if(true){
-			return ImmutableMap.of("open","succ");
-		}else{
-			return ImmutableMap.of("open","fail");
-		}
-	}
-
 	private String genProjectCreateDate(CreateProjectFormBean bean) {
 		return bean.getCreateDate().substring(2, 6);
 	}

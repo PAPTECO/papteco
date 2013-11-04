@@ -13,6 +13,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class FilesUtils extends BaseUtils{
 	
+	public static String genFileId(){
+		return java.util.UUID.randomUUID().toString().replaceAll("-", "");
+	}
+	
 	public static void copyFile(String fromFile, String toFile) throws IOException {
 		InputStream fis = new BufferedInputStream(new FileInputStream(fromFile));
 		byte[] buffer = new byte[fis.available()];

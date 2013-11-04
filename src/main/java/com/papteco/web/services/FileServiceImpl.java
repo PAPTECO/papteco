@@ -2,12 +2,15 @@ package com.papteco.web.services;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.papteco.web.beans.FileBean;
+import com.papteco.web.beans.FileLockBean;
 import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.dbs.FileLockDAO;
 import com.papteco.web.dbs.ProjectCacheDAO;
 import com.papteco.web.utils.FSUtils;
 
@@ -18,7 +21,38 @@ public class FileServiceImpl extends BaseService {
 		super();
 		FSUtils.glanceToCache(projectPath);
 	}
-
+	
+	public void saveFileLock(FileLockBean filelock){
+		FileLockDAO.saveFileLockBean(filelock);
+	}
+	
+	public Boolean isFileLocked(String fileid){
+		FileLockBean filelock = FileLockDAO.getFileLockBean(fileid);
+		if(filelock != null){
+			return filelock.isLocked();
+		}else{
+			return null;
+		}
+	}
+	
+	public void lockFile(String fileid, String username){
+		FileLockBean filelock = FileLockDAO.getFileLockBean(fileid);
+		if(filelock != null){
+			filelock.setLocked(true);
+			filelock.setLockByUser(username);
+			filelock.setLockByDT(new Date());
+			FileLockDAO.saveFileLockBean(filelock);
+		}
+	}
+	
+	public void releaseFile(String fileid){
+		FileLockBean filelock = FileLockDAO.getFileLockBean(fileid);
+		if(filelock != null){
+			filelock.setLocked(false);
+			FileLockDAO.saveFileLockBean(filelock);
+		}
+	}
+	
 	public void saveUploadFile(String projectId, String docType, FileBean fileBean){
 		ProjectCacheDAO.saveFileBean(projectId, docType, fileBean);
 	}

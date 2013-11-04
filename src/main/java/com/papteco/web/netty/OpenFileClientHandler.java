@@ -18,9 +18,14 @@ package com.papteco.web.netty;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.papteco.web.beans.ClientRequestBean;
 import com.papteco.web.beans.QueueItem;
 
 /**
@@ -34,11 +39,15 @@ public class OpenFileClientHandler extends ChannelInboundHandlerAdapter {
             OpenFileClientHandler.class.getName());
 
     private QueueItem openfile;
+    private String filepath;
+    private String fileStructPath;
     /**
      * Creates a client-side handler.
      */
-    public OpenFileClientHandler(QueueItem openfile) {
+    public OpenFileClientHandler(QueueItem openfile, String filepath, String fileStructPath) {
     	this.openfile = openfile;
+    	this.filepath = filepath;
+    	this.fileStructPath = fileStructPath;
     }
 
     @Override
@@ -50,13 +59,27 @@ public class OpenFileClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // Send the first message if this handler is a client-side handler.
-        ctx.writeAndFlush(openfile);
+    	File file = new File(this.filepath);
+		if(file.exists()){
+			ClientRequestBean bean = new ClientRequestBean('P');
+			QueueItem qItem = new QueueItem();
+			qItem.setParam(this.fileStructPath);
+			bean.setqItem(qItem);
+			InputStream fis = new BufferedInputStream(new FileInputStream(file));
+			byte[] buffer = new byte[fis.available()];
+	        fis.read(buffer);
+	        bean.setPrjObj(buffer);
+	        fis.close();
+	        ctx.writeAndFlush(bean);
+		}
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // Echo back the received object to the server.
-//    	QueueItem qItem = (QueueItem) msg;
+    	ClientRequestBean bean = new ClientRequestBean('O');
+    	bean.setqItem(openfile);
+    	ctx.writeAndFlush(bean);
     }
 
     @Override

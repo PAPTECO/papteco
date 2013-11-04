@@ -383,6 +383,7 @@ public class WebUtils {
 			
 			if ("rev".equals(col.getFieldName())) {
 				//TODO Cony
+				=
 				//search current doc and recommend the new rev
 				defaultValue = "recommend";
 			}
