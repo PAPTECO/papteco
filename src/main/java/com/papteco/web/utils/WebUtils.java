@@ -447,7 +447,8 @@ public class WebUtils {
 							"projectId", projectId, "field_details",
 							displayUploadFileFields(file, sysConfig),
 							"docType",folder.getDocType(),
-							"ftype","file"));
+							"ftype","file",
+							"fileId",file.getFileId()));
 
 				}
 				//TODO Cony

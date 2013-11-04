@@ -240,9 +240,12 @@ public class FileController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "editFile")
 	@ResponseBody
-	public Map editFile(@RequestParam String docType,
-			@RequestParam String filename) throws Exception {
-		System.out.println("doctype:"+docType+" filename:"+filename);
+	public Map editFile(@RequestParam String projectId,
+			@RequestParam String docType,
+			@RequestParam String filename,
+			@RequestParam String fileid) throws Exception {
+		
+		System.out.println("projectId:"+projectId+" fileid:"+fileid+" doctype:"+docType+" filename:"+filename);
 		
 		//TODO Cony
 		// order client to open doc locally and locked this file
@@ -255,9 +258,12 @@ public class FileController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "releaseFile")
 	@ResponseBody
-	public Map releaseFile(@RequestParam String docType,
-			@RequestParam String filename) throws Exception {
-		System.out.println("doctype:"+docType+" filename:"+filename);
+	public Map releaseFile(@RequestParam String projectId,
+			@RequestParam String docType,
+			@RequestParam String filename,
+			@RequestParam String fileid) throws Exception {
+		
+		System.out.println("projectId:"+projectId+" fileid:"+fileid+" doctype:"+docType+" filename:"+filename);
 		
 		//TODO Cony
 		// order client upload file and release this file

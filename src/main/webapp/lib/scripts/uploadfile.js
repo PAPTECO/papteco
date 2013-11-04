@@ -1,14 +1,16 @@
 require("dojox/form/Uploader");
 require("dojox/form/uploader/plugins/IFrame");
 
-function editFile(foldertype, editfilename) {
+function editFile(projectId,foldertype, editfilename,fileid) {
 	
 	require([ "dojo/dom", "dijit/registry", "dojo/request/xhr", "dojo/json" ],
 			function(dom, registry, xhr, json) {
 
 				dataset = {
+						projectId : projectId,
 						docType : foldertype,
-						filename : editfilename
+						filename : editfilename,
+						fileid : fileid
 				};
 
 				xhr("editFile", {
@@ -35,14 +37,16 @@ function editFile(foldertype, editfilename) {
 	
 }
 
-function releaseFile(foldertype, editfilename) {
+function releaseFile(projectId,foldertype, editfilename,fileid) {
 	
 	require([ "dojo/dom", "dijit/registry", "dojo/request/xhr", "dojo/json" ],
 			function(dom, registry, xhr, json) {
 
 				dataset = {
+						projectId : projectId,
 						docType : foldertype,
-						filename : editfilename
+						filename : editfilename,
+						fileid : fileid
 				};
 
 				xhr("releaseFile", {
