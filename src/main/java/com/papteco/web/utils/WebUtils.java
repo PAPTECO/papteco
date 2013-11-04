@@ -286,8 +286,9 @@ public class WebUtils {
 		for (FieldDef col : seqAndDesc) {
 			if (!col.isAdditional()
 					&& getValueByFieldName(col.getFieldName(), item) != ActionEnum.notApplicable){
-				sb.append(detailtd(col, docType, bean.getClientNo(),
-						bean.getUniqueNo(),values==null?null:values[vCt]));
+				sb.append(detailtd(prjId, col, docType, bean.getClientNo(),
+						bean.getUniqueNo(),values==null?null:values[vCt],
+								values==null?preFileName:null));
 				vCt++;
 			}
 				
@@ -324,7 +325,7 @@ public class WebUtils {
 	}
 
 	private static Object additionalfieldtd(FieldDef col) {
-		return headertd(col, "td") + detailtd(col, null, null, null,null);
+		return headertd(col, "td") + detailtd(null,col, null, null, null,null,null);
 	}
 
 	public static String headertd(FieldDef col, String tag) {
@@ -348,8 +349,8 @@ public class WebUtils {
 		return sfyymmdd.format(new Date());
 	}
 
-	public static String detailtd(FieldDef col, String docType,
-			String clientno, String ref, String overwriteValue) {
+	public static String detailtd(String prjId, FieldDef col, String docType,
+			String clientno, String ref, String overwriteValue,String copyfromFileName) {
 
 		String result = "";
 		String defaultValue = "";
@@ -383,7 +384,7 @@ public class WebUtils {
 			
 			if ("rev".equals(col.getFieldName())) {
 				//TODO Cony
-				=
+
 				//search current doc and recommend the new rev
 				defaultValue = "recommend";
 			}
