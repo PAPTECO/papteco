@@ -445,7 +445,7 @@ if (r==false)
 	return;
 
 editFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId); 
-
+refreshProjectBroad(getProjectId());
                     </script>Edit</li>
                     <li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
@@ -462,7 +462,7 @@ var r=confirm("Are you sure to release object on "+tn.item.id +" ?");
 if (r==false)
 	return;
 releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
-
+refreshProjectBroad(getProjectId());
 
                     </script>Release Object</li>
 				</ul>

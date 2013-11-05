@@ -290,7 +290,7 @@ public class WebUtils {
 					&& getValueByFieldName(col.getFieldName(), item) != ActionEnum.notApplicable){
 				sb.append(detailtd(prjId, col, docType, bean.getClientNo(),
 						bean.getUniqueNo(),values==null?null:values[vCt],
-								values==null?preFileName:null));
+								values==null?null:preFileName));
 				vCt++;
 			}
 				
