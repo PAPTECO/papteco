@@ -2,7 +2,6 @@ package com.papteco.web.services;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -29,28 +28,14 @@ public class FileServiceImpl extends BaseService {
 	public Boolean isFileLocked(String fileid){
 		FileLockBean filelock = FileLockDAO.getFileLockBean(fileid);
 		if(filelock != null){
-			return filelock.isLocked();
+			return true;
 		}else{
-			return null;
-		}
-	}
-	
-	public void lockFile(String fileid, String username){
-		FileLockBean filelock = FileLockDAO.getFileLockBean(fileid);
-		if(filelock != null){
-			filelock.setLocked(true);
-			filelock.setLockByUser(username);
-			filelock.setLockByDT(new Date());
-			FileLockDAO.saveFileLockBean(filelock);
+			return false;
 		}
 	}
 	
 	public void releaseFile(String fileid){
-		FileLockBean filelock = FileLockDAO.getFileLockBean(fileid);
-		if(filelock != null){
-			filelock.setLocked(false);
-			FileLockDAO.saveFileLockBean(filelock);
-		}
+		FileLockDAO.deleteFileLockBean(fileid);
 	}
 	
 	public void saveUploadFile(String projectId, String docType, FileBean fileBean){

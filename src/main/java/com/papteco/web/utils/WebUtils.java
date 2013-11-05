@@ -20,10 +20,12 @@ import com.papteco.web.beans.ActionEnum;
 import com.papteco.web.beans.ClientBean;
 import com.papteco.web.beans.FieldDef;
 import com.papteco.web.beans.FileBean;
+import com.papteco.web.beans.FileLockBean;
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.PreserveNosBean;
 import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.dbs.FileLockDAO;
 import com.papteco.web.dbs.PreserveNosDAO;
 import com.papteco.web.dbs.ProjectCacheDAO;
 
@@ -441,9 +443,21 @@ public class WebUtils {
 				//TODO Cony
 				// please replace function on (locked by ?) if this file is locked.
 				List<Map> subList = Lists.newArrayList();
+				int amountFileLocks = 0;
 				for (FileBean file : files) {
+					StringBuffer sb = new StringBuffer();
+					FileLockBean filelock = FileLockDAO.getFileLockBean(file.getFileId());
+					if(filelock != null){
+						sb.append(" (locked by ");
+						sb.append(filelock.getLockByUser());
+						sb.append(")");
+						
+						amountFileLocks++;
+					}
+					
+					
 					subList.add(of("id", file.getFileName(), "name",
-							file.getFileName()+" (locked by ?)", "type", "continent",
+							file.getFileName()+sb.toString(), "type", "continent",
 							"projectId", projectId, "field_details",
 							displayUploadFileFields(file, sysConfig),
 							"docType",folder.getDocType(),
@@ -454,7 +468,7 @@ public class WebUtils {
 				//TODO Cony
 				// please replace function on (contain X, N is locked)
 				resultList.add(of("id", folder.getDocType(), "name",
-						folder.getFolderName() + "(contain " + subList.size() + ", 2 locked)",
+						folder.getFolderName() + "(contain " + subList.size() + ", " + amountFileLocks+" locked)",
 						"type", "continent", 
 						"ftype","folder",
 						"docType",folder.getDocType(),

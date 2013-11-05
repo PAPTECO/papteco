@@ -21,6 +21,10 @@ public class ProjectServiceImpl extends BaseService {
 		FSUtils.glanceToCache(projectPath);
 	}
 
+	public ProjectBean getProject(String prjId) throws Exception {
+		return ProjectCacheDAO.getProjectTree(prjId);
+	}
+	
 	public void createProject(ProjectBean project, List<FolderBean> folderList) throws Exception {
 		foldersUtils.createProjectFolders(foldersUtils.prepareProjectPath(project.getProjectCde()), folderList);
 		ProjectCacheDAO.saveProjectTree(project);

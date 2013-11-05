@@ -66,7 +66,7 @@ public class ReleaseFileClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // Echo back the received object to the server.
-    	ClientRequestBean bean = new ClientRequestBean('O');
+    	ClientRequestBean bean = (ClientRequestBean) msg;
     	if(bean.getPrjObj() != null){
     		byte[] buffer = (byte[]) bean.getPrjObj();
     		BufferedOutputStream buff = null;

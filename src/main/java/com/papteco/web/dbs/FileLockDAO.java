@@ -62,6 +62,10 @@ public class FileLockDAO {
 		return filelockIndex.get(fileid);
 	}
 
+	public static void deleteFileLockBean(String fileid) {
+		filelockIndex.delete(fileid);
+	}
+
 	/* mandatory constructor method */
 	public FileLockDAO() {
 		

@@ -15,17 +15,16 @@ public class FileLockBean implements Serializable {
 	@PrimaryKey
 	private String fileId;
 	
-	private boolean isLocked = false;
-	
 	private String lockByUser;
 	
 	private Date lockByDT;
 	
 	public FileLockBean(){}
 	
-	public FileLockBean(String fileId, boolean isLocked){
+	public FileLockBean(String fileId, String lockByUser, Date lockByDT){
 		this.fileId = fileId;
-		this.isLocked = isLocked;
+		this.lockByUser = lockByUser;
+		this.lockByDT = lockByDT;
 	}
 
 	public String getFileId() {
@@ -34,14 +33,6 @@ public class FileLockBean implements Serializable {
 
 	public void setFileId(String fileId) {
 		this.fileId = fileId;
-	}
-
-	public boolean isLocked() {
-		return isLocked;
-	}
-
-	public void setLocked(boolean isLocked) {
-		this.isLocked = isLocked;
 	}
 
 	public String getLockByUser() {
