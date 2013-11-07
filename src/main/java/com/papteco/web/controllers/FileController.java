@@ -107,49 +107,47 @@ public class FileController extends BaseController {
 
 		//TODO Cony
 		
-		if(StringUtils.isNotBlank(bean.getUploadedCopyForm())){
-			// showing that copy from
-			System.out.println("Copy from:"+bean.getUploadedCopyForm());
-		}
-		
-		String fileFolder = combineFolderPath(
-				combineFolderPath(rootpath, bean.getProjectCde()),
-				this.sysConfig.getFolderNameByFolderCde(bean
-						.getUpload_doctype()));
-		String fileName = prepareFileName(bean);
-		
-		File file = new File(fileFolder, fileName);
-		FileBean fileBean = new FileBean();
-		fileBean.setFileId(FilesUtils.genFileId());
-		fileBean.setFileName(fileName);
-		fileBean.setInitUploadAt(new Date());
-		fileBean.setLastModifiedAt(new Date());
-		fileBean.setLastModifiedBy("admin");
-		fileBean.setInitUploadBy("cony");
-		BeanUtils.copyProperties(fileBean, bean);
-		
-		if(fileService.isFileNameExisting(bean.getProjectId(), fileBean.getFileName())){
-			return null;
-		}else{
-			if (!file.exists()) {
-				file.createNewFile();
-			}
+		if(StringUtils.isNotBlank(bean.getUploadedCopyForm()) &&
+				!"undefined".equals(bean.getUploadedCopyForm())){
 			
-			if(StringUtils.isNotBlank(bean.getUploadedCopyForm()) &&
-					!"undefined".equals(bean.getUploadedCopyForm())){
-				FilesUtils.copyFile(new File(file.getParent(), bean.getUploadedCopyForm()).getPath(), file.getPath());
+			String fileFolder;
+			if(bean.getUploadedCopyForm().substring(1, 2).equals("0")){
+				fileFolder = combineFolderPath(
+						combineFolderPath(rootpath, "Templates"),
+						this.sysConfig.getFolderNameByFolderCde(bean
+								.getUpload_doctype()));
 			}else{
-				bean.getUploadfile().transferTo(file);
+				fileFolder = combineFolderPath(
+						combineFolderPath(rootpath, bean.getProjectCde()),
+						this.sysConfig.getFolderNameByFolderCde(bean
+								.getUpload_doctype()));
 			}
 			
-			fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
-					fileBean);
+			String fileName = prepareFileName(bean);
 			
-			//TODO Cony
-			// Order client to open the file
-			// temp solution for upload
-			if(!"undefined".equals(bean.getUploadedCopyForm()) &&
-					StringUtils.isNotBlank(bean.getUploadedCopyForm())){
+			File file = new File(fileFolder, fileName);
+			FileBean fileBean = new FileBean();
+			fileBean.setFileId(FilesUtils.genFileId());
+			fileBean.setFileName(fileName);
+			fileBean.setInitUploadAt(new Date());
+			fileBean.setLastModifiedAt(new Date());
+			fileBean.setLastModifiedBy("admin");
+			fileBean.setInitUploadBy("cony");
+			BeanUtils.copyProperties(fileBean, bean);
+			
+			if(fileService.isFileNameExisting(bean.getProjectId(), fileBean.getFileName())){
+				return null;
+			}else{
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+				FilesUtils.copyFile(new File(file.getParent(), bean.getUploadedCopyForm()).getPath(), file.getPath());
+				fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
+						fileBean);
+				
+				//TODO Cony
+				// Order client to open the file
+				// temp solution for upload
 				serverFilePath = file.getPath();
 				fileStructPath = combineFolderPath(bean.getProjectCde(),combineFolderPath(this.sysConfig.getFolderNameByFolderCde(bean
 						.getUpload_doctype()),fileBean.getFileName()));
@@ -160,8 +158,37 @@ public class FileController extends BaseController {
 				openfile.setParam(fileStructPath);
 				fileService.saveFileLock(new FileLockBean(fileBean.getFileId(), "conygychen", new Date()));
 				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP(), openfile, serverFilePath, fileStructPath)).start();
+				return fileBean.getFileName();
 			}
-			return fileBean.getFileName();
+			
+		}else{
+			String fileFolder = combineFolderPath(
+					combineFolderPath(rootpath, bean.getProjectCde()),
+					this.sysConfig.getFolderNameByFolderCde(bean
+							.getUpload_doctype()));
+			String fileName = prepareFileName(bean);
+			
+			File file = new File(fileFolder, fileName);
+			FileBean fileBean = new FileBean();
+			fileBean.setFileId(FilesUtils.genFileId());
+			fileBean.setFileName(fileName);
+			fileBean.setInitUploadAt(new Date());
+			fileBean.setLastModifiedAt(new Date());
+			fileBean.setLastModifiedBy("admin");
+			fileBean.setInitUploadBy("cony");
+			BeanUtils.copyProperties(fileBean, bean);
+			
+			if(fileService.isFileNameExisting(bean.getProjectId(), fileBean.getFileName())){
+				return null;
+			}else{
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+				bean.getUploadfile().transferTo(file);
+				fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
+						fileBean);
+				return fileBean.getFileName();
+			}
 		}
 		
 	}

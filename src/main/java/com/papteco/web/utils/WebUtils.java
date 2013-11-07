@@ -116,14 +116,21 @@ public class WebUtils {
 						+ presNo.getPresNoTo() + "");
 	}
 
-	public static List toSearchGrid(String searchClinetno, String searchAnykey) {
+	public static List toSearchGrid(String searchClinetno, String searAnykey) {
 
+		String searchAnykey = new String(searAnykey);
+		if(searAnykey.equals("TEMPLATE")){
+			searchClinetno = "0";
+			searchAnykey = "";
+		}
 		List<ProjectBean> searchResult = ProjectCacheDAO
 				.getProjectBeansByFilter(searchClinetno, searchAnykey);
 		List datalist = Lists.newArrayList();
 
 		for (int i = 0; i < searchResult.size(); i++) {
 			ProjectBean bean = searchResult.get(i);
+			if(bean.getProjectId().equals("0") && !searAnykey.equals("TEMPLATE"))
+				continue;
 			int countFiles = bean.getTotalFileList().size();
 			StringBuffer files = new StringBuffer();
 			;
@@ -386,9 +393,34 @@ public class WebUtils {
 			
 			if ("rev".equals(col.getFieldName())) {
 				//TODO Cony
-
-				//search current doc and recommend the new rev
-				defaultValue = "recommend";
+				List<String> revNum = new ArrayList<String>();
+				
+				if(StringUtils.isNotBlank(prjId) && StringUtils.isNotBlank(copyfromFileName)){
+					String copyFilename = copyfromFileName.substring(0, copyfromFileName.lastIndexOf("-"));
+					ProjectBean project = ProjectCacheDAO.getProjectTree(prjId);
+					if(project != null){
+						List<FolderBean> folders = project.getFolderTree();
+						for(FolderBean folder : folders){
+							if(docType.substring(0, 1).equals(folder.getDocType())){
+								List<FileBean> files = folder.getFileTree();
+								for(FileBean file : files){
+									if(file.getFileName().contains(copyFilename)){
+										revNum.add(file.getRev());
+									}
+								}
+							}
+						}
+					}
+					Collections.sort(revNum);
+				}
+				
+				if(revNum.size() == 0){
+					defaultValue = "001";
+				}else{
+					String maxRevNum = revNum.get(revNum.size()-1);
+					Integer revnum = Integer.valueOf(maxRevNum) + 1;
+					defaultValue = formatedNumber(revnum.toString(), 3);
+				}
 			}
 			
 			result = new StringBuilder()
@@ -411,6 +443,15 @@ public class WebUtils {
 
 	}
 
+	protected static String formatedNumber(String num, int digs){
+		StringBuffer result = new StringBuffer();
+		for(int i = 0; i < digs-num.length(); i++){
+			result.append("0");
+		}
+		result.append(num);
+		return result.toString();
+	}
+	
 	public static Map of(Object... keyval) {
 		Builder b = ImmutableMap.builder();
 
