@@ -267,6 +267,8 @@ public class FileController extends BaseController {
 				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP(), openfile, serverFilePath, fileStructPath)).start();
 			}
 			
+		}else{
+			return ImmutableMap.of("open","fail");
 		}
 		//TODO Cony
 		// order client to open doc locally and locked this file
