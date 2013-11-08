@@ -96,6 +96,10 @@ function uploadFileFormShow(foldertype, templatename, addrev) {
 				if(registry.byId(tagid)){
 					registry.byId(tagid)._lastValueReported ="";
 				}
+				
+				if(addrev){
+					dom.byId("isRev").value="isRev";
+				}
 			});
 	
 	
@@ -165,10 +169,24 @@ function uploadFileFormShow(foldertype, templatename, addrev) {
 }
 
 function setVal1(value) {
-	setVal2(value,"");
+	
+	require([ "dojo/dom", "dijit/registry", "dojo/query" ], function(dom,
+			registry, query) {
+		if(dom.byId("isRev").value=="isRev"){
+			setVal2(value,dom.byId("isRev")?dom.byId("uploadedCopyForm").value:"");
+		}else{
+			setVal2(value,"");
+		}
+		
+		
+	});
+	
+	
+	
 }
 
 function setVal2(value,previouslyFileName) {
+
 	require([ "dojo/dom", "dijit/registry", "dojo/request/xhr", "dojo/json" ],
 			function(dom, registry, xhr, json) {
 
