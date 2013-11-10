@@ -1,20 +1,20 @@
 package com.papteco.web.controllers;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.papteco.web.beans.QueueItem;
-import com.papteco.web.dbs.UserIPDAO;
 import com.papteco.web.netty.NettyAppServerBuilder;
-import com.papteco.web.netty.OpenFileClientBuilder;
 
 @Controller
 public class ClientAppController extends BaseController {
 	private final int port = 8081;
 	
-	public ClientAppController() throws Exception{
-		new Thread(new NettyAppServerBuilder(port)).start();
+	@PostConstruct
+	public void ClientAppController() throws Exception{
+		new Thread(new NettyAppServerBuilder(port, rootpath)).start();
 //		new Thread(new SustainableAppConnClientBuilder()).start();
 	}
 	

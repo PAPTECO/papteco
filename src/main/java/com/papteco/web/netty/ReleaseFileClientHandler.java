@@ -26,6 +26,8 @@ import java.util.logging.Logger;
 
 import com.papteco.web.beans.ClientRequestBean;
 import com.papteco.web.beans.QueueItem;
+import com.papteco.web.dbs.FileLockDAO;
+import com.papteco.web.utils.TaskUtils;
 
 /**
  * Handler implementation for the object echo client.  It initiates the
@@ -39,12 +41,16 @@ public class ReleaseFileClientHandler extends ChannelInboundHandlerAdapter {
 
     private String filepath;
     private String fileStructPath;
+    private String fileid;
+    private String taskid;
     /**
      * Creates a client-side handler.
      */
-    public ReleaseFileClientHandler(String filepath, String fileStructPath) {
+    public ReleaseFileClientHandler(String filepath, String fileStructPath, String fileid, String taskid) {
     	this.filepath = filepath;
     	this.fileStructPath = fileStructPath;
+    	this.fileid = fileid;
+    	this.taskid = taskid;
     }
 
     @Override
@@ -75,6 +81,8 @@ public class ReleaseFileClientHandler extends ChannelInboundHandlerAdapter {
     		buff.flush();
     		buff.close();
     	}
+    	FileLockDAO.deleteFileLockBean(fileid);
+    	TaskUtils.setTaskStatus(taskid, TaskUtils.STUS_SUCC, "Release Successfull.");
     }
 
     @Override

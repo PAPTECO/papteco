@@ -31,10 +31,11 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 public class NettyAppServerBuilder implements Runnable {
 
     private final int port;
-    private final String rootpath = "C:\\cony\\tmp";
+    private String rootpath;
 
-    public NettyAppServerBuilder(int port) {
+    public NettyAppServerBuilder(int port, String rootpath) {
         this.port = port;
+        this.rootpath = rootpath;
     }
 
     public void run() {

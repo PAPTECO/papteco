@@ -37,15 +37,17 @@ public class ReleaseFileClientBuilder implements Runnable{
     private String filepath;
     private String fileStructPath;
     private String fileid;
+    private String taskid;
 
     public ReleaseFileClientBuilder(String ip) {
     	this.host = ip;
     }
-    public ReleaseFileClientBuilder(String ip, String filepath, String fileStructPath, String fileid) {
+    public ReleaseFileClientBuilder(String ip, String filepath, String fileStructPath, String fileid, String taskid) {
     	this.host = ip;
     	this.filepath = filepath;
     	this.fileStructPath = fileStructPath;
     	this.fileid = fileid;
+    	this.taskid = taskid;
     }
 
     public void run() {
@@ -60,20 +62,13 @@ public class ReleaseFileClientBuilder implements Runnable{
                     ch.pipeline().addLast(
                             new ObjectEncoder(),
                             new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new ReleaseFileClientHandler(filepath, fileStructPath));
+                            new ReleaseFileClientHandler(filepath, fileStructPath, fileid, taskid));
                 }
              });
 
             // Start the connection attempt.
-            
-            try {
-				b.connect(host, port).sync().channel().closeFuture().sync();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("123");
-			}
-            System.out.println(b.connect(host, port).sync().channel().closeFuture().sync().isSuccess());
+            b.connect(host, port).sync().channel().closeFuture().sync();
+//            System.out.println(b.connect(host, port).sync().channel().closeFuture().sync().isSuccess());
 //            if(b.connect(host, port).sync().channel().closeFuture().sync().isSuccess()){
 //            	FileLockDAO.deleteFileLockBean(fileid);
 //            }else{

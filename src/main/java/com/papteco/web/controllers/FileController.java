@@ -31,6 +31,7 @@ import com.papteco.web.netty.ReleaseFileClientBuilder;
 import com.papteco.web.services.FileServiceImpl;
 import com.papteco.web.services.ProjectServiceImpl;
 import com.papteco.web.utils.FilesUtils;
+import com.papteco.web.utils.TaskUtils;
 import com.papteco.web.utils.WebUtils;
 
 @Controller
@@ -348,7 +349,8 @@ public class FileController extends BaseController {
 		// order client upload file and release this file
 
 		if (fileService.isFileLocked(fileid)) {
-
+			String taskid = TaskUtils.genTaskId();
+			TaskUtils.setTaskStatus(taskid, TaskUtils.STUS_START, "Starting release.");
 			ProjectBean project = projectService.getProject(projectId);
 			if (project != null) {
 				String fileFolder = combineFolderPath(
@@ -364,7 +366,7 @@ public class FileController extends BaseController {
 				// fileService.releaseFile(fileid);
 				new Thread(new ReleaseFileClientBuilder(UserIPDAO
 						.getUserIPBean("conygychen").getPCIP(), serverFilePath,
-						fileStructPath, fileid)).start();
+						fileStructPath, fileid, taskid)).start();
 
 			}
 		}
@@ -373,5 +375,12 @@ public class FileController extends BaseController {
 		} else {
 			return ImmutableMap.of("open", "fail");
 		}
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "checkTask")
+	@ResponseBody
+	public Map checkTask(@RequestParam String taskid) throws Exception {
+		String[] task = TaskUtils.getTaskStatus(taskid);
+		return null;
 	}
 }
