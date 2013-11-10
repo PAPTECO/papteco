@@ -116,20 +116,15 @@ public class WebUtils {
 						+ presNo.getPresNoTo() + "");
 	}
 
-	public static List toSearchGrid(String searchClinetno, String searAnykey) {
+	public static List toSearchGrid(String searchClinetno, String searchAnykey) {
 
-		String searchAnykey = new String(searAnykey);
-		if(searAnykey.equals("TEMPLATE")){
-			searchClinetno = "0";
-			searchAnykey = "";
-		}
 		List<ProjectBean> searchResult = ProjectCacheDAO
 				.getProjectBeansByFilter(searchClinetno, searchAnykey);
 		List datalist = Lists.newArrayList();
 
 		for (int i = 0; i < searchResult.size(); i++) {
 			ProjectBean bean = searchResult.get(i);
-			if(bean.getProjectId().equals("0") && !searAnykey.equals("TEMPLATE"))
+			if(bean.getProjectId().equals("0"))
 				continue;
 			int countFiles = bean.getTotalFileList().size();
 			StringBuffer files = new StringBuffer();
