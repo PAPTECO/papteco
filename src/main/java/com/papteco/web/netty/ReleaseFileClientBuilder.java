@@ -15,6 +15,8 @@
  */
 package com.papteco.web.netty;
 
+import com.papteco.web.dbs.FileLockDAO;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -34,14 +36,16 @@ public class ReleaseFileClientBuilder implements Runnable{
     private final int port = 8083;
     private String filepath;
     private String fileStructPath;
+    private String fileid;
 
     public ReleaseFileClientBuilder(String ip) {
     	this.host = ip;
     }
-    public ReleaseFileClientBuilder(String ip, String filepath, String fileStructPath) {
+    public ReleaseFileClientBuilder(String ip, String filepath, String fileStructPath, String fileid) {
     	this.host = ip;
     	this.filepath = filepath;
     	this.fileStructPath = fileStructPath;
+    	this.fileid = fileid;
     }
 
     public void run() {
@@ -61,7 +65,20 @@ public class ReleaseFileClientBuilder implements Runnable{
              });
 
             // Start the connection attempt.
-            b.connect(host, port).sync().channel().closeFuture().sync();
+            
+            try {
+				b.connect(host, port).sync().channel().closeFuture().sync();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("123");
+			}
+            System.out.println(b.connect(host, port).sync().channel().closeFuture().sync().isSuccess());
+//            if(b.connect(host, port).sync().channel().closeFuture().sync().isSuccess()){
+//            	FileLockDAO.deleteFileLockBean(fileid);
+//            }else{
+//            	System.out.println("Connection fail! Client is not running!");
+//            }
         } catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

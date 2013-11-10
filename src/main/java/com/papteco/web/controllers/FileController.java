@@ -39,56 +39,56 @@ public class FileController extends BaseController {
 	private FileServiceImpl fileService;
 	@Autowired
 	private ProjectServiceImpl projectService;
-	
+
 	private String fileStructPath;
 	private String serverFilePath;
 
-	private String prepareFileName(DocTypeFieldSet bean){
+	private String prepareFileName(DocTypeFieldSet bean) {
 		StringBuffer trgFileName = new StringBuffer();
-		
+
 		trgFileName.append(bean.getUpload_doctype());
 		trgFileName.append(bean.getClientNo());
 		trgFileName.append("-");
-		
-		if(StringUtils.isNotBlank(bean.getDrawintType())){
+
+		if (StringUtils.isNotBlank(bean.getDrawintType())) {
 			trgFileName.append(bean.getDrawintType());
 			trgFileName.append(bean.getRef());
 			trgFileName.append("-");
-			trgFileName.append(bean.getL1()+" ");
-			trgFileName.append(bean.getL2()+" ");
+			trgFileName.append(bean.getL1() + " ");
+			trgFileName.append(bean.getL2() + " ");
 			trgFileName.append(bean.getL3());
 			trgFileName.append("-");
 		}
-		
-		if(StringUtils.isNotBlank(bean.getDateWith4digs())){
+
+		if (StringUtils.isNotBlank(bean.getDateWith4digs())) {
 			trgFileName.append(bean.getDateWith4digs());
 			trgFileName.append("-");
 			trgFileName.append(bean.getRef());
 			trgFileName.append("-");
-			
+
 		}
-		
-		if(StringUtils.isNotBlank(bean.getDateWith6digs())){
+
+		if (StringUtils.isNotBlank(bean.getDateWith6digs())) {
 			trgFileName.append(bean.getDateWith6digs());
 			trgFileName.append("-");
 			trgFileName.append(bean.getRef());
 			trgFileName.append("-");
 		}
-		
+
 		trgFileName.append(bean.getDescription());
 		trgFileName.append("-");
 		trgFileName.append("Rev");
-		if(bean.getRev().length() < 3)
+		if (bean.getRev().length() < 3)
 			trgFileName.append(formatedNumber(bean.getRev(), 3));
 		else
 			trgFileName.append(bean.getRev());
-		
-		if(StringUtils.isNotBlank(bean.getUploadedCopyForm()) && bean.getUploadedCopyForm().contains(".")){
+
+		if (StringUtils.isNotBlank(bean.getUploadedCopyForm())
+				&& bean.getUploadedCopyForm().contains(".")) {
 			trgFileName.append(bean.getUploadedCopyForm().substring(
-					bean.getUploadedCopyForm()
-									.lastIndexOf(".")));
-		}else {
-			if(bean.getUploadfile().getOriginalFilename().contains(".")){
+					bean.getUploadedCopyForm().lastIndexOf(".")));
+		} else {
+			if (bean.getUploadfile().getOriginalFilename().contains(".")) {
 				trgFileName.append(bean
 						.getUploadfile()
 						.getOriginalFilename()
@@ -99,33 +99,40 @@ public class FileController extends BaseController {
 		}
 		return trgFileName.toString();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "submitUploadFile")
 	@ResponseBody
 	public String submitUploadFile(DocTypeFieldSet bean, Model model)
 			throws Exception {
 
-		//TODO Cony
-		
-		if(StringUtils.isNotBlank(bean.getUploadedCopyForm()) &&
-				!"undefined".equals(bean.getUploadedCopyForm())){
-			
+		// TODO Cony
+
+		if (StringUtils.isNotBlank(bean.getUploadedCopyForm())
+				&& !"undefined".equals(bean.getUploadedCopyForm())) {
+
+			String fromfileFolder;
 			String fileFolder;
-			if(bean.getUploadedCopyForm().substring(1, 2).equals("0")){
-				fileFolder = combineFolderPath(
+			if (bean.getUploadedCopyForm().substring(1, 2).equals("0")) {
+				fromfileFolder = combineFolderPath(
 						combineFolderPath(rootpath, "Templates"),
 						this.sysConfig.getFolderNameByFolderCde(bean
 								.getUpload_doctype()));
 			}else{
-				fileFolder = combineFolderPath(
+				fromfileFolder = combineFolderPath(
 						combineFolderPath(rootpath, bean.getProjectCde()),
 						this.sysConfig.getFolderNameByFolderCde(bean
 								.getUpload_doctype()));
 			}
-			
+			fileFolder = combineFolderPath(
+					combineFolderPath(rootpath, bean.getProjectCde()),
+					this.sysConfig.getFolderNameByFolderCde(bean
+							.getUpload_doctype()));
+
 			String fileName = prepareFileName(bean);
+
+			File fromfile = new File(fromfileFolder, bean.getUploadedCopyForm());
 			
-			File file = new File(fileFolder, fileName);
+			File tofile = new File(fileFolder, fileName);
 			FileBean fileBean = new FileBean();
 			fileBean.setFileId(FilesUtils.genFileId());
 			fileBean.setFileName(fileName);
@@ -134,40 +141,48 @@ public class FileController extends BaseController {
 			fileBean.setLastModifiedBy("admin");
 			fileBean.setInitUploadBy("cony");
 			BeanUtils.copyProperties(fileBean, bean);
-			
-			if(fileService.isFileNameExisting(bean.getProjectId(), fileBean.getFileName())){
+
+			if (fileService.isFileNameExisting(bean.getProjectId(),
+					fileBean.getFileName())) {
 				return null;
-			}else{
-				if (!file.exists()) {
-					file.createNewFile();
+			} else {
+				if (!fromfile.exists()) {
+					fromfile.createNewFile();
 				}
-				FilesUtils.copyFile(new File(file.getParent(), bean.getUploadedCopyForm()).getPath(), file.getPath());
-				fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
-						fileBean);
-				
-				//TODO Cony
+				FilesUtils.copyFile(fromfile.getPath(), tofile.getPath());
+				fileService.saveUploadFile(bean.getProjectId(),
+						bean.getUpload_doctype(), fileBean);
+
+				// TODO Cony
 				// Order client to open the file
 				// temp solution for upload
-				serverFilePath = file.getPath();
-				fileStructPath = combineFolderPath(bean.getProjectCde(),combineFolderPath(this.sysConfig.getFolderNameByFolderCde(bean
-						.getUpload_doctype()),fileBean.getFileName()));
+				serverFilePath = tofile.getPath();
+				fileStructPath = combineFolderPath(
+						bean.getProjectCde(),
+						combineFolderPath(this.sysConfig
+								.getFolderNameByFolderCde(bean
+										.getUpload_doctype()), fileBean
+								.getFileName()));
 
 				// open add rev file on local
 				QueueItem openfile = new QueueItem();
 				openfile.setActionType("OPENFILE");
 				openfile.setParam(fileStructPath);
-				fileService.saveFileLock(new FileLockBean(fileBean.getFileId(), "conygychen", new Date()));
-				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP(), openfile, serverFilePath, fileStructPath)).start();
+				fileService.saveFileLock(new FileLockBean(fileBean.getFileId(),
+						"conygychen", new Date()));
+				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean(
+						"conygychen").getPCIP(), openfile, serverFilePath,
+						fileStructPath)).start();
 				return fileBean.getFileName();
 			}
-			
-		}else{
+
+		} else {
 			String fileFolder = combineFolderPath(
 					combineFolderPath(rootpath, bean.getProjectCde()),
 					this.sysConfig.getFolderNameByFolderCde(bean
 							.getUpload_doctype()));
 			String fileName = prepareFileName(bean);
-			
+
 			File file = new File(fileFolder, fileName);
 			FileBean fileBean = new FileBean();
 			fileBean.setFileId(FilesUtils.genFileId());
@@ -177,20 +192,21 @@ public class FileController extends BaseController {
 			fileBean.setLastModifiedBy("admin");
 			fileBean.setInitUploadBy("cony");
 			BeanUtils.copyProperties(fileBean, bean);
-			
-			if(fileService.isFileNameExisting(bean.getProjectId(), fileBean.getFileName())){
+
+			if (fileService.isFileNameExisting(bean.getProjectId(),
+					fileBean.getFileName())) {
 				return null;
-			}else{
+			} else {
 				if (!file.exists()) {
 					file.createNewFile();
 				}
 				bean.getUploadfile().transferTo(file);
-				fileService.saveUploadFile(bean.getProjectId(), bean.getUpload_doctype(),
-						fileBean);
+				fileService.saveUploadFile(bean.getProjectId(),
+						bean.getUpload_doctype(), fileBean);
 				return fileBean.getFileName();
 			}
 		}
-		
+
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "uploadfile.do")
@@ -211,53 +227,57 @@ public class FileController extends BaseController {
 		model.addAttribute("success", "true");
 		return "uploadView";
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "getDocs")
 	@ResponseBody
 	public Map getDocs(@RequestParam String projectId) throws Exception {
-		System.out.println("getDocs:"+projectId);
+		System.out.println("getDocs:" + projectId);
 
-		return WebUtils.toDocsSummaries(projectId,this.sysConfig);
+		return WebUtils.toDocsSummaries(projectId, this.sysConfig);
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "deleteDocs")
 	@ResponseBody
 	public Map deleteDocs(@RequestParam String projectId,
 			@RequestParam String filename) throws Exception {
 		ProjectBean project = fileService.getProjectBeanByProjectId(projectId);
-		
+
 		String fileFolder = combineFolderPath(
 				combineFolderPath(rootpath, project.getProjectCde()),
-				this.sysConfig.getFolderNameByFolderCde(filename.substring(0, 1)));
+				this.sysConfig.getFolderNameByFolderCde(filename
+						.substring(0, 1)));
 		File file = new File(fileFolder, filename);
 		if (file.exists()) {
 			file.delete();
-			fileService.deleteFile(projectId, filename.substring(0, 1), filename);
+			fileService.deleteFile(projectId, filename.substring(0, 1),
+					filename);
 		}
-		
+
 		return WebUtils.responseWithStatusCode();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "viewDocs")
 	@ResponseBody
 	public Map viewDocs(@RequestParam String projectId,
-			@RequestParam String filename,
-			HttpServletResponse response) throws Exception {
+			@RequestParam String filename, HttpServletResponse response)
+			throws Exception {
 
 		ProjectBean project = fileService.getProjectBeanByProjectId(projectId);
 
-		
 		String fileFolder = combineFolderPath(
 				combineFolderPath(rootpath, project.getProjectCde()),
-				this.sysConfig.getFolderNameByFolderCde(filename.substring(0, 1)));
+				this.sysConfig.getFolderNameByFolderCde(filename
+						.substring(0, 1)));
 		File file = new File(fileFolder, filename);
 		if (file.exists()) {
 			response.setContentType("application/x-download");
-			response.setHeader("Content-disposition", "attachment; filename=" + filename);
-			IOUtils.copy(fileService.getFileIs(file.getPath()), response.getOutputStream());
-		    response.flushBuffer();
-		}else {
+			response.setHeader("Content-disposition", "attachment; filename="
+					+ filename);
+			IOUtils.copy(fileService.getFileIs(file.getPath()),
+					response.getOutputStream());
+			response.flushBuffer();
+		} else {
 			System.out.println("no such file.");
 		}
 		System.out.println("viewDocs: " + filename);
@@ -265,79 +285,93 @@ public class FileController extends BaseController {
 		return WebUtils.responseWithStatusCode();
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "editFile")
 	@ResponseBody
 	public Map editFile(@RequestParam String projectId,
-			@RequestParam String docType,
-			@RequestParam String filename,
+			@RequestParam String docType, @RequestParam String filename,
 			@RequestParam String fileid) throws Exception {
-		
-		System.out.println("projectId:"+projectId+" fileid:"+fileid+" doctype:"+docType+" filename:"+filename);
-		
-		if(!fileService.isFileLocked(fileid)){
-			ProjectBean project = projectService.getProject(projectId);
-			if(project != null){
-				String fileFolder = combineFolderPath(
-						combineFolderPath(rootpath, project.getProjectCde()),
-						this.sysConfig.getFolderNameByFolderCde(docType));
-				File file = new File(fileFolder, filename);
-				
-				serverFilePath = file.getPath();
-				fileStructPath = combineFolderPath(project.getProjectCde(),combineFolderPath(this.sysConfig.getFolderNameByFolderCde(docType),filename));
-				
-				// open add rev file on local
-				QueueItem openfile = new QueueItem();
-				openfile.setActionType("OPENFILE");
-				openfile.setParam(fileStructPath);
-				fileService.saveFileLock(new FileLockBean(fileid, "conygychen", new Date()));
-				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP(), openfile, serverFilePath, fileStructPath)).start();
+
+		System.out.println("projectId:" + projectId + " fileid:" + fileid
+				+ " doctype:" + docType + " filename:" + filename);
+
+		// if(!fileService.isFileLocked(fileid)){
+		ProjectBean project = projectService.getProject(projectId);
+		if (project != null) {
+			String fileFolder = combineFolderPath(
+					combineFolderPath(rootpath, project.getProjectCde()),
+					this.sysConfig.getFolderNameByFolderCde(docType));
+			File file = new File(fileFolder, filename);
+
+			serverFilePath = file.getPath();
+			fileStructPath = combineFolderPath(
+					project.getProjectCde(),
+					combineFolderPath(
+							this.sysConfig.getFolderNameByFolderCde(docType),
+							filename));
+
+			// open add rev file on local
+			QueueItem openfile = new QueueItem();
+			openfile.setActionType("OPENFILE");
+			openfile.setParam(fileStructPath);
+			if (!fileService.isFileLocked(fileid)) {
+				fileService.saveFileLock(new FileLockBean(fileid, "conygychen",
+						new Date()));
 			}
-			
-		}else{
-			return ImmutableMap.of("open","fail");
+			new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean(
+					"conygychen").getPCIP(), openfile, serverFilePath,
+					fileStructPath)).start();
 		}
-		//TODO Cony
+
+		// }else{
+		// return ImmutableMap.of("open","fail");
+		// }
+		// TODO Cony
 		// order client to open doc locally and locked this file
-		if(true){
-			return ImmutableMap.of("open","succ");
-		}else{
-			return ImmutableMap.of("open","fail");
+		if (true) {
+			return ImmutableMap.of("open", "succ");
+		} else {
+			return ImmutableMap.of("open", "fail");
 		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "releaseFile")
 	@ResponseBody
 	public Map releaseFile(@RequestParam String projectId,
-			@RequestParam String docType,
-			@RequestParam String filename,
+			@RequestParam String docType, @RequestParam String filename,
 			@RequestParam String fileid) throws Exception {
-		
-		System.out.println("projectId:"+projectId+" fileid:"+fileid+" doctype:"+docType+" filename:"+filename);
-		
-		//TODO Cony
+
+		System.out.println("projectId:" + projectId + " fileid:" + fileid
+				+ " doctype:" + docType + " filename:" + filename);
+
+		// TODO Cony
 		// order client upload file and release this file
-		
-		if(fileService.isFileLocked(fileid)){
-			
+
+		if (fileService.isFileLocked(fileid)) {
+
 			ProjectBean project = projectService.getProject(projectId);
-			if(project != null){
+			if (project != null) {
 				String fileFolder = combineFolderPath(
 						combineFolderPath(rootpath, project.getProjectCde()),
 						this.sysConfig.getFolderNameByFolderCde(docType));
 				File file = new File(fileFolder, filename);
-				
+
 				serverFilePath = file.getPath();
-				fileStructPath = combineFolderPath(project.getProjectCde(),combineFolderPath(this.sysConfig.getFolderNameByFolderCde(docType),filename));
-				fileService.releaseFile(fileid);
-				new Thread(new ReleaseFileClientBuilder(UserIPDAO.getUserIPBean("conygychen").getPCIP(), serverFilePath, fileStructPath)).start();
-				
+				fileStructPath = combineFolderPath(
+						project.getProjectCde(),
+						combineFolderPath(this.sysConfig
+								.getFolderNameByFolderCde(docType), filename));
+				// fileService.releaseFile(fileid);
+				new Thread(new ReleaseFileClientBuilder(UserIPDAO
+						.getUserIPBean("conygychen").getPCIP(), serverFilePath,
+						fileStructPath, fileid)).start();
+
 			}
 		}
-		if(true){
-			return ImmutableMap.of("open","succ");
-		}else{
-			return ImmutableMap.of("open","fail");
+		if (true) {
+			return ImmutableMap.of("open", "succ");
+		} else {
+			return ImmutableMap.of("open", "fail");
 		}
 	}
 }
