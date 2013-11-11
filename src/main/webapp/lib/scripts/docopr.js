@@ -91,6 +91,41 @@ require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
 
 });
 
+function beforeExpandAll(treeId) {
+	var openedTab=new Array(); 
+    var tree = dijit.byId(treeId);
+    nodes = tree.rootNode.getChildren();
+    var node;
+    var count=0;
+    for (var i = 0; i < nodes.length; i++){
+            node = nodes[i];
+            if (node.isExpanded) {
+            	console.log("opened node ",node.label.substring(0,3));
+            	openedTab[count++]=node.label.substring(0,3);
+            }
+    }
+    console.log("opened ids ",openedTab);
+    return openedTab;
+} 
+
+function expandTabs(treeId,openedTab) {
+    var tree = dijit.byId(treeId);
+    nodes = tree.rootNode.getChildren();
+    var node;
+    for (var i = 0; i < nodes.length; i++){
+            node = nodes[i];
+            console.log("opened ids node",node.label.substring(0,3));
+            for (var j = 0; j < openedTab.length; j++){
+            	
+            	if (node.label.substring(0,3) == openedTab[j]) {
+                	console.log("matched");
+                        tree._expandNode(node);
+                }
+            }
+            
+    }
+} 
+
 function refreshDocBroad(projectId) {
 
 	console.log("requesting", projectId);
@@ -99,6 +134,8 @@ function refreshDocBroad(projectId) {
 			"dijit/tree/ForestStoreModel" ], function(dom, xhr, JSON, parser,
 			Tree, ItemFileReadStore, ForestStoreModel) {
 
+		openedTab = beforeExpandAll("doctree");
+		
 		dataset = {
 			"projectId" : projectId
 		};
@@ -156,6 +193,7 @@ function refreshDocBroad(projectId) {
 			dijit.byId("doctree").postMixInProperties();
 			dijit.byId("doctree")._load();
 
+			expandTabs("doctree",openedTab);
 		}, function(err) {
 			// Handle the error condition
 			console.log(err);
@@ -165,6 +203,8 @@ function refreshDocBroad(projectId) {
 			console.log(evt);
 		});
 
+		
+		
 	});
 
 }
