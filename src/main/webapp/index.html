@@ -462,7 +462,7 @@ var r=confirm("Are you sure to release object on "+tn.item.id +" ?");
 if (r==false)
 	return;
 releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
-refreshProjectBroad(getProjectId());
+
 
                     </script>Release Object</li>
 				</ul>
@@ -470,6 +470,8 @@ refreshProjectBroad(getProjectId());
 
 			</div>
 
+		<div data-dojo-type="dijit/Dialog" data-dojo-id="waitingDialog"
+			title="Release object ..."><div id="waitingDialogtext"></div></div>
 
 			<div data-dojo-type="dijit/Dialog"
 				data-dojo-id="uploadFileFormDialog" title="Upload documents"

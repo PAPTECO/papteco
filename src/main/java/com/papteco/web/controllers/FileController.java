@@ -369,18 +369,23 @@ public class FileController extends BaseController {
 						fileStructPath, fileid, taskid)).start();
 
 			}
+			
+			//3 mins timeout
+			int i=0;
+			while(i<90){
+				i++;
+				Thread.sleep(2000);
+				
+				String[] task = TaskUtils.getTaskStatus(taskid);
+				
+				if(task != null && task[0] != "START" ){
+					return ImmutableMap.of("FLAG", task[0],"Message", task[1]);
+				}
+			}
+			
+			return ImmutableMap.of("FLAG", "FAIL","Message", "Operation timeout, please retry");
 		}
-		if (true) {
-			return ImmutableMap.of("open", "succ");
-		} else {
-			return ImmutableMap.of("open", "fail");
-		}
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "checkTask")
-	@ResponseBody
-	public Map checkTask(@RequestParam String taskid) throws Exception {
-		String[] task = TaskUtils.getTaskStatus(taskid);
-		return null;
+		
+		return ImmutableMap.of("FLAG", "FAIL","Message", "File is not locked");
 	}
 }

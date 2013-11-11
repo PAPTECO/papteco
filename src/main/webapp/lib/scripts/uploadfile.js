@@ -42,6 +42,8 @@ function releaseFile(projectId,foldertype, editfilename,fileid) {
 	require([ "dojo/dom", "dijit/registry", "dojo/request/xhr", "dojo/json" ],
 			function(dom, registry, xhr, json) {
 
+				waitingDialog.show();
+				dojo.byId("waitingDialogtext").innerHTML="Please wait ...";
 				dataset = {
 						projectId : projectId,
 						docType : foldertype,
@@ -54,13 +56,19 @@ function releaseFile(projectId,foldertype, editfilename,fileid) {
 					query : dataset,
 					method : "get",
 					preventCache : true,
+					//sync : false,
 					headers : {
 						'Content-Type' : 'application/json'
 					}
 				}).then(function(datas) {
 
 					console.log("datas", datas);
-
+					dojo.byId("waitingDialogtext").innerHTML=datas["Message"];
+					if(datas["FLAG"] == "SUCC"){
+						waitingDialog.hide();
+					}
+					refreshProjectBroad(getProjectId());
+					
 				}, function(err) {
 					// Handle the error condition
 					console.log(err);

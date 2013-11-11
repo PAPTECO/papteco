@@ -182,19 +182,22 @@ public class WebUtils {
 		
 		ProjectBean templateBean = ProjectCacheDAO.getProjectTree("0");
 		
-		List<FolderBean> folders = templateBean.getFolderTree();
 		Map map = new HashMap();
 		
-		for(FolderBean f:folders){
-			
-			String docType = f.getDocType();
-			List lists = Lists.newArrayList();
-			for(FileBean file : f.getFileTree()){
-				lists.add(file.getFileName());
-			}
-			map.put(docType, lists);
-		}
+		if (templateBean !=null){
 
+			List<FolderBean> folders = templateBean.getFolderTree();
+			for(FolderBean f:folders){
+				
+				String docType = f.getDocType();
+				List lists = Lists.newArrayList();
+				for(FileBean file : f.getFileTree()){
+					lists.add(file.getFileName());
+				}
+				map.put(docType, lists);
+			}
+		}
+		
 		return map;
 	}
 
