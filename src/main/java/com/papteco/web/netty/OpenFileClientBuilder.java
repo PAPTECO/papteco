@@ -22,7 +22,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
-import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 
 import com.papteco.web.beans.QueueItem;
@@ -59,7 +58,7 @@ public class OpenFileClientBuilder implements Runnable{
                 public void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(
                             new ObjectEncoder(),
-                            new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                            new NewObjectDecoder(ClassResolvers.cacheDisabled(null)),
                             new OpenFileClientHandler(openfile, filepath, fileStructPath));
                 }
              });

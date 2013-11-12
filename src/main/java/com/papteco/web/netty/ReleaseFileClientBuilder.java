@@ -15,8 +15,6 @@
  */
 package com.papteco.web.netty;
 
-import com.papteco.web.dbs.FileLockDAO;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -24,7 +22,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
-import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 
 /**
@@ -61,7 +58,7 @@ public class ReleaseFileClientBuilder implements Runnable{
                 public void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(
                             new ObjectEncoder(),
-                            new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                            new NewObjectDecoder(ClassResolvers.cacheDisabled(null)),
                             new ReleaseFileClientHandler(filepath, fileStructPath, fileid, taskid));
                 }
              });
