@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -167,7 +168,7 @@ public class ProjectCacheDAO {
 			}
 		}
 		List<String> totalFileList = project.getTotalFileList();
-		totalFileList.add(fileBean.getFileName());
+		totalFileList.add(StringEscapeUtils.unescapeHtml(fileBean.getFileName()));
 		project.setTotalFileList(totalFileList);
 		saveProjectTree(project);
 	}

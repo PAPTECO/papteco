@@ -9,7 +9,7 @@ function editFile(projectId,foldertype, editfilename,fileid) {
 				dataset = {
 						projectId : projectId,
 						docType : foldertype,
-						filename : editfilename,
+						filename : encodeURIComponent(editfilename),
 						fileid : fileid
 				};
 
@@ -47,7 +47,7 @@ function releaseFile(projectId,foldertype, editfilename,fileid) {
 				dataset = {
 						projectId : projectId,
 						docType : foldertype,
-						filename : editfilename,
+						filename : encodeURIComponent(editfilename),
 						fileid : fileid
 				};
 
@@ -201,7 +201,7 @@ function setVal2(value,previouslyFileName) {
 				dataset = {
 					docType : value,
 					prjId : getProjectId(),
-					revFileName : previouslyFileName
+					revFileName : encodeURIComponent(previouslyFileName)
 				};
 
 				xhr("getNumberingFormat", { 
@@ -317,7 +317,7 @@ function validateUploadForm() {
 										data = xmldoc.body.textContent;
 										console.log(data);
 										if (data) {
-											alert(data + " has been uploaded.");
+											alert(decodeURIComponent(data) + " has been uploaded.");
 											dom.byId("uploadFileForm").reset();
 											uploadFileFormDialog.hide();
 											refreshProjectBroad(getProjectId());

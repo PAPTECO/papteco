@@ -1,6 +1,8 @@
 package com.papteco.web.controllers;
 
 import java.io.File;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,7 +79,7 @@ public class FileController extends BaseController {
 			trgFileName.append("-");
 		}
 
-		trgFileName.append(bean.getDescription());
+		trgFileName.append(StringEscapeUtils.unescapeHtml(bean.getDescription()));
 		trgFileName.append("-");
 		trgFileName.append("Rev");
 		if (bean.getRev().length() < 3)
@@ -131,7 +134,7 @@ public class FileController extends BaseController {
 
 			String fileName = prepareFileName(bean);
 
-			File fromfile = new File(fromfileFolder, bean.getUploadedCopyForm());
+			File fromfile = new File(fromfileFolder, StringEscapeUtils.unescapeHtml(bean.getUploadedCopyForm()));
 			
 			File tofile = new File(fileFolder, fileName);
 			FileBean fileBean = new FileBean();
@@ -174,7 +177,7 @@ public class FileController extends BaseController {
 				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean(
 						"conygychen").getPCIP(), openfile, serverFilePath,
 						fileStructPath)).start();
-				return fileBean.getFileName();
+				return URLEncoder.encode(fileBean.getFileName());
 			}
 
 		} else {
@@ -204,7 +207,7 @@ public class FileController extends BaseController {
 				bean.getUploadfile().transferTo(file);
 				fileService.saveUploadFile(bean.getProjectId(),
 						bean.getUpload_doctype(), fileBean);
-				return fileBean.getFileName();
+				return URLEncoder.encode(fileBean.getFileName());
 			}
 		}
 
@@ -242,6 +245,7 @@ public class FileController extends BaseController {
 	@ResponseBody
 	public Map deleteDocs(@RequestParam String projectId,
 			@RequestParam String filename) throws Exception {
+		filename = URLDecoder.decode(filename);
 		ProjectBean project = fileService.getProjectBeanByProjectId(projectId);
 
 		String fileFolder = combineFolderPath(
@@ -292,7 +296,7 @@ public class FileController extends BaseController {
 	public Map editFile(@RequestParam String projectId,
 			@RequestParam String docType, @RequestParam String filename,
 			@RequestParam String fileid) throws Exception {
-
+		filename = URLDecoder.decode(filename);
 		System.out.println("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
@@ -341,7 +345,7 @@ public class FileController extends BaseController {
 	public Map releaseFile(@RequestParam String projectId,
 			@RequestParam String docType, @RequestParam String filename,
 			@RequestParam String fileid) throws Exception {
-
+		filename = URLDecoder.decode(filename);
 		System.out.println("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 

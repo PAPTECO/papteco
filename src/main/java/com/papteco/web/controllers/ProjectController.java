@@ -1,10 +1,12 @@
 package com.papteco.web.controllers;
 
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -227,7 +229,7 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Map getNumberingFormat(@RequestParam String docType,
 			@RequestParam String prjId,@RequestParam String revFileName) throws Exception {
-		System.out.println("doctype:"+docType+" prjId:"+prjId + " revFileName:"+revFileName);
+		System.out.println("doctype:"+docType+" prjId:"+prjId + " revFileName:"+URLDecoder.decode(revFileName));
 		String shortCode = docType + "("
 				+ this.sysConfig.getFolderNameByFolderCde(docType) + ")";
 		FormatItem formating = this.sysConfig.getFormatSetting().get(docType);
@@ -235,7 +237,7 @@ public class ProjectController extends BaseController {
 		String clientno = "(?)"; // please change it by prjId
 		String ref = "(?)"; // please change it by prjId
 		return WebUtils.toNumberingFormat(prjId, shortCode, formating,
-				fieldSetting, clientno, ref,revFileName);
+				fieldSetting, clientno, ref,URLDecoder.decode(revFileName));
 
 	}
 	

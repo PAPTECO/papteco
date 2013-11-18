@@ -384,7 +384,7 @@ if (r==false)
 
 				dataset = {
 						projectId:getProjectId(),
-						filename : tn.item.id
+						filename : encodeURIComponent(tn.item.id)
 				};
 
 				xhr("deleteDocs", {
