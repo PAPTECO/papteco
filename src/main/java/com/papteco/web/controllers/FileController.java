@@ -266,7 +266,7 @@ public class FileController extends BaseController {
 	public Map viewDocs(@RequestParam String projectId,
 			@RequestParam String filename, HttpServletResponse response)
 			throws Exception {
-		filename = EncoderDecoderUtil.decodeURIComponent(filename);
+		filename = StringEscapeUtils.unescapeHtml(filename);
 		ProjectBean project = fileService.getProjectBeanByProjectId(projectId);
 
 		String fileFolder = combineFolderPath(
