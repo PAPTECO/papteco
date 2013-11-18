@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +25,7 @@ import com.papteco.web.beans.ProjectShortcutBean;
 import com.papteco.web.beans.SearchShortcutBean;
 import com.papteco.web.services.PresNoServiceImpl;
 import com.papteco.web.services.ProjectServiceImpl;
+import com.papteco.web.utils.EncoderDecoderUtil;
 import com.papteco.web.utils.WebUtils;
 
 @Controller
@@ -237,7 +237,7 @@ public class ProjectController extends BaseController {
 		String clientno = "(?)"; // please change it by prjId
 		String ref = "(?)"; // please change it by prjId
 		return WebUtils.toNumberingFormat(prjId, shortCode, formating,
-				fieldSetting, clientno, ref,URLDecoder.decode(revFileName));
+				fieldSetting, clientno, ref,EncoderDecoderUtil.decodeURIComponent(revFileName));
 
 	}
 	

@@ -1,8 +1,6 @@
 package com.papteco.web.controllers;
 
 import java.io.File;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Map;
 
@@ -33,6 +31,7 @@ import com.papteco.web.netty.OpenFileClientBuilder;
 import com.papteco.web.netty.ReleaseFileClientBuilder;
 import com.papteco.web.services.FileServiceImpl;
 import com.papteco.web.services.ProjectServiceImpl;
+import com.papteco.web.utils.EncoderDecoderUtil;
 import com.papteco.web.utils.FilesUtils;
 import com.papteco.web.utils.TaskUtils;
 import com.papteco.web.utils.WebUtils;
@@ -177,7 +176,7 @@ public class FileController extends BaseController {
 				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean(
 						"conygychen").getPCIP(), openfile, serverFilePath,
 						fileStructPath)).start();
-				return URLEncoder.encode(fileBean.getFileName());
+				return EncoderDecoderUtil.encodeURIComponent(fileBean.getFileName());
 			}
 
 		} else {
@@ -207,7 +206,7 @@ public class FileController extends BaseController {
 				bean.getUploadfile().transferTo(file);
 				fileService.saveUploadFile(bean.getProjectId(),
 						bean.getUpload_doctype(), fileBean);
-				return URLEncoder.encode(fileBean.getFileName());
+				return EncoderDecoderUtil.encodeURIComponent(fileBean.getFileName());
 			}
 		}
 
@@ -245,7 +244,7 @@ public class FileController extends BaseController {
 	@ResponseBody
 	public Map deleteDocs(@RequestParam String projectId,
 			@RequestParam String filename) throws Exception {
-		filename = URLDecoder.decode(filename);
+		filename = EncoderDecoderUtil.decodeURIComponent(filename);
 		ProjectBean project = fileService.getProjectBeanByProjectId(projectId);
 
 		String fileFolder = combineFolderPath(
@@ -267,7 +266,7 @@ public class FileController extends BaseController {
 	public Map viewDocs(@RequestParam String projectId,
 			@RequestParam String filename, HttpServletResponse response)
 			throws Exception {
-
+		filename = EncoderDecoderUtil.decodeURIComponent(filename);
 		ProjectBean project = fileService.getProjectBeanByProjectId(projectId);
 
 		String fileFolder = combineFolderPath(
@@ -296,7 +295,7 @@ public class FileController extends BaseController {
 	public Map editFile(@RequestParam String projectId,
 			@RequestParam String docType, @RequestParam String filename,
 			@RequestParam String fileid) throws Exception {
-		filename = URLDecoder.decode(filename);
+		filename = EncoderDecoderUtil.decodeURIComponent(filename);
 		System.out.println("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
@@ -345,7 +344,7 @@ public class FileController extends BaseController {
 	public Map releaseFile(@RequestParam String projectId,
 			@RequestParam String docType, @RequestParam String filename,
 			@RequestParam String fileid) throws Exception {
-		filename = URLDecoder.decode(filename);
+		filename = EncoderDecoderUtil.decodeURIComponent(filename);
 		System.out.println("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
