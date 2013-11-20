@@ -551,4 +551,40 @@ public class WebUtils {
 				StringUtils.isEmpty(errmsg) ? "None" : errmsg);
 
 	}
+	
+	//users
+	
+	public static List toSearchUserGrid(String searchRoles, String searchUserName) {
+
+//		List<ProjectBean> searchResult = ProjectCacheDAO
+//				.getProjectBeansByFilter(searchClinetno, searchAnykey);
+		
+		List datalist = Lists.newArrayList();
+
+		for (int i = 0; i < 3; i++) {
+
+			Map data = ImmutableMap.of("col1", "Name1", "col2","name1@qq.com", "col3","Administrators,General manager");
+			Map testdata = Maps.newHashMap();
+			testdata.put("id", "user"+i);
+			testdata.putAll(data);
+			datalist.add(testdata);
+		}
+		return datalist;
+	}
+	
+	public static Map toRolesJson(List<String> roles) {
+		Map result = Maps.newHashMap();
+
+		List dataList = Lists.newArrayList();
+
+		// sort first
+		Collections.sort(roles);
+
+		for (String bean : roles) {
+			dataList.add(ImmutableMap.of("id", bean, "name", bean));
+		}
+
+		result.put("data", dataList);
+		return result;
+	}
 }
