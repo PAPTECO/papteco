@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,5 +75,27 @@ public class UsersController extends BaseController {
 //		}
 		
 		return ImmutableMap.of("type", "success");
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "getUsersRoleList")
+	@ResponseBody
+	public Map getUsersRoleList(@RequestBody UsersFormBean userid)
+			throws Exception {
+		
+		System.out.println("getUsersRoleList() userid:"+userid.getCreateUserName());
+
+		if(StringUtils.isBlank(userid.getCreateUserName())){
+			return ImmutableMap.of("type", "success",
+					"username","",
+					"email","",
+					"roles","<input type='checkbox' class='rolecls' name='fruit' value ='apple' >apple<br><input type='checkbox' name='fruit' class='rolecls' value='orange'>orange<br><input type='checkbox' name='fruit' class='rolecls' value='mango'>mango<br>");
+		}else{
+			return ImmutableMap.of("type", "success",
+					"username","username1",
+					"email","email1",
+					"roles","<input type='checkbox' class='rolecls' name='fruit' value ='apple' >apple<br><input type='checkbox' name='fruit' class='rolecls' value='orange'>orange<br><input type='checkbox' name='fruit' class='rolecls' value='mango'>mango<br>");	
+		}
+		
+		
 	}
 }
