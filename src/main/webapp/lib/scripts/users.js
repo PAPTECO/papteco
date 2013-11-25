@@ -207,7 +207,7 @@ function loadingRoles(tagid, flag) {
 }
 
 function createRolesSelection(userid) {
-	loadingSelectionBox("createSelection",userid);
+	loadingSelectionBox("createSelection", userid);
 	// loadingClients("clientSelect",true);
 	// loadingdate("prjym");
 	// loadinguniqueno("prjno");
@@ -216,20 +216,20 @@ function createRolesSelection(userid) {
 
 function loadingSelectionBox(tagId, userid) {
 
-	require(
-			[ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
+	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
 			function(dom, xhr, JSON, parser) {
 
 				dom.byId("createUserName").value = "";
 				dom.byId("createPassword").value = "";
 				dom.byId("createEmail").value = "";
-				
+				dom.byId("createUserName").readOnly = false;
+
 				dataset = {
-						createUserName : userid
+					createUserName : userid
 				};
-				
+
 				console.log("request user roles", dataset);
-				
+
 				xhr("getUsersRoleList", {
 					handleAs : "json",
 					data : JSON.stringify(dataset),
@@ -243,12 +243,14 @@ function loadingSelectionBox(tagId, userid) {
 					console.log("return datas", datas);
 
 					if (datas.type == "success") {
-						
-						dojo.byId(tagId).innerHTML = datas.roles;
 
-						dom.byId("createUserName").value = datas.username;
-						dom.byId("createEmail").value = datas.email;
-						
+						dojo.byId(tagId).innerHTML = datas.roles;
+						if (userid) {
+							dom.byId("createUserName").value = datas.username;
+							dom.byId("createUserName").readOnly = true;
+							dom.byId("createEmail").value = datas.email;
+						}
+
 					} else {
 						alert("Fetch role lists error. ");
 					}
@@ -264,7 +266,6 @@ function loadingSelectionBox(tagId, userid) {
 					alert("Fetch role lists error. " + evt);
 				});
 
-				
 			});
 
 }
@@ -289,6 +290,22 @@ function submitEditUser() {
 		}
 		console.log("roles:", list);
 
+		if(list.length == 0){
+			alert("Please select at least one role");
+			return;
+		}
+		
+		if(dom.byId("createUserName").readOnly && 
+				dom.byId("createPassword").value){
+			if (!confirm("Password will be reset. Are you sure ?")) {
+				return;
+			}
+		}else if(!dom.byId("createUserName").readOnly &&
+				!dom.byId("createPassword").value){
+			alert("Please input the new password.");
+			return;
+		}
+		
 		dataset = {
 			createUserName : dom.byId("createUserName").value,
 			createPassword : dom.byId("createPassword").value,
@@ -296,7 +313,10 @@ function submitEditUser() {
 			createRoles : list
 		};
 		console.log("requestdataset", dataset);
-		xhr("createUserRequest", {
+		
+		actionname = (dom.byId("createUserName").readOnly)?"updateUserRequest":"createUserRequest";
+		
+		xhr(actionname, {
 			handleAs : "json",
 			data : JSON.stringify(dataset),
 			method : "post",
@@ -309,14 +329,14 @@ function submitEditUser() {
 			console.log("datas", datas);
 
 			if (datas.type == "success") {
-				alert("User has been created success.");
+				alert("User information has been updated.");
 				createUserDialog.hide();
 
 				dom.byId("createUserName").value = "";
 				dom.byId("createPassword").value = "";
 				dom.byId("createEmail").value = "";
 			} else {
-				alert("User created fail. " + datas.message);
+				alert(datas.message);
 			}
 
 		}, function(err) {

@@ -544,22 +544,23 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 
 			<div data-dojo-type="dijit/Dialog" data-dojo-id="createUserDialog"
-				title="Create New User"
+				title="User Information"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
 				<div data-dojo-type="dijit/form/Form" id="userform"
 					data-dojo-id="userform" encType="multipart/form-data"
 					action="" method="">
 
-					<div class="dijitDialogPaneContentArea">
+					<div class="dijitDialogPaneContentArea"> 
 
-						<div style="float: left">
-							<fieldset style="float: left">
+						<div >
+							<fieldset style="float: left;height:430px;">
 								<legend>Require Information</legend>
 								<table class="dijitdialog_index">
 									<tr>
 										<td><label for="name">User Name: </label></td>
-										<td><input id="createUserName" /></td>
+										<td><input id="createUserName" required="true"
+											data-dojo-type="dijit/form/ValidationTextBox"/></td>
 									</tr>
 									<tr>
 										<td><label for="name">Password: </label></td>
@@ -567,7 +568,8 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 									</tr>
 									<tr>
 										<td><label for="name">Email: </label></td>
-										<td><input id="createEmail" /></td>
+										<td><input id="createEmail" required="true"
+											data-dojo-type="dijit/form/ValidationTextBox"/></td>
 									</tr>
 
 								</table>
@@ -579,12 +581,15 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 										onClick="createUserDialog.hide()">Cancel</button>
 								</div>
 							</fieldset>
+							<fieldset>
+							<legend>Roles</legend>
+
+							<div style="height:410px;overflow-y:auto;" id="createSelection"></div>
+					
+							</fieldset>
 						</div>
 
-						<fieldset>
-							<legend>Roles</legend>
-							<div id="createSelection"></div>
-						</fieldset>
+						
 					</div>
 				</div>
 

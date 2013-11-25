@@ -38,12 +38,7 @@ public class UsersController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "loadingRoles")
 	@ResponseBody
 	public Map loadingRoles() {
-		List l = Lists.newArrayList();
-		Map<String, String> allroles = userrolesSetting.getAllRoles();
-		for(String key : allroles.keySet()){
-			l.add(allroles.get(key));
-		}
-		return WebUtils.toRolesJson(l);
+		return WebUtils.toRolesJson(userrolesSetting.getAllRoles());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "createUserRequest")
@@ -51,12 +46,43 @@ public class UsersController extends BaseController {
 	public Map createUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
 		
-		System.out.println("UsersFormBean:"+bean);
+		System.out.println("createUserRequest UsersFormBean:"+bean);
 		UsersBean user = preUserBean(bean, userrolesSetting.getAllRoles());
 		
-		userService.saveUser(user);
+		try{
+			if(userService.getUser(bean.getCreateUserName())!=null){
+				return ImmutableMap.of("type", "fail","message","User already exists");
+			}else{
+				userService.saveUser(user);
+				return ImmutableMap.of("type", "success");
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return ImmutableMap.of("type", "fail","message",e.getMessage());
+			
+		}
 		
-		return ImmutableMap.of("type", "success");
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "updateUserRequest")
+	@ResponseBody
+	public Map updateUserRequest(@RequestBody UsersFormBean bean)
+			throws Exception {
+		
+		System.out.println("updateUserRequest UsersFormBean:"+bean);
+		
+		
+		try{
+			UsersBean user = preUserBean(bean, userrolesSetting.getAllRoles());
+			
+			userService.saveUser(user);
+			return ImmutableMap.of("type", "success");
+		}catch(Exception e){
+			e.printStackTrace();
+			return ImmutableMap.of("type", "fail","message",e.getMessage());
+			
+		}
 	}
 	
 	private UsersBean preUserBean(UsersFormBean bean, Map<String, String> allroles){
@@ -107,13 +133,15 @@ public class UsersController extends BaseController {
 	private String populateUserRolsesInputs(Map<String, String> userroles){
 		StringBuffer sb = new StringBuffer();
 		if(userroles != null && userroles.size() != 0){
+			sb.append("<table border='0' cellspacing='0' cellpadding='0'>");
 			for(String key : userroles.keySet()){
-				sb.append("<input type='checkbox' class='rolecls' name='roles' value ='");
+				sb.append("<tr><td><input type='checkbox' class='rolecls' name='roles' value ='");
 				sb.append(key);
-				sb.append("' >");
+				sb.append("' ></td><td>");
 				sb.append(userroles.get(key));
-				sb.append("<br/>");
+				sb.append("</td></tr>");
 			}
+			sb.append("</table>");
 		}
 		return sb.toString();
 	}

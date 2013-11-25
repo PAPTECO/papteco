@@ -579,19 +579,16 @@ public class WebUtils {
 		return datalist;
 	}
 	
-	public static Map toRolesJson(List<String> roles) {
-		Map result = Maps.newHashMap();
-
+	public static Map toRolesJson(Map<String, String> roles) {
+		
+		Map<String, String> allroles = roles;
 		List dataList = Lists.newArrayList();
+		
+		for(String key : allroles.keySet()){
 
-		// sort first
-		Collections.sort(roles);
-
-		for (String bean : roles) {
-			dataList.add(ImmutableMap.of("id", bean, "name", bean));
+			dataList.add(ImmutableMap.of("id", key, "name", allroles.get(key)));
 		}
 
-		result.put("data", dataList);
-		return result;
+		return ImmutableMap.of("data", dataList);
 	}
 }
