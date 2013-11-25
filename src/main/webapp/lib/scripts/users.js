@@ -206,6 +206,53 @@ function loadingRoles(tagid, flag) {
 
 }
 
+function roleDisplay() {
+	loadingRolesBox("roleDisplay");
+	// loadingClients("clientSelect",true);
+	// loadingdate("prjym");
+	// loadinguniqueno("prjno");
+	roleDisplayDialog.show();
+}
+
+function loadingRolesBox(tagId) {
+
+	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
+			function(dom, xhr, JSON, parser) {
+
+				xhr("getRoleDisplay", {
+					handleAs : "json",
+					method : "post",
+					preventCache : true,
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).then(function(datas) {
+
+					console.log("return datas", datas);
+
+					if (datas.type == "success") {
+
+						dojo.byId(tagId).innerHTML = datas.data;
+
+					} else {
+						alert("Fetch role lists error. ");
+					}
+
+				}, function(err) {
+					// Handle the error condition
+					console.log(err);
+					alert("Fetch role lists error. " + err);
+				}, function(evt) {
+					// Handle a progress event from the request if the
+					// browser supports XHR2
+					console.log(evt);
+					alert("Fetch role lists error. " + evt);
+				});
+
+			});
+
+}
+
 function createRolesSelection(userid) {
 	loadingSelectionBox("createSelection", userid);
 	// loadingClients("clientSelect",true);
@@ -330,7 +377,7 @@ function submitEditUser() {
 
 			if (datas.type == "success") {
 				alert("User information has been updated.");
-				createUserDialog.hide();
+				hideUserDialog();
 
 				dom.byId("createUserName").value = "";
 				dom.byId("createPassword").value = "";
@@ -350,4 +397,9 @@ function submitEditUser() {
 			alert("Project created fail ." + evt);
 		});
 	});
+}
+
+function hideUserDialog(){
+	createUserDialog.hide();
+	doUserSearch();
 }
