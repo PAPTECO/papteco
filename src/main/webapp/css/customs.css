@@ -115,6 +115,11 @@ a {
     height: 500px !important;
 }
 
+.roleDijitDialogPaneContentArea{
+	width: 720px !important;
+    height: 510px !important;
+}
+
 .dialogNum{
     width: 40px;
 }
