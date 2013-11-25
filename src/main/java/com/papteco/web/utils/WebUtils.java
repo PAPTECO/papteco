@@ -25,9 +25,12 @@ import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.PreserveNosBean;
 import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.beans.RoleBean;
+import com.papteco.web.beans.UsersBean;
 import com.papteco.web.dbs.FileLockDAO;
 import com.papteco.web.dbs.PreserveNosDAO;
 import com.papteco.web.dbs.ProjectCacheDAO;
+import com.papteco.web.dbs.UserDAO;
 
 public class WebUtils {
 
@@ -556,16 +559,20 @@ public class WebUtils {
 	
 	public static List toSearchUserGrid(String searchRoles, String searchUserName) {
 
-//		List<ProjectBean> searchResult = ProjectCacheDAO
-//				.getProjectBeansByFilter(searchClinetno, searchAnykey);
+		List<UsersBean> searchResult = UserDAO.getUsersByFilter(searchUserName, searchRoles);
 		
 		List datalist = Lists.newArrayList();
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < searchResult.size(); i++) {
 
-			Map data = ImmutableMap.of("col1", "Name1", "col2","name1@qq.com", "col3","Administrators,General manager");
+			StringBuffer sb = new StringBuffer();
+			for(RoleBean role : searchResult.get(i).getRoles()){
+				sb.append(role.getRoleDesc() + ";");
+			}
+			
+			Map data = ImmutableMap.of("col1", searchResult.get(i).getUserName(), "col2",searchResult.get(i).getEmail(), "col3",sb.toString());
 			Map testdata = Maps.newHashMap();
-			testdata.put("id", "user"+i);
+			testdata.put("id", searchResult.get(i).getUserName());
 			testdata.putAll(data);
 			datalist.add(testdata);
 		}

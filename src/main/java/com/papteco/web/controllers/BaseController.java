@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import com.papteco.web.utils.SystemConfiguration;
+import com.papteco.web.utils.UserRolesConfiguration;
 
 /**
  * @author Administrator
@@ -24,6 +25,9 @@ public class BaseController {
 	@Value("#{settings['rootpath']}")
 	protected String rootpath;
 
+	@Autowired
+	protected UserRolesConfiguration userrolesSetting;
+	
 	public static Logger logger = Logger.getLogger("Logger");
 
 	protected String combineFolderPath(String path1, String path2) {

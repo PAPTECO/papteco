@@ -1,6 +1,6 @@
 package com.papteco.web.controllers;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,20 +15,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.beans.RoleBean;
+import com.papteco.web.beans.UsersBean;
 import com.papteco.web.beans.UsersFormBean;
-import com.papteco.web.services.PresNoServiceImpl;
-import com.papteco.web.services.ProjectServiceImpl;
+import com.papteco.web.services.UserServiceImpl;
 import com.papteco.web.utils.WebUtils;
 
 @Controller
 public class UsersController extends BaseController {
 	@Autowired
-	private ProjectServiceImpl projectService;
+	private UserServiceImpl userService;
 	
-	@Autowired
-	private PresNoServiceImpl presNoService;
-
 	@RequestMapping(method = RequestMethod.GET, value = "doSearchUser")
 	@ResponseBody
 	public List doSearchUser(@RequestParam String searchRoles,
@@ -42,9 +39,10 @@ public class UsersController extends BaseController {
 	@ResponseBody
 	public Map loadingRoles() {
 		List l = Lists.newArrayList();
-		l.add("Administrator");
-		l.add("General manager");
-		l.add("Assistant to the general manager");
+		Map<String, String> allroles = userrolesSetting.getAllRoles();
+		for(String key : allroles.keySet()){
+			l.add(allroles.get(key));
+		}
 		return WebUtils.toRolesJson(l);
 	}
 	
@@ -54,27 +52,27 @@ public class UsersController extends BaseController {
 			throws Exception {
 		
 		System.out.println("UsersFormBean:"+bean);
-//		try {
-//			if(projectService.isPrjIdExisting(bean.getUniqueno())){
-//				return ImmutableMap.of("type", "failure", "message",
-//						"The Unique No. was existing : "+bean.getUniqueno());
-//			}else{
-//
-//				
-//				projectService.createProject(tmpProject,
-//						this.sysConfig.prepareFolderStructure());
-//
-//				return ImmutableMap.of("type", "success", "projectcode",
-//						tmpProject.getProjectCde());
-//			}
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			return ImmutableMap
-//					.of("type", "failure", "message", e.getMessage());
-//		}
+		UsersBean user = preUserBean(bean, userrolesSetting.getAllRoles());
+		
+		userService.saveUser(user);
 		
 		return ImmutableMap.of("type", "success");
+	}
+	
+	private UsersBean preUserBean(UsersFormBean bean, Map<String, String> allroles){
+		UsersBean user = new UsersBean();
+		if(StringUtils.isNotBlank(bean.getCreateUserName()))
+			user.setUserName(bean.getCreateUserName());
+		if(StringUtils.isNotBlank(bean.getCreatePassword()))
+			user.setPassword(bean.getCreatePassword());
+		user.setEmail(bean.getCreateEmail());
+		
+		List<RoleBean> roles = new ArrayList<RoleBean>();
+		for(String role : bean.getCreateRoles()){
+			roles.add(new RoleBean(role, allroles.get(role)));
+		}
+		user.setRoles(roles);
+		return user;
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "getUsersRoleList")
@@ -88,14 +86,35 @@ public class UsersController extends BaseController {
 			return ImmutableMap.of("type", "success",
 					"username","",
 					"email","",
-					"roles","<input type='checkbox' class='rolecls' name='fruit' value ='apple' >apple<br><input type='checkbox' name='fruit' class='rolecls' value='orange'>orange<br><input type='checkbox' name='fruit' class='rolecls' value='mango'>mango<br>");
+					"roles",this.populateUserRolsesInputs(userrolesSetting.getAllRoles()));
 		}else{
-			return ImmutableMap.of("type", "success",
-					"username","username1",
-					"email","email1",
-					"roles","<input type='checkbox' class='rolecls' name='fruit' value ='apple' >apple<br><input type='checkbox' name='fruit' class='rolecls' value='orange'>orange<br><input type='checkbox' name='fruit' class='rolecls' value='mango'>mango<br>");	
+			
+			UsersBean user = userService.getUser(userid.getCreateUserName());
+			if(user != null){
+				return ImmutableMap.of("type", "success",
+						"username",user.getUserName(),
+						"email",user.getEmail(),
+						"roles",this.populateUserRolsesInputs(userrolesSetting.getAllRoles()));	
+			}else{
+				return ImmutableMap.of("type", "success",
+						"username","username1",
+						"email","email1",
+						"roles",this.populateUserRolsesInputs(userrolesSetting.getAllRoles()));	
+			}
 		}
-		
-		
+	}
+	
+	private String populateUserRolsesInputs(Map<String, String> userroles){
+		StringBuffer sb = new StringBuffer();
+		if(userroles != null && userroles.size() != 0){
+			for(String key : userroles.keySet()){
+				sb.append("<input type='checkbox' class='rolecls' name='roles' value ='");
+				sb.append(key);
+				sb.append("' >");
+				sb.append(userroles.get(key));
+				sb.append("<br/>");
+			}
+		}
+		return sb.toString();
 	}
 }
