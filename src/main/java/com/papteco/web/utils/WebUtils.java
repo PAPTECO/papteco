@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -25,7 +26,6 @@ import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.PreserveNosBean;
 import com.papteco.web.beans.ProjectBean;
-import com.papteco.web.beans.RoleBean;
 import com.papteco.web.beans.UsersBean;
 import com.papteco.web.dbs.FileLockDAO;
 import com.papteco.web.dbs.PreserveNosDAO;
@@ -566,8 +566,8 @@ public class WebUtils {
 		for (int i = 0; i < searchResult.size(); i++) {
 
 			StringBuffer sb = new StringBuffer();
-			for(RoleBean role : searchResult.get(i).getRoles()){
-				sb.append(role.getRoleDesc() + ";");
+			for(String role : searchResult.get(i).getRoles()){
+				sb.append(role + ";");
 			}
 			
 			Map data = ImmutableMap.of("col1", searchResult.get(i).getUserName(), "col2",searchResult.get(i).getEmail(), "col3",sb.toString());
@@ -579,16 +579,11 @@ public class WebUtils {
 		return datalist;
 	}
 	
-	public static Map toRolesJson(Map<String, String> roles) {
-		
-		Map<String, String> allroles = roles;
+	public static Map toRolesJson(Set<Object> roles) {
 		List dataList = Lists.newArrayList();
-		
-		for(String key : allroles.keySet()){
-
-			dataList.add(ImmutableMap.of("id", key, "name", allroles.get(key)));
+		for(Object key : roles){
+			dataList.add(ImmutableMap.of("id", key.toString(), "name", key.toString()));
 		}
-
 		return ImmutableMap.of("data", dataList);
 	}
 }

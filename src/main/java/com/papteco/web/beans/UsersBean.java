@@ -17,7 +17,7 @@ public class UsersBean implements Serializable {
 	private String userName;
 	private String password;
 	private String email;
-	private List<RoleBean> roles;
+	private List<String> roles;
 	
 	public String getUserName() {
 		return userName;
@@ -37,10 +37,10 @@ public class UsersBean implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public List<RoleBean> getRoles() {
+	public List<String> getRoles() {
 		return roles;
 	}
-	public void setRoles(List<RoleBean> roles) {
+	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
 	@Override

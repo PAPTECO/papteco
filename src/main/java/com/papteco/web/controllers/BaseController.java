@@ -4,14 +4,15 @@
 package com.papteco.web.controllers;
 
 import java.io.File;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
+import com.papteco.web.utils.Roles2RightsConfiguration;
 import com.papteco.web.utils.SystemConfiguration;
-import com.papteco.web.utils.UserRolesConfiguration;
 
 /**
  * @author Administrator
@@ -25,8 +26,8 @@ public class BaseController {
 	@Value("#{settings['rootpath']}")
 	protected String rootpath;
 
-	@Autowired
-	protected UserRolesConfiguration userrolesSetting;
+	protected Properties rolessetting = Roles2RightsConfiguration.getRolesSetting();
+	protected Properties rightssetting = Roles2RightsConfiguration.getRightsSetting();
 	
 	public static Logger logger = Logger.getLogger("Logger");
 

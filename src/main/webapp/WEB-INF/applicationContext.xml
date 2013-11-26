@@ -3,5 +3,4 @@
 <beans>
 	<import resource="classpath:SystemConfiguration.xml"/>
 	<import resource="classpath:Formating.xml"/>
-	<import resource="classpath:UserRolesConfiguration.xml"/>
 </beans>

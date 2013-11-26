@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.papteco.web.beans.RoleBean;
 import com.papteco.web.beans.UsersBean;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
@@ -72,9 +71,9 @@ public class UserDAO {
 			if(StringUtils.isBlank(username) && StringUtils.isBlank(rolekey)){
 				result.add(bean);
 			}else if(StringUtils.isBlank(username) && StringUtils.isNotBlank(rolekey)){
-				List<RoleBean> roles = bean.getRoles();
-				for(RoleBean role : roles){
-					if(role.getRoleCde().equals(rolekey)){
+				List<String> roles = bean.getRoles();
+				for(String role : roles){
+					if(role.contains(rolekey)){
 						result.add(bean);
 						break;
 					}
@@ -85,9 +84,9 @@ public class UserDAO {
 				}
 			}else{
 				if(username.trim().equals(bean.getUserName().trim())){
-					List<RoleBean> roles = bean.getRoles();
-					for(RoleBean role : roles){
-						if(role.getRoleCde().equals(rolekey)){
+					List<String> roles = bean.getRoles();
+					for(String role : roles){
+						if(role.contains(rolekey)){
 							result.add(bean);
 							break;
 						}
