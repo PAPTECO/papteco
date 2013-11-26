@@ -74,7 +74,7 @@ public class UserDAO {
 			}else if(StringUtils.isBlank(username) && StringUtils.isNotBlank(rolekey)){
 				List<RoleBean> roles = bean.getRoles();
 				for(RoleBean role : roles){
-					if(role.getRoleDesc().contains(rolekey)){
+					if(role.getRoleCde().equals(rolekey)){
 						result.add(bean);
 						break;
 					}
@@ -87,7 +87,7 @@ public class UserDAO {
 				if(username.trim().equals(bean.getUserName().trim())){
 					List<RoleBean> roles = bean.getRoles();
 					for(RoleBean role : roles){
-						if(role.getRoleDesc().contains(rolekey)){
+						if(role.getRoleCde().equals(rolekey)){
 							result.add(bean);
 							break;
 						}
