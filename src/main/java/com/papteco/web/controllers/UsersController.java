@@ -3,6 +3,7 @@ package com.papteco.web.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.ImmutableMap;
-import com.papteco.web.beans.RoleBean;
 import com.papteco.web.beans.UsersBean;
 import com.papteco.web.beans.UsersFormBean;
 import com.papteco.web.services.UserServiceImpl;
@@ -37,7 +37,7 @@ public class UsersController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "loadingRoles")
 	@ResponseBody
 	public Map loadingRoles() {
-		return WebUtils.toRolesJson(userrolesSetting.getAllRoles());
+		return WebUtils.toRolesJson(rolessetting.keySet());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "createUserRequest")
@@ -46,7 +46,7 @@ public class UsersController extends BaseController {
 			throws Exception {
 		
 		System.out.println("createUserRequest UsersFormBean:"+bean);
-		UsersBean user = preUserBean(bean, userrolesSetting.getAllRoles());
+		UsersBean user = preUserBean(bean);
 		
 		try{
 			if(userService.getUser(bean.getCreateUserName())!=null){
@@ -73,7 +73,7 @@ public class UsersController extends BaseController {
 		
 		
 		try{
-			UsersBean user = preUserBean(bean, userrolesSetting.getAllRoles());
+			UsersBean user = preUserBean(bean);
 			
 			userService.saveUser(user);
 			return ImmutableMap.of("type", "success");
@@ -84,7 +84,7 @@ public class UsersController extends BaseController {
 		}
 	}
 	
-	private UsersBean preUserBean(UsersFormBean bean, Map<String, String> allroles){
+	private UsersBean preUserBean(UsersFormBean bean){
 		UsersBean user = new UsersBean();
 		if(StringUtils.isNotBlank(bean.getCreateUserName()))
 			user.setUserName(bean.getCreateUserName());
@@ -92,9 +92,9 @@ public class UsersController extends BaseController {
 			user.setPassword(bean.getCreatePassword());
 		user.setEmail(bean.getCreateEmail());
 		
-		List<RoleBean> roles = new ArrayList<RoleBean>();
+		List<String> roles = new ArrayList<String>();
 		for(String role : bean.getCreateRoles()){
-			roles.add(new RoleBean(role, allroles.get(role)));
+			roles.add(role);
 		}
 		user.setRoles(roles);
 		return user;
@@ -130,7 +130,7 @@ public class UsersController extends BaseController {
 					"username","",
 					"password","",
 					"email","",
-					"roles",this.populateUserRolsesCreate(userrolesSetting.getAllRoles()));
+					"roles",this.populateUserRolsesCreate(rolessetting.keySet()));
 		}else{
 			UsersBean user = userService.getUser(userid.getCreateUserName());
 			if(user != null){
@@ -138,26 +138,26 @@ public class UsersController extends BaseController {
 						"username",user.getUserName(),
 						"password",user.getPassword(),
 						"email",user.getEmail(),
-						"roles",this.populateUserRolsesModify(userrolesSetting.getAllRoles(), user));	
+						"roles",this.populateUserRolsesModify(rolessetting.keySet(), user));	
 			}else{
 				return ImmutableMap.of("type", "success",
 						"username","username1",
 						"password","",
 						"email","email1",
-						"roles",this.populateUserRolsesCreate(userrolesSetting.getAllRoles()));	
+						"roles",this.populateUserRolsesCreate(rolessetting.keySet()));	
 			}
 		}
 	}
 	
-	private String populateUserRolsesCreate(Map<String, String> userroles){
+	private String populateUserRolsesCreate(Set<Object> userroles){
 		StringBuffer sb = new StringBuffer();
 		if(userroles != null && userroles.size() != 0){
 			sb.append("<table border='0' cellspacing='0' cellpadding='0'>");
-			for(String key : userroles.keySet()){
+			for(Object key : userroles){
 				sb.append("<tr><td><input type='checkbox' class='rolecls' name='roles' value ='");
-				sb.append(key);
+				sb.append(key.toString());
 				sb.append("' ></td><td>");
-				sb.append(userroles.get(key));
+				sb.append(key.toString());
 				sb.append("</td></tr>");
 			}
 			sb.append("</table>");
@@ -165,21 +165,21 @@ public class UsersController extends BaseController {
 		return sb.toString();
 	}
 	
-	private String populateUserRolsesModify(Map<String, String> userroles, UsersBean user){
+	private String populateUserRolsesModify(Set<Object> userroles, UsersBean user){
 		StringBuffer sb = new StringBuffer();
-		List<RoleBean> roles = user.getRoles();
+		List<String> roles = user.getRoles();
 		if(userroles != null && userroles.size() != 0){
 			sb.append("<table border='0' cellspacing='0' cellpadding='0'>");
-			for(String key : userroles.keySet()){
+			for(Object key : userroles){
 				sb.append("<tr><td><input type='checkbox' class='rolecls' name='roles'");
-				for(RoleBean role : roles){
-					if(role.getRoleCde().equals(key))
+				for(String role : roles){
+					if(role.equals(key.toString()))
 						sb.append(" checked = true");
 				}
 				sb.append(" value ='");
-				sb.append(key);
+				sb.append(key.toString());
 				sb.append("' ></td><td>");
-				sb.append(userroles.get(key));
+				sb.append(key.toString());
 				sb.append("</td></tr>");
 			}
 			sb.append("</table>");
