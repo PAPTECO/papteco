@@ -27,10 +27,9 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 /**
  * Modification of {@link EchoClient} which utilizes Java object serialization.
  */
-public class ReleaseFileClientBuilder implements Runnable{
+public class ReleaseFileClientBuilder extends BasicBuilder implements Runnable{
 
     private final String host;
-    private final int port = 8083;
     private String filepath;
     private String fileStructPath;
     private String fileid;
@@ -64,13 +63,8 @@ public class ReleaseFileClientBuilder implements Runnable{
              });
 
             // Start the connection attempt.
-            b.connect(host, port).sync().channel().closeFuture().sync();
-//            System.out.println(b.connect(host, port).sync().channel().closeFuture().sync().isSuccess());
-//            if(b.connect(host, port).sync().channel().closeFuture().sync().isSuccess()){
-//            	FileLockDAO.deleteFileLockBean(fileid);
-//            }else{
-//            	System.out.println("Connection fail! Client is not running!");
-//            }
+            b.connect(host,PortTranslater(envsetting.getProperty("rlse_file_port"))).sync().channel().closeFuture().sync();
+
         } catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

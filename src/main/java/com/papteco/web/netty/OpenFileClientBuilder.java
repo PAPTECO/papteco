@@ -29,10 +29,9 @@ import com.papteco.web.beans.QueueItem;
 /**
  * Modification of {@link EchoClient} which utilizes Java object serialization.
  */
-public class OpenFileClientBuilder implements Runnable{
+public class OpenFileClientBuilder extends BasicBuilder implements Runnable{
 
     private final String host;
-    private final int port = 8082;
     private QueueItem openfile;
     private String filepath;
     private String fileStructPath;
@@ -64,7 +63,7 @@ public class OpenFileClientBuilder implements Runnable{
              });
 
             // Start the connection attempt.
-            b.connect(host, port).sync().channel().closeFuture().sync();
+            b.connect(host, PortTranslater(envsetting.getProperty("open_file_port"))).sync().channel().closeFuture().sync();
         } catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

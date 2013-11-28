@@ -6,15 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.papteco.web.netty.LoginServerBuilder;
 import com.papteco.web.netty.NettyAppServerBuilder;
 
 @Controller
 public class ClientAppController extends BaseController {
-	private final int port = 8081;
 	
 	@PostConstruct
 	public void ClientAppController() throws Exception{
-		new Thread(new NettyAppServerBuilder(port, rootpath)).start();
+		new Thread(new NettyAppServerBuilder(rootpath)).start();
+		new Thread(new LoginServerBuilder()).start();
 //		new Thread(new SustainableAppConnClientBuilder()).start();
 	}
 	

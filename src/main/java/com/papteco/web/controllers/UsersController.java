@@ -194,11 +194,15 @@ public class UsersController extends BaseController {
 		System.out.println("createUserRequest UsersFormBean:" + bean);
 
 		try {
-			if (true) {
+			String status = userService.validateUser(bean.getCreateUserName(), bean.getCreatePassword());
+			if (status.equals("SUCC")) {
 				return ImmutableMap.of("type", "success");
+			} else if(status.equals("NOUSER")){
+				return ImmutableMap.of("type", "fail", "message",
+						"User not exists");
 			} else {
 				return ImmutableMap.of("type", "fail", "message",
-						"User already exists");
+						"Incorrect Password.");
 			}
 
 		} catch (Exception e) {

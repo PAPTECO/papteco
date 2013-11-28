@@ -27,12 +27,9 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 /**
  * Modification of {@link EchoServer} which utilizes Java object serialization.
  */
-public class NettyAppServerBuilder extends BasicBuilder implements Runnable {
+public class LoginServerBuilder extends BasicBuilder implements Runnable {
 
-    private String rootpath;
-
-    public NettyAppServerBuilder(String rootpath) {
-        this.rootpath = rootpath;
+    public LoginServerBuilder() {
     }
 
     public void run() {
@@ -48,12 +45,12 @@ public class NettyAppServerBuilder extends BasicBuilder implements Runnable {
                     ch.pipeline().addLast(
                             new ObjectEncoder(),
                             new NewObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new NettyAppServerHandler(rootpath));
+                            new LoginServerHandler());
                 }
              });
 
             // Bind and start to accept incoming connections.
-            b.bind(PortTranslater(envsetting.getProperty("comm_nett_port"))).sync().channel().closeFuture().sync();
+            b.bind(PortTranslater(envsetting.getProperty("login_sym_port"))).sync().channel().closeFuture().sync();
         } catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
