@@ -307,7 +307,7 @@ function validateUploadForm() {
 					sethiddenValue(query, dom, "orderedDate");
 					sethiddenValue(query, dom, "completedDate");
 
-					iframe("submitUploadFile", {
+					iframe("secure/submitUploadFile", {
 						form : "uploadFileForm",
 						handleAs : "html"
 					})

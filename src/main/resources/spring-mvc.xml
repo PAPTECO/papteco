@@ -18,7 +18,7 @@
 	<context:component-scan base-package="com.papteco.web.beans" />
 	<context:component-scan base-package="com.papteco.web.utils" />
 	<context:component-scan base-package="com.papteco.web.dbs" />
-	
+
 	<!-- environment properties -->
 	<util:properties id="settings" location="classpath:environment.properties" />
 
@@ -67,4 +67,20 @@
 			</list>
 		</property>
 	</bean>
+
+<!-- 
+	<mvc:interceptors>
+		<bean class="com.papteco.web.filters.SecurityFilter" />
+	</mvc:interceptors> -->
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/secure/*" /> <!-- /user/* -->
+			<bean class="com.papteco.web.filters.SecurityFilter"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- <bean id="urlMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"> 
+		<property name="interceptors"> <list> <bean class="com.papteco.web.filters.SecurityFilter" 
+		/> </list> </property> </bean> -->
 </beans>

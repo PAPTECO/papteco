@@ -586,4 +586,21 @@ public class WebUtils {
 		}
 		return ImmutableMap.of("data", dataList);
 	}
+	
+	public static boolean isActionInFunctionList(String action,List functionList){
+		// Cony TODO
+		return false;
+	}
+
+	public static boolean isDocTypeInEditFunctionList(String doc_type,
+			List functionList) {
+		// Cony TODO
+		return false;
+	}
+
+	public static boolean isFilenameInViewFunctionList(String filename,
+			List functionList) {
+		// Cony TODO
+		return false;
+	}
 }

@@ -387,13 +387,17 @@ if (r==false)
 						filename : tn.item.id
 				};
 
-				xhr("deleteDocs", {
+				xhr("secure/deleteDocs", {
 					handleAs : "json",
 					query : dataset,
 					method : "get",
 					preventCache : true
 				}).then(function(datas) {
-
+					console.log("debug...",datas);
+					if(datas["type"]=="fail"){
+						alert(datas["message"]);
+						return;
+					}
 					console.log("deleted",datas);
 					alert(tn.item.id + " has been deleted.");
 					refreshProjectBroad(getProjectId());

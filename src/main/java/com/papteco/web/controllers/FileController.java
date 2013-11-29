@@ -103,7 +103,7 @@ public class FileController extends BaseController {
 		return trgFileName.toString();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "submitUploadFile")
+	@RequestMapping(method = RequestMethod.POST, value = "secure/submitUploadFile")
 	@ResponseBody
 	public String submitUploadFile(DocTypeFieldSet bean, Model model)
 			throws Exception {
@@ -240,7 +240,7 @@ public class FileController extends BaseController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "deleteDocs")
+	@RequestMapping(method = RequestMethod.GET, value = "secure/deleteDocs")
 	@ResponseBody
 	public Map deleteDocs(@RequestParam String projectId,
 			@RequestParam String filename) throws Exception {
@@ -261,7 +261,7 @@ public class FileController extends BaseController {
 		return WebUtils.responseWithStatusCode();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "viewDocs")
+	@RequestMapping(method = RequestMethod.GET, value = "secure/viewDocs")
 	@ResponseBody
 	public Map viewDocs(@RequestParam String projectId,
 			@RequestParam String filename, HttpServletResponse response)

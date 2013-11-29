@@ -144,13 +144,18 @@ function doSearch() {
 					searchAnykey : dom.byId("search_anykey").value
 				};
 
-				xhr("doSearch", {
+				xhr("secure/doSearch", {
 					handleAs : "json",
 					query : dataset,
 					method : "get",
 					preventCache : true
 				}).then(function(datas) {
-
+					console.log("debug...",datas);
+					if(datas["type"]=="fail"){
+						alert(datas["message"]);
+						return;
+					}
+					
 					data.items = datas;
 					var store = new dojo.data.ItemFileWriteStore({
 						data : data

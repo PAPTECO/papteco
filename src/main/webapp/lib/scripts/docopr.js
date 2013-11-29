@@ -77,7 +77,7 @@ require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
 		dojo.byId("ViewDoc").onclick = function() {
 
 			if (item.field_details) {
-				window.open("viewDocs?projectId=" + item.projectId
+				window.open("secure/viewDocs?projectId=" + item.projectId
 						+ "&filename=" + docTree.getLabel(item));
 			} else {
 				alert('Please select file.');

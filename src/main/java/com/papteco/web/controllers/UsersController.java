@@ -212,4 +212,20 @@ public class UsersController extends BaseController {
 		}
 
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "forbid")
+	@ResponseBody
+	public Map forbid() throws Exception {
+
+		return ImmutableMap.of("type", "fail","message","You have no permission !");
+
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "forbid")
+	@ResponseBody
+	public Map forbidUpload() throws Exception {
+
+		return ImmutableMap.of("type", "fail","message","You have no permission !");
+
+	}
 }

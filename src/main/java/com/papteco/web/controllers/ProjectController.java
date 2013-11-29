@@ -94,7 +94,7 @@ public class ProjectController extends BaseController {
 		return tmpProject;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "doSearch")
+	@RequestMapping(method = RequestMethod.GET, value = "secure/doSearch")
 	@ResponseBody
 	public List doSearch(@RequestParam String searchClinetno,
 			@RequestParam String searchAnykey) throws Exception {
