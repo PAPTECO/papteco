@@ -15,7 +15,6 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.papteco.web.beans.ActionEnum;
@@ -28,6 +27,7 @@ import com.papteco.web.beans.FormatItem;
 import com.papteco.web.beans.PreserveNosBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.beans.UsersBean;
+import com.papteco.web.controllers.BaseController;
 import com.papteco.web.dbs.FileLockDAO;
 import com.papteco.web.dbs.PreserveNosDAO;
 import com.papteco.web.dbs.ProjectCacheDAO;
@@ -175,7 +175,7 @@ public class WebUtils {
 	public static Map toProjectSummaries(String projectId) {
 		ProjectBean bean = ProjectCacheDAO.getProjectTree(projectId);
 
-		return of("projectIndentify", bean.getProjectCde(), "createdBy",
+		return BaseController.of("projectIndentify", bean.getProjectCde(), "createdBy",
 				bean.getCreatedBy(), "createdAt", bean.getCreatedAt()
 						.toString(), "description", bean.getLongDesc(),
 						"templates",getProjectTemplate());
@@ -455,15 +455,15 @@ public class WebUtils {
 		return result.toString();
 	}
 	
-	public static Map of(Object... keyval) {
-		Builder b = ImmutableMap.builder();
-
-		for (int i = 0; i < keyval.length; i = i + 2) {
-			b.put(keyval[i], keyval[i + 1]);
-		}
-		return b.build();
-
-	}
+//	public static Map of(Object... keyval) {
+//		Builder b = ImmutableMap.builder();
+//
+//		for (int i = 0; i < keyval.length; i = i + 2) {
+//			b.put(keyval[i], keyval[i + 1]);
+//		}
+//		return b.build();
+//
+//	}
 
 	public static Map toDocsSummaries(String projectId,
 			SystemConfiguration sysConfig) {
@@ -476,7 +476,7 @@ public class WebUtils {
 		for (FolderBean folder : project.getFolderTree()) {
 			List<FileBean> files = folder.getFileTree();
 			if (files == null || files.size() == 0) {
-				resultList.add(of("id", folder.getDocType(), "name",
+				resultList.add(BaseController.of("id", folder.getDocType(), "name",
 						folder.getFolderName(), "type", "continent",
 						"numformat", folder.getNuberformat(), 
 						"ftype","folder",
@@ -500,7 +500,7 @@ public class WebUtils {
 					}
 					
 					
-					subList.add(of("id", file.getFileName(), "name",
+					subList.add(BaseController.of("id", file.getFileName(), "name",
 							file.getFileName()+sb.toString(), "type", "continent",
 							"projectId", projectId, "field_details",
 							displayUploadFileFields(file, sysConfig),
@@ -511,7 +511,7 @@ public class WebUtils {
 				}
 				//TODO Cony
 				// please replace function on (contain X, N is locked)
-				resultList.add(of("id", folder.getDocType(), "name",
+				resultList.add(BaseController.of("id", folder.getDocType(), "name",
 						folder.getFolderName() + "(contain " + subList.size() + ", " + amountFileLocks+" locked)",
 						"type", "continent", 
 						"ftype","folder",

@@ -36,7 +36,8 @@ public class SecurityFilter extends HandlerInterceptorAdapter  {
         	String doc_type = request.getParameter("upload_doctype");
         	System.out.println("===>> uploading:"+doc_type);
         	if(!WebUtils.isDocTypeInEditFunctionList(doc_type,functionList)){
-        		request.getRequestDispatcher("/forbidUpload").forward(request, response);
+        		//post
+        		request.getRequestDispatcher("/forbid").forward(request, response);
             	return false;
         	}
         }else if(actionName.equals("viewDocs")){
@@ -46,7 +47,8 @@ public class SecurityFilter extends HandlerInterceptorAdapter  {
         	System.out.println("===>> viewing:"+filename);
         	
         	if(!WebUtils.isFilenameInViewFunctionList(filename,functionList)){
-        		request.getRequestDispatcher("/forbid").forward(request, response);
+        		//get
+        		request.getRequestDispatcher("/forbidPlan").forward(request, response);
             	return false;
         	}
         }else if(!WebUtils.isActionInFunctionList(actionName, functionList)){

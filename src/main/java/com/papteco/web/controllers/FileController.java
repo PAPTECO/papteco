@@ -105,7 +105,7 @@ public class FileController extends BaseController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "secure/submitUploadFile")
 	@ResponseBody
-	public String submitUploadFile(DocTypeFieldSet bean, Model model)
+	public Map submitUploadFile(DocTypeFieldSet bean, Model model)
 			throws Exception {
 
 		// TODO Cony
@@ -147,7 +147,7 @@ public class FileController extends BaseController {
 
 			if (fileService.isFileNameExisting(bean.getProjectId(),
 					fileBean.getFileName())) {
-				return null;
+				return this.failMessage("File already exits!");
 			} else {
 				if (!fromfile.exists()) {
 					fromfile.createNewFile();
@@ -176,7 +176,8 @@ public class FileController extends BaseController {
 				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean(
 						"conygychen").getPCIP(), openfile, serverFilePath,
 						fileStructPath)).start();
-				return EncoderDecoderUtil.encodeURIComponent(fileBean.getFileName());
+				return this.successMessage(of("filename",
+						EncoderDecoderUtil.encodeURIComponent(fileBean.getFileName())));
 			}
 
 		} else {
@@ -198,7 +199,7 @@ public class FileController extends BaseController {
 
 			if (fileService.isFileNameExisting(bean.getProjectId(),
 					fileBean.getFileName())) {
-				return null;
+				return this.failMessage("File already exits!");
 			} else {
 				if (!file.exists()) {
 					file.createNewFile();
@@ -206,7 +207,9 @@ public class FileController extends BaseController {
 				bean.getUploadfile().transferTo(file);
 				fileService.saveUploadFile(bean.getProjectId(),
 						bean.getUpload_doctype(), fileBean);
-				return EncoderDecoderUtil.encodeURIComponent(fileBean.getFileName());
+				return this.successMessage(of("filename",
+						EncoderDecoderUtil.encodeURIComponent(fileBean.getFileName())));
+				
 			}
 		}
 

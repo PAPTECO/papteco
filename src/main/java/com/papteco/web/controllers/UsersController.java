@@ -54,16 +54,15 @@ public class UsersController extends BaseController {
 		
 		try{
 			if(userService.getUser(bean.getCreateUserName())!=null){
-				return ImmutableMap.of("type", "fail","message","User already exists");
+				return this.failMessage("User already exists");
 			}else{
 				userService.saveUser(user);
-				return ImmutableMap.of("type", "success");
+				return this.successMessage();
 			}
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			return ImmutableMap.of("type", "fail","message",e.getMessage());
-			
+			return this.failMessage(e.getMessage());
 		}
 		
 	}
@@ -80,10 +79,10 @@ public class UsersController extends BaseController {
 			UsersBean user = preUserBean(bean);
 			
 			userService.saveUser(user);
-			return ImmutableMap.of("type", "success");
+			return this.successMessage();
 		}catch(Exception e){
 			e.printStackTrace();
-			return ImmutableMap.of("type", "fail","message",e.getMessage());
+			return this.failMessage(e.getMessage());
 			
 		}
 	}
@@ -117,9 +116,7 @@ public class UsersController extends BaseController {
 		sb.append("<tr><td>Assistant to the general manager</td><td>Create searches,Create project</td></tr>");
 		sb.append("</table>");
 
-		return ImmutableMap.of("type", "success", 
-				"data",sb.toString());
-
+		return this.successMessage(of("data",sb.toString()));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "getUsersRoleList")
@@ -130,25 +127,26 @@ public class UsersController extends BaseController {
 		System.out.println("getUsersRoleList() userid:"+userid.getCreateUserName());
 
 		if(StringUtils.isBlank(userid.getCreateUserName())){
-			return ImmutableMap.of("type", "success",
+			
+			return this.successMessage(of(
 					"username","",
 					"password","",
 					"email","",
-					"roles",this.populateUserRolsesCreate(rolessetting.keySet()));
+					"roles",this.populateUserRolsesCreate(rolessetting.keySet())));
 		}else{
 			UsersBean user = userService.getUser(userid.getCreateUserName());
 			if(user != null){
-				return ImmutableMap.of("type", "success",
+				return this.successMessage(of(
 						"username",user.getUserName(),
 						"password",user.getPassword(),
 						"email",user.getEmail(),
-						"roles",this.populateUserRolsesModify(rolessetting.keySet(), user));	
+						"roles",this.populateUserRolsesModify(rolessetting.keySet(), user)));	
 			}else{
-				return ImmutableMap.of("type", "success",
+				return this.successMessage(of(
 						"username","username1",
 						"password","",
 						"email","email1",
-						"roles",this.populateUserRolsesCreate(rolessetting.keySet()));	
+						"roles",this.populateUserRolsesCreate(rolessetting.keySet())));	
 			}
 		}
 	}
@@ -200,8 +198,7 @@ public class UsersController extends BaseController {
 		try {
 			UsersBean user = userService.validateUser(bean.getCreateUserName());
 			if(user == null)
-				return ImmutableMap.of("type", "fail", "message",
-						"User not exists");
+				return this.failMessage("User not exists");
 			else if(user.getPassword().equals(bean.getCreatePassword())){
 				Set<String> tempAllowFunctions = new HashSet<String>();
 				for(String role : user.getRoles()){
@@ -211,33 +208,51 @@ public class UsersController extends BaseController {
 				List<String> allowFunctions = new ArrayList<String>();
 				allowFunctions.addAll(tempAllowFunctions);
 				session.setAttribute("allowFunctions", allowFunctions);
-				return ImmutableMap.of("type", "success");
+				return this.successMessage();
 			}
 			else
-				return ImmutableMap.of("type", "fail", "message",
-						"Incorrect Password.");
+				return this.failMessage("Incorrect Password.");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ImmutableMap.of("type", "fail", "message", e.getMessage());
+			return this.failMessage(e.getMessage());
 
 		}
 
 	}
 	
+
+	// common
 	@RequestMapping(method = RequestMethod.GET, value = "forbid")
 	@ResponseBody
-	public Map forbid() throws Exception {
+	public Map forbid_get() throws Exception {
 
 		return ImmutableMap.of("type", "fail","message","You have no permission !");
 
 	}
 	
+	// common
 	@RequestMapping(method = RequestMethod.POST, value = "forbid")
 	@ResponseBody
-	public Map forbidUpload() throws Exception {
+	public Map forbid_post() throws Exception {
 
 		return ImmutableMap.of("type", "fail","message","You have no permission !");
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "forbidPlan")
+	@ResponseBody
+	public String forbid_plan_get() throws Exception {
+
+		return "You have no permission !";
+
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "forbidPlan")
+	@ResponseBody
+	public String forbid_plan_post() throws Exception {
+
+		return "You have no permission !";
 
 	}
 }

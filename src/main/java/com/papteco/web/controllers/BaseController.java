@@ -4,13 +4,20 @@
 package com.papteco.web.controllers;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 import com.papteco.web.utils.Roles2RightsConfiguration;
 import com.papteco.web.utils.SystemConfiguration;
 
@@ -50,4 +57,40 @@ public class BaseController {
 		result.append(num);
 		return result.toString();
 	}
+	
+	protected Map successMessage(Map messageMap){
+		
+		if(messageMap == null)
+			messageMap = new HashMap();
+		
+		messageMap.put("type", "success");
+		
+		return messageMap;
+	}
+	
+	protected Map successMessage(){
+		
+		return this.successMessage(null);
+	}
+	
+	protected Map failMessage(String message){
+		
+		Map messageMap = new HashMap();
+		
+		messageMap.put("type", "fail");
+		messageMap.put("message", message);
+		
+		return messageMap;
+	}
+	
+	public static Map of(Object... keyval) {
+		Map map = new HashMap();
+
+		for (int i = 0; i < keyval.length; i = i + 2) {
+			map.put(keyval[i], keyval[i + 1]);
+		}
+		return map;
+
+	}
+
 }

@@ -55,8 +55,7 @@ public class ProjectController extends BaseController {
 
 		try {
 			if(projectService.isPrjIdExisting(bean.getUniqueno())){
-				return ImmutableMap.of("type", "failure", "message",
-						"The Unique No. was existing : "+bean.getUniqueno());
+				return this.failMessage("The Unique No. was existing : "+bean.getUniqueno());
 			}else{
 				//TODO Cony,
 				//Test only
@@ -68,14 +67,13 @@ public class ProjectController extends BaseController {
 				projectService.createProject(tmpProject,
 						this.sysConfig.prepareFolderStructure());
 
-				return ImmutableMap.of("type", "success", "projectcode",
-						tmpProject.getProjectCde());
+				return this.successMessage(of("projectcode",
+						tmpProject.getProjectCde()));
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return ImmutableMap
-					.of("type", "failure", "message", e.getMessage());
+			return this.failMessage(e.getMessage());
 		}
 	}
 	
@@ -114,7 +112,7 @@ public class ProjectController extends BaseController {
 		System.out.println(searchSavName);
 		projectService.saveSearchShortcut("conygychen", searchSavName,
 				searchClinetno, searchAnykey);
-		return ImmutableMap.of("type", "success");
+		return this.successMessage();
 
 	}
 	
@@ -136,7 +134,7 @@ public class ProjectController extends BaseController {
 
 			}
 		}
-		return ImmutableMap.of("data", sb.toString());
+		return this.successMessage(of("data", sb.toString()));
 
 	}
 	
@@ -157,7 +155,7 @@ public class ProjectController extends BaseController {
 				
 			} 
 		}
-		return ImmutableMap.of("data", sb.toString());
+		return this.successMessage(of("data", sb.toString()));
 
 	}
 	
@@ -183,10 +181,10 @@ public class ProjectController extends BaseController {
 		if(StringUtils.isBlank(issuecases)){
 			presNoService.savePresNos(new PreserveNosBean(presNoFrom,presNoTo));
 		}else{
-			return ImmutableMap.of("type","fail","msg","Cannot save the preserve numbers. ProjectId ["+issuecases+"] was existing.");
+			return this.failMessage("Cannot save the preserve numbers. ProjectId ["+issuecases+"] was existing.");
 		}
 		
-		return ImmutableMap.of("type","success");
+		return this.successMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "savePrjshortcut")
@@ -195,7 +193,7 @@ public class ProjectController extends BaseController {
 			@RequestParam String prjSavName) throws Exception {
 
 		projectService.saveProjectShortcut("conygychen", prjSavName, prjId);
-		return ImmutableMap.of("type", "success");
+		return this.successMessage();
 
 	}
 	
@@ -204,7 +202,7 @@ public class ProjectController extends BaseController {
 	public Map deleteprjshortcut(@RequestParam String delId) throws Exception {
 		System.out.println("delId:"+delId);
 		projectService.deletePrjShortcut("conygychen", delId);
-		return ImmutableMap.of("type", "success");
+		return this.successMessage();
 
 	}
 	
@@ -213,7 +211,7 @@ public class ProjectController extends BaseController {
 	public Map deleteSearchshortcut(@RequestParam String delId) throws Exception {
 		System.out.println("delId:"+delId);
 		projectService.deleteSearchShortcut("conygychen", delId);
-		return ImmutableMap.of("type", "success");
+		return this.successMessage();
 
 	}
 

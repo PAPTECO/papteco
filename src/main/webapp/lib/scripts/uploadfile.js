@@ -312,17 +312,20 @@ function validateUploadForm() {
 						handleAs : "html"
 					})
 							.then(
-									function(xmldoc) {
+									function(xmldoc) { 
 										console.log(xmldoc);
 										data = xmldoc.body.textContent;
 										console.log(data);
-										if (data) {
-											alert(decodeURIComponent(data) + " has been uploaded.");
+										r= json.parse(data);
+										console.log(r);
+										
+										if (r.type=="success") {
+											alert(decodeURIComponent(r.filename)+" has been uploaded.");
 											dom.byId("uploadFileForm").reset();
 											uploadFileFormDialog.hide();
 											refreshProjectBroad(getProjectId());
 										} else {
-											alert("File already exists. Please change file name.");
+											alert(r.message);
 										}
 									}, function(err) {
 										alert("Error occurs " + err);

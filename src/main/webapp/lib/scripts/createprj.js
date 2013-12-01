@@ -254,7 +254,7 @@ function submitPresrvNos() {
 											+ " has been preserved.");
 									presrvDialog.hide();
 								}else{
-									alert(datas.msg);
+									alert(datas.message);
 								}
 								
 							}, function(err) {
