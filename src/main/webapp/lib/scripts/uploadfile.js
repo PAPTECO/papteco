@@ -228,6 +228,55 @@ function setVal2(value,previouslyFileName) {
 					placeAtDate("paymentDueDate");
 					placeAtDate("orderedDate");
 					placeAtDate("completedDate");
+					
+					//p-form
+					console.log("Doctype:",value);
+					if(value == "P"){
+						requestPformRef();	
+					}
+					
+
+				}, function(err) {
+					// Handle the error condition
+					console.log(err);
+				}, function(evt) {
+					// Handle a progress event from the request if the
+					// browser supports XHR2
+					console.log(evt);
+				});
+			});
+}
+
+function requestPformRef(date){
+	
+	
+	
+	require([ "dojo/dom", "dijit/registry", "dojo/request/xhr", "dojo/json" ],
+			function(dom, registry, xhr, json) {
+
+		console.log("projectid,",getProjectId());
+		console.log("date,",dom.byId("dateWith4digs").value);
+		
+				dataset = {
+					prjId : getProjectId(),
+					date : dom.byId("dateWith4digs").value
+				};
+
+				xhr("getPformRef", { 
+					handleAs : "json",
+					query : dataset,
+					method : "get",
+					preventCache : true,
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).then(function(datas) {
+					
+					console.log("datas", datas);
+					
+					if(datas.type="success"){
+						dom.byId("ref").value = datas['no'];
+					}
 
 				}, function(err) {
 					// Handle the error condition

@@ -102,7 +102,23 @@ public class FileController extends BaseController {
 		}
 		return trgFileName.toString();
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "getPformRef")
+	@ResponseBody
+	public Map getPformRef(@RequestParam String prjId,
+			@RequestParam String date) throws Exception {
+		
+		System.out.println("getDocs:" + prjId + " date:"+date);
+		
+		//Cony TODO
+		// if client no startwith "1" search the max add 1
+		// else return this.failMessage("It is not admin document type"); 
+		
+		return this.successMessage(of("no","009"));
+		
 
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "secure/submitUploadFile")
 	@ResponseBody
 	public Map submitUploadFile(DocTypeFieldSet bean, Model model)
