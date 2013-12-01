@@ -40,6 +40,16 @@ public class SecurityFilter extends HandlerInterceptorAdapter  {
         		request.getRequestDispatcher("/forbid").forward(request, response);
             	return false;
         	}
+        }else if(actionName.equals("editFile")){
+        	// find out which type it processing
+        	String doc_type = request.getParameter("docType");
+        	System.out.println("===>> uploading:"+doc_type);
+        	if(!WebUtils.isDocTypeInEditFunctionList(doc_type,functionList)){
+        		//get
+        		request.getRequestDispatcher("/forbid").forward(request, response);
+            	return false;
+        	}
+        	
         }else if(actionName.equals("viewDocs")){
         	
         	// find out which type it processing

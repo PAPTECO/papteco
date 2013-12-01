@@ -293,7 +293,7 @@ public class FileController extends BaseController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "editFile")
+	@RequestMapping(method = RequestMethod.GET, value = "secure/editFile")
 	@ResponseBody
 	public Map editFile(@RequestParam String projectId,
 			@RequestParam String docType, @RequestParam String filename,
@@ -342,7 +342,7 @@ public class FileController extends BaseController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "releaseFile")
+	@RequestMapping(method = RequestMethod.GET, value = "secure/releaseFile")
 	@ResponseBody
 	public Map releaseFile(@RequestParam String projectId,
 			@RequestParam String docType, @RequestParam String filename,
@@ -385,13 +385,11 @@ public class FileController extends BaseController {
 				String[] task = TaskUtils.getTaskStatus(taskid);
 				
 				if(task != null && task[0] != "START" ){
-					return ImmutableMap.of("FLAG", task[0],"Message", task[1]);
+					return this.successMessage(of("message", task[1]));
 				}
 			}
-			
-			return ImmutableMap.of("FLAG", "FAIL","Message", "Operation timeout, please retry");
+			return this.failMessage("Operation timeout, please retry");
 		}
-		
-		return ImmutableMap.of("FLAG", "FAIL","Message", "File is not locked");
+		return this.failMessage("File is not locked");
 	}
 }

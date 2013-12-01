@@ -13,7 +13,7 @@ function editFile(projectId,foldertype, editfilename,fileid) {
 						fileid : fileid
 				};
 
-				xhr("editFile", {
+				xhr("secure/editFile", {
 					handleAs : "json",
 					query : dataset,
 					method : "get",
@@ -23,8 +23,14 @@ function editFile(projectId,foldertype, editfilename,fileid) {
 					}
 				}).then(function(datas) {
 
-					console.log("datas", datas);
-
+					console.log("debug...",datas);
+					if(datas["type"]=="fail"){
+						alert(datas["message"]);
+						return;
+					}
+					console.log("edited",datas);
+					refreshProjectBroad(getProjectId());
+					
 				}, function(err) {
 					// Handle the error condition
 					console.log(err);
@@ -51,7 +57,7 @@ function releaseFile(projectId,foldertype, editfilename,fileid) {
 						fileid : fileid
 				};
 
-				xhr("releaseFile", {
+				xhr("secure/releaseFile", { 
 					handleAs : "json",
 					query : dataset,
 					method : "get",
@@ -63,11 +69,12 @@ function releaseFile(projectId,foldertype, editfilename,fileid) {
 				}).then(function(datas) {
 
 					console.log("datas", datas);
-					dojo.byId("waitingDialogtext").innerHTML=datas["Message"];
-					if(datas["FLAG"] == "SUCC"){
+					dojo.byId("waitingDialogtext").innerHTML=datas["message"];
+					if(datas["type"] == "success"){
 						waitingDialog.hide();
+						refreshProjectBroad(getProjectId());
 					}
-					refreshProjectBroad(getProjectId());
+					
 					
 				}, function(err) {
 					// Handle the error condition
