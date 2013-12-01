@@ -591,14 +591,11 @@ public class WebUtils {
 	
 	public static boolean isActionInFunctionList(String action,List functionList){
 		
-		String actionrights_str = actionsetting.getProperty(action);
-		if(StringUtils.isNotBlank(actionrights_str)){
-			String[] actionrights = actionrights_str.split(",");
-			for(String actionright : actionrights){
-				if(functionList.contains(actionright))
-					return true;
-			}
+		String right = actionsetting.getProperty(action,"");
+		if(functionList.contains(right)){
+			return true;
 		}
+		
 		return false;
 	}
 

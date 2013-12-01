@@ -1,5 +1,6 @@
 package com.papteco.web.filters;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +20,10 @@ public class SecurityFilter extends HandlerInterceptorAdapter  {
         System.out.println("==>>Begin to Filter session====");
         HttpSession session = request.getSession();
         List functionList = (List) session.getAttribute("allowFunctions");
+        functionList = (functionList == null) ? new ArrayList():functionList;
+        
         System.out.println("===??Current functionList=="+functionList);
         
-//        if(roles == null){
-//        	request.getRequestDispatcher("/forbid").forward(request, response);
-//        	return false;
-//        }
         String[] curPath=request.getRequestURL().toString().split("/");
         String actionName = curPath[curPath.length-1];
         
@@ -50,11 +49,7 @@ public class SecurityFilter extends HandlerInterceptorAdapter  {
         		request.getRequestDispatcher("/forbid").forward(request, response);
             	return false;
         	}
-        }
-        
-        
-        // Cony, TODO WebUtils.isActionInFunctionList
-        if(!WebUtils.isActionInFunctionList(actionName, functionList)){
+        }else if(!WebUtils.isActionInFunctionList(actionName, functionList)){
         	request.getRequestDispatcher("/forbid").forward(request, response);
         	return false;
         }
