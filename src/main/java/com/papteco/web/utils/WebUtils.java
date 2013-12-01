@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -34,6 +35,7 @@ import com.papteco.web.dbs.UserDAO;
 
 public class WebUtils {
 
+	private static Properties actionsetting = Roles2RightsConfiguration.getActionSetting();
 	private static Map<String, String> drawingType = new LinkedHashMap<String, String>();
 	private static String drawingtypeSelect = "";
 	static {
@@ -588,19 +590,47 @@ public class WebUtils {
 	}
 	
 	public static boolean isActionInFunctionList(String action,List functionList){
-		// Cony TODO
+		
+		String actionrights_str = actionsetting.getProperty(action);
+		if(StringUtils.isNotBlank(actionrights_str)){
+			String[] actionrights = actionrights_str.split(",");
+			for(String actionright : actionrights){
+				if(functionList.contains(actionright))
+					return true;
+			}
+		}
 		return false;
 	}
 
 	public static boolean isDocTypeInEditFunctionList(String doc_type,
-			List functionList) {
-		// Cony TODO
+			List<String> functionList) {
+		
+		for(String right : functionList){
+			if(right.startsWith("D") && right.endsWith("E")){
+				String tmp = right.substring(1, right.length()-1);
+				if(tmp.contains(doc_type)){
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 
 	public static boolean isFilenameInViewFunctionList(String filename,
-			List functionList) {
-		// Cony TODO
+			List<String> functionList) {
+		
+		if(StringUtils.isNotBlank(filename)){
+			String docType = filename.substring(0, 1);
+			for(String right : functionList){
+				if(right.startsWith("D") && right.endsWith("V")){
+					String tmp = right.substring(1, right.length()-1);
+					if(tmp.contains(docType)){
+						return true;
+					}
+				}
+			}
+		}
+		
 		return false;
 	}
 }

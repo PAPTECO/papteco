@@ -1,9 +1,13 @@
 package com.papteco.web.controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,22 +193,30 @@ public class UsersController extends BaseController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "userlogin")
 	@ResponseBody
-	public Map userlogin(@RequestBody UsersFormBean bean) throws Exception {
+	public Map userlogin(@RequestBody UsersFormBean bean, HttpSession session) throws Exception {
 
 		System.out.println("createUserRequest UsersFormBean:" + bean);
 
 		try {
-			String status = userService.validateUser(bean.getCreateUserName(), bean.getCreatePassword());
-			if (status.equals("SUCC")) {
-				return ImmutableMap.of("type", "success");
-			} else if(status.equals("NOUSER")){
+			UsersBean user = userService.validateUser(bean.getCreateUserName());
+			if(user == null)
 				return ImmutableMap.of("type", "fail", "message",
 						"User not exists");
-			} else {
+			else if(user.getPassword().equals(bean.getCreatePassword())){
+				Set<String> tempAllowFunctions = new HashSet<String>();
+				for(String role : user.getRoles()){
+					List<String> rights = Arrays.asList(rolessetting.get(role).toString().split(","));
+					tempAllowFunctions.addAll(rights);
+				}
+				List<String> allowFunctions = new ArrayList<String>();
+				allowFunctions.addAll(tempAllowFunctions);
+				session.setAttribute("allowFunctions", allowFunctions);
+				return ImmutableMap.of("type", "success");
+			}
+			else
 				return ImmutableMap.of("type", "fail", "message",
 						"Incorrect Password.");
-			}
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ImmutableMap.of("type", "fail", "message", e.getMessage());

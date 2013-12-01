@@ -3,7 +3,6 @@ package com.papteco.web.services;
 import org.springframework.stereotype.Service;
 
 import com.papteco.web.beans.UsersBean;
-import com.papteco.web.beans.UsersFormBean;
 import com.papteco.web.dbs.UserDAO;
 import com.papteco.web.utils.FSUtils;
 
@@ -23,14 +22,9 @@ public class UserServiceImpl extends BaseService {
 		return UserDAO.getUser(username);
 	}
 	
-	public String validateUser(String username, String password){
+	public UsersBean validateUser(String username){
 		UsersBean user = UserDAO.getUser(username);
-		if(user == null)
-			return "NOUSER";
-		else if(user.getPassword().equals(password))
-			return "SUCC";
-		else
-			return "PWDINC";
+		return user;
 	}
 	
 	/* mandatory constructor method */
