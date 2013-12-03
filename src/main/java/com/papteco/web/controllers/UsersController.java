@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import cc.monggo.domain.LoginForm;
 
 import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.UsersBean;
@@ -189,6 +194,28 @@ public class UsersController extends BaseController {
 		return sb.toString();
 	}
 
+
+	@RequestMapping(method = RequestMethod.GET, value = "userlogout")
+	@ResponseBody
+	public Map userlogout(HttpSession session) throws Exception {
+
+		System.out.println("userlogout:" );
+
+		try {
+			if(true){
+				return this.successMessage();
+			}
+			else
+				return this.failMessage("Incorrect Password.");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.failMessage(e.getMessage());
+
+		}
+
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "userlogin")
 	@ResponseBody
 	public Map userlogin(@RequestBody UsersFormBean bean, HttpSession session) throws Exception {
