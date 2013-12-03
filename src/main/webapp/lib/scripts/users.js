@@ -138,13 +138,19 @@ function doUserSearch() {
 					searchUserName : dom.byId("search_user_name").value
 				};
 
-				xhr("doSearchUser", {
+				xhr("secure/doSearchUser", {
 					handleAs : "json",
 					query : dataset,
 					method : "get",
 					preventCache : true
 				}).then(function(datas) {
 
+					console.log("debug...",datas);
+					if(datas["type"]=="fail"){
+						alert(datas["message"]);
+						return;
+					}
+					
 					data.items = datas;
 					var store = new dojo.data.ItemFileWriteStore({
 						data : data
@@ -266,6 +272,7 @@ function loadingSelectionBox(tagId, userid) {
 				dom.byId("createPassword").value = "";
 				dom.byId("createEmail").value = "";
 				dom.byId("createUserName").readOnly = false;
+				dom.byId("deletetag").innerHTML = "";
 
 				dataset = {
 					createUserName : userid
@@ -273,7 +280,7 @@ function loadingSelectionBox(tagId, userid) {
 
 				console.log("request user roles", dataset);
 
-				xhr("getUsersRoleList", {
+				xhr("secure/getUsersRoleList", {
 					handleAs : "json",
 					data : JSON.stringify(dataset),
 					method : "post",
@@ -293,6 +300,7 @@ function loadingSelectionBox(tagId, userid) {
 							dom.byId("createPassword").value = datas.password;
 							dom.byId("createUserName").readOnly = true;
 							dom.byId("createEmail").value = datas.email;
+							dom.byId("deletetag").innerHTML = "<a onClick='deleteUser("+datas.username+");' class='insideFont bRed notext_wrap' href='#'>X</a>";
 						}
 						createUserDialog.show();
 					} else if (datas.type == "fail") {
@@ -315,6 +323,55 @@ function loadingSelectionBox(tagId, userid) {
 
 			});
 
+}
+
+
+function deleteUser(username) {
+
+	console.log("deleteUser");
+
+	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser",
+			"dojo/query" ], function(dom, xhr, JSON, parser, query) {
+		
+		dataset = {
+				createUserName : username
+		};
+		console.log("requestdataset", dataset);
+		
+		xhr("secure/deleteUserRequest", {
+			handleAs : "json",
+			data : JSON.stringify(dataset),
+			method : "post",
+			preventCache : true,
+			headers : {
+				'Content-Type' : 'application/json'
+			}
+		}).then(function(datas) {
+
+			console.log("datas", datas);
+
+			if (datas.type == "success") {
+				alert("User has been deleted.");
+				hideUserDialog();
+
+				dom.byId("createUserName").value = "";
+				dom.byId("createPassword").value = "";
+				dom.byId("createEmail").value = "";
+			} else {
+				alert(datas.message);
+			}
+
+		}, function(err) {
+			// Handle the error condition
+			console.log(err);
+			alert("Project created fail ." + err);
+		}, function(evt) {
+			// Handle a progress event from the request if the
+			// browser supports XHR2
+			console.log(evt);
+			alert("Project created fail ." + evt);
+		});
+	});
 }
 
 function submitEditUser() {
@@ -361,7 +418,7 @@ function submitEditUser() {
 		};
 		console.log("requestdataset", dataset);
 		
-		actionname = (dom.byId("createUserName").readOnly)?"updateUserRequest":"createUserRequest";
+		actionname = (dom.byId("createUserName").readOnly)?"secure/updateUserRequest":"secure/createUserRequest";
 		
 		xhr(actionname, {
 			handleAs : "json",

@@ -31,7 +31,7 @@ public class UsersController extends BaseController {
 	@Autowired
 	private UserServiceImpl userService;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "doSearchUser")
+	@RequestMapping(method = RequestMethod.GET, value = "secure/doSearchUser")
 	@ResponseBody
 	public List doSearchUser(@RequestParam String searchRoles,
 			@RequestParam String searchUserName) throws Exception {
@@ -46,7 +46,7 @@ public class UsersController extends BaseController {
 		return WebUtils.toRolesJson(rolessetting.keySet());
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "createUserRequest")
+	@RequestMapping(method = RequestMethod.POST, value = "secure/createUserRequest")
 	@ResponseBody
 	public Map createUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
@@ -69,7 +69,7 @@ public class UsersController extends BaseController {
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "updateUserRequest")
+	@RequestMapping(method = RequestMethod.POST, value = "secure/updateUserRequest")
 	@ResponseBody
 	public Map updateUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
@@ -89,6 +89,30 @@ public class UsersController extends BaseController {
 				}
 			}
 			userService.saveUser(user);
+			return this.successMessage();
+		}catch(Exception e){
+			e.printStackTrace();
+			return this.failMessage(e.getMessage());
+			
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "secure/deleteUserRequest")
+	@ResponseBody
+	public Map deleteUserRequest(@RequestBody UsersFormBean bean)
+			throws Exception {
+		
+		System.out.println("deleteUserRequest UsersFormBean:"+bean);
+		
+		
+		try{
+			UsersBean dbuser = userService.getUser(bean.getCreateUserName());
+			
+			if(dbuser==null){
+				throw new Exception("User not exits.");
+			}
+
+			userService.deleteUser(dbuser);
 			return this.successMessage();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -142,7 +166,7 @@ public class UsersController extends BaseController {
 		return this.successMessage(of("data",sb.toString()));
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "getUsersRoleList")
+	@RequestMapping(method = RequestMethod.POST, value = "secure/getUsersRoleList")
 	@ResponseBody
 	public Map getUsersRoleList(@RequestBody UsersFormBean userid)
 			throws Exception {

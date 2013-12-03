@@ -18,6 +18,10 @@ public class UserServiceImpl extends BaseService {
 		UserDAO.saveUser(user);
 	}
 	
+	public void deleteUser(UsersBean user){
+		UserDAO.deleteUser(user);
+	}
+	
 	public UsersBean getUser(String username){
 		return UserDAO.getUser(username);
 	}

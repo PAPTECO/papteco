@@ -60,6 +60,11 @@ public class UserDAO {
 		usersIndex.put(user);
 	}
 	
+	// this is retry function
+	public static void deleteUser(UsersBean user) {
+		usersIndex.delete(user.getUserName());
+	}
+	
 	public static UsersBean getUser(String username) {
 		return usersIndex.get(username);
 	}
