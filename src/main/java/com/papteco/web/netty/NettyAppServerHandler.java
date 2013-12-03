@@ -22,15 +22,25 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.papteco.web.beans.ClientRequestBean;
+import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.IPItem;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.beans.QueueItem;
+import com.papteco.web.beans.UsersBean;
 import com.papteco.web.dbs.ProjectCacheDAO;
+import com.papteco.web.dbs.UserDAO;
 import com.papteco.web.dbs.UserIPDAO;
+import com.papteco.web.utils.Roles2RightsConfiguration;
 
 /**
  * Handles both client-side and server-side handler depending on which
@@ -40,6 +50,7 @@ public class NettyAppServerHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger logger = Logger.getLogger(
             NettyAppServerHandler.class.getName());
+    private Properties rolessetting = Roles2RightsConfiguration.getRolesSetting();
 
     private final String rootpath;
     public NettyAppServerHandler(String rootpath){
@@ -59,8 +70,46 @@ public class NettyAppServerHandler extends ChannelInboundHandlerAdapter {
     		ctx.write(request);
     		break;
     	case 'P':
+    		String reqUser = request.getReqUser();
+    		UsersBean user = UserDAO.getUser(reqUser);
+    		if(user == null){
+    			request.setReqUser(null);
+    			ctx.write(request);
+    			break;
+    		}
+    		
+    		Set<String> tempAllowFunctions = new HashSet<String>();
+			for(String role : user.getRoles()){
+				List<String> rights = Arrays.asList(rolessetting.get(role).toString().split(","));
+				tempAllowFunctions.addAll(rights);
+			}
+			List<String> allowDocTypes = new ArrayList<String>();
+			for(String allowDocType : tempAllowFunctions){
+				if(allowDocType.startsWith("D") && allowDocType.endsWith("V")){
+					String tmp = allowDocType.substring(1, allowDocType.length()-1);
+					char[] tmpchar = tmp.toCharArray();
+					for(char c : tmpchar){
+						allowDocTypes.add(String.valueOf(c));
+					}
+				}
+			}
+			
     		String prjCde = request.getPrjCde();
     		ProjectBean project = ProjectCacheDAO.getProjectBeanByFilterProjectCde(prjCde);
+    		if(project == null){
+    			ctx.write(request);
+    			break;
+    		}
+    		
+    		List<FolderBean> folders = project.getFolderTree();
+    		List<FolderBean> resultFolders = new ArrayList<FolderBean>();
+    		for(FolderBean folder : folders){
+    			if(allowDocTypes.contains(folder.getDocType())){
+    				resultFolders.add(folder);
+    			}
+    		}
+    		project.setFolderTree(resultFolders);
+    		
     		request.setPrjObj(project);
     		ctx.write(request);
     		break;

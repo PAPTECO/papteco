@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
@@ -121,10 +122,10 @@ public class FileController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "secure/submitUploadFile")
 	@ResponseBody
-	public Map submitUploadFile(DocTypeFieldSet bean, Model model)
+	public Map submitUploadFile(DocTypeFieldSet bean, Model model, HttpSession session)
 			throws Exception {
 
-		// TODO Cony
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 
 		if (StringUtils.isNotBlank(bean.getUploadedCopyForm())
 				&& !"undefined".equals(bean.getUploadedCopyForm())) {
@@ -157,8 +158,8 @@ public class FileController extends BaseController {
 			fileBean.setFileName(fileName);
 			fileBean.setInitUploadAt(new Date());
 			fileBean.setLastModifiedAt(new Date());
-			fileBean.setLastModifiedBy("admin");
-			fileBean.setInitUploadBy("cony");
+			fileBean.setLastModifiedBy(username);
+			fileBean.setInitUploadBy(username);
 			BeanUtils.copyProperties(fileBean, bean);
 
 			if (fileService.isFileNameExisting(bean.getProjectId(),
@@ -188,9 +189,9 @@ public class FileController extends BaseController {
 				openfile.setActionType("OPENFILE");
 				openfile.setParam(fileStructPath);
 				fileService.saveFileLock(new FileLockBean(fileBean.getFileId(),
-						"conygychen", new Date()));
+						username, new Date()));
 				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean(
-						"conygychen").getPCIP(), openfile, serverFilePath,
+						username).getPCIP(), openfile, serverFilePath,
 						fileStructPath)).start();
 				return this.successMessage(of("filename",
 						EncoderDecoderUtil.encodeURIComponent(fileBean.getFileName())));
@@ -209,8 +210,8 @@ public class FileController extends BaseController {
 			fileBean.setFileName(fileName);
 			fileBean.setInitUploadAt(new Date());
 			fileBean.setLastModifiedAt(new Date());
-			fileBean.setLastModifiedBy("admin");
-			fileBean.setInitUploadBy("cony");
+			fileBean.setLastModifiedBy(username);
+			fileBean.setInitUploadBy(username);
 			BeanUtils.copyProperties(fileBean, bean);
 
 			if (fileService.isFileNameExisting(bean.getProjectId(),
@@ -313,8 +314,10 @@ public class FileController extends BaseController {
 	@ResponseBody
 	public Map editFile(@RequestParam String projectId,
 			@RequestParam String docType, @RequestParam String filename,
-			@RequestParam String fileid) throws Exception {
+			@RequestParam String fileid, HttpSession session) throws Exception {
 		filename = EncoderDecoderUtil.decodeURIComponent(filename);
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+
 		System.out.println("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
@@ -338,11 +341,11 @@ public class FileController extends BaseController {
 			openfile.setActionType("OPENFILE");
 			openfile.setParam(fileStructPath);
 			if (!fileService.isFileLocked(fileid)) {
-				fileService.saveFileLock(new FileLockBean(fileid, "conygychen",
+				fileService.saveFileLock(new FileLockBean(fileid, username,
 						new Date()));
 			}
 			new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean(
-					"conygychen").getPCIP(), openfile, serverFilePath,
+					username).getPCIP(), openfile, serverFilePath,
 					fileStructPath)).start();
 		}
 
@@ -362,13 +365,12 @@ public class FileController extends BaseController {
 	@ResponseBody
 	public Map releaseFile(@RequestParam String projectId,
 			@RequestParam String docType, @RequestParam String filename,
-			@RequestParam String fileid) throws Exception {
+			@RequestParam String fileid, HttpSession session) throws Exception {
 		filename = EncoderDecoderUtil.decodeURIComponent(filename);
 		System.out.println("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
-		// TODO Cony
-		// order client upload file and release this file
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 
 		if (fileService.isFileLocked(fileid)) {
 			String taskid = TaskUtils.genTaskId();
@@ -387,7 +389,7 @@ public class FileController extends BaseController {
 								.getFolderNameByFolderCde(docType), filename));
 				// fileService.releaseFile(fileid);
 				new Thread(new ReleaseFileClientBuilder(UserIPDAO
-						.getUserIPBean("conygychen").getPCIP(), serverFilePath,
+						.getUserIPBean(username).getPCIP(), serverFilePath,
 						fileStructPath, fileid, taskid)).start();
 
 			}

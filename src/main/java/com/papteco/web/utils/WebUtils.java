@@ -275,7 +275,7 @@ public class WebUtils {
 	
 	public static Map toNumberingFormat(String prjId, String docType,
 			FormatItem item, List<FieldDef> seqAndDesc, String clientno,
-			String ref,String preFileName) {
+			String ref,String preFileName, String username) {
 		ProjectBean bean = ProjectCacheDAO.getProjectTree(prjId);
 		StringBuilder sb = new StringBuilder();
 
@@ -314,7 +314,7 @@ public class WebUtils {
 			if (col.isAdditional()
 					&& getValueByFieldName(col.getFieldName(), item) != ActionEnum.notApplicable) {
 				sb.append("<tr>");
-				sb.append(additionalfieldtd(col));
+				sb.append(additionalfieldtd(col, username));
 				sb.append("</tr>");
 			}
 		}
@@ -337,7 +337,11 @@ public class WebUtils {
 	}
 
 	private static Object additionalfieldtd(FieldDef col) {
-		return headertd(col, "td") + detailtd(null,col, null, null, null,null,null);
+		return additionalfieldtd(col, "");
+	}
+	
+	private static Object additionalfieldtd(FieldDef col, String username) {
+		return headertd(col, "td") + detailtd(null,col, null, null, null,null,null, username);
 	}
 
 	public static String headertd(FieldDef col, String tag) {
@@ -363,6 +367,12 @@ public class WebUtils {
 
 	public static String detailtd(String prjId, FieldDef col, String docType,
 			String clientno, String ref, String overwriteValue,String copyfromFileName) {
+		return detailtd(prjId, col, docType,
+				clientno, ref, overwriteValue,copyfromFileName, "");
+	}
+	
+	public static String detailtd(String prjId, FieldDef col, String docType,
+			String clientno, String ref, String overwriteValue,String copyfromFileName, String username) {
 
 		String result = "";
 		String defaultValue = "";
@@ -388,6 +398,8 @@ public class WebUtils {
 				defaultValue = "00";
 			} else if ("l3".equals(col.getFieldName())) {
 				defaultValue = "000";
+			} else if ("uploadedBy".equals(col.getFieldName())) {
+				defaultValue = username;
 			}
 			
 			if(StringUtils.isNotBlank(overwriteValue)){

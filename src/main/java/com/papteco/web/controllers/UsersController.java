@@ -208,6 +208,7 @@ public class UsersController extends BaseController {
 				List<String> allowFunctions = new ArrayList<String>();
 				allowFunctions.addAll(tempAllowFunctions);
 				session.setAttribute("allowFunctions", allowFunctions);
+				session.setAttribute("LOGIN_USER", user.getUserName());
 				return this.successMessage();
 			}
 			else

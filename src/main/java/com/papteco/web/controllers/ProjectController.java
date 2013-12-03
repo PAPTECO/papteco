@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -105,12 +107,14 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Map saveSearch(@RequestParam String searchClinetno,
 			@RequestParam String searchAnykey,
-			@RequestParam String searchSavName) throws Exception {
+			@RequestParam String searchSavName,
+			HttpSession session) throws Exception {
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 
 		System.out.println(searchClinetno);
 		System.out.println(searchAnykey);
 		System.out.println(searchSavName);
-		projectService.saveSearchShortcut("conygychen", searchSavName,
+		projectService.saveSearchShortcut(username, searchSavName,
 				searchClinetno, searchAnykey);
 		return this.successMessage();
 
@@ -118,12 +122,13 @@ public class ProjectController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "getSearchShortcut")
 	@ResponseBody
-	public Map getSearchShortcut() throws Exception {
-		
+	public Map getSearchShortcut(HttpSession session) throws Exception {
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+
 		System.out.println("getSearchShortcut");
 		StringBuilder sb = new StringBuilder();
 		
-		SearchShortcutBean schShortcut = projectService.getSearchShortcut("conygychen");
+		SearchShortcutBean schShortcut = projectService.getSearchShortcut(username);
 		if(schShortcut != null){
 			Iterator iter = schShortcut.getSearchShortcuts().entrySet().iterator();
 			while(iter.hasNext()){
@@ -140,11 +145,12 @@ public class ProjectController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "getPrjShortcut")
 	@ResponseBody
-	public Map getPrjShortcut() throws Exception {
-		
+	public Map getPrjShortcut(HttpSession session) throws Exception {
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+
 		System.out.println("getPrjShortcut");
 		StringBuilder sb = new StringBuilder();
-		ProjectShortcutBean prjShortcut = projectService.getPrjShortcut("conygychen");
+		ProjectShortcutBean prjShortcut = projectService.getPrjShortcut(username);
 		if(prjShortcut != null){
 			Iterator iter = prjShortcut.getPrjShortcuts().entrySet().iterator();
 			while(iter.hasNext()){
@@ -177,6 +183,9 @@ public class ProjectController extends BaseController {
 		System.out.println("submitPresrvNos - "+datafrom + " to " + datato);
 		int presNoFrom = Integer.valueOf(datafrom);
 		int presNoTo = Integer.valueOf(datato);
+		if(presNoFrom > presNoTo){
+			return this.failMessage("PresNoFrom should be little than PresNoTo.");
+		}
 		String issuecases = presNoService.isPresNoValidationPassed(presNoFrom, presNoTo);
 		if(StringUtils.isBlank(issuecases)){
 			presNoService.savePresNos(new PreserveNosBean(presNoFrom,presNoTo));
@@ -190,27 +199,32 @@ public class ProjectController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "savePrjshortcut")
 	@ResponseBody
 	public Map saveSearch(@RequestParam String prjId,
-			@RequestParam String prjSavName) throws Exception {
+			@RequestParam String prjSavName, HttpSession session) throws Exception {
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 
-		projectService.saveProjectShortcut("conygychen", prjSavName, prjId);
+		projectService.saveProjectShortcut(username, prjSavName, prjId);
 		return this.successMessage();
 
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "deleteprjshortcut")
 	@ResponseBody
-	public Map deleteprjshortcut(@RequestParam String delId) throws Exception {
+	public Map deleteprjshortcut(@RequestParam String delId, HttpSession session) throws Exception {
 		System.out.println("delId:"+delId);
-		projectService.deletePrjShortcut("conygychen", delId);
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+
+		projectService.deletePrjShortcut(username, delId);
 		return this.successMessage();
 
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "deleteSearchshortcut")
 	@ResponseBody
-	public Map deleteSearchshortcut(@RequestParam String delId) throws Exception {
+	public Map deleteSearchshortcut(@RequestParam String delId, HttpSession session) throws Exception {
 		System.out.println("delId:"+delId);
-		projectService.deleteSearchShortcut("conygychen", delId);
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+
+		projectService.deleteSearchShortcut(username, delId);
 		return this.successMessage();
 
 	}
@@ -226,7 +240,10 @@ public class ProjectController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getNumberingFormat")
 	@ResponseBody
 	public Map getNumberingFormat(@RequestParam String docType,
-			@RequestParam String prjId,@RequestParam String revFileName) throws Exception {
+			@RequestParam String prjId,@RequestParam String revFileName,
+			HttpSession session) throws Exception {
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+
 		System.out.println("doctype:"+docType+" prjId:"+prjId + " revFileName:"+URLDecoder.decode(revFileName));
 		String shortCode = docType + "("
 				+ this.sysConfig.getFolderNameByFolderCde(docType) + ")";
@@ -235,7 +252,7 @@ public class ProjectController extends BaseController {
 		String clientno = "(?)"; // please change it by prjId
 		String ref = "(?)"; // please change it by prjId
 		return WebUtils.toNumberingFormat(prjId, shortCode, formating,
-				fieldSetting, clientno, ref,EncoderDecoderUtil.decodeURIComponent(revFileName));
+				fieldSetting, clientno, ref,EncoderDecoderUtil.decodeURIComponent(revFileName), username);
 
 	}
 	
