@@ -255,10 +255,6 @@ function loadingRolesBox(tagId) {
 
 function createRolesSelection(userid) {
 	loadingSelectionBox("createSelection", userid);
-	// loadingClients("clientSelect",true);
-	// loadingdate("prjym");
-	// loadinguniqueno("prjno");
-	createUserDialog.show();
 }
 
 function loadingSelectionBox(tagId, userid) {
@@ -298,8 +294,11 @@ function loadingSelectionBox(tagId, userid) {
 							dom.byId("createUserName").readOnly = true;
 							dom.byId("createEmail").value = datas.email;
 						}
+						createUserDialog.show();
+					} else if (datas.type == "fail") {
 
-					} else {
+						alert(datas.message);
+					}else {
 						alert("Fetch role lists error. ");
 					}
 

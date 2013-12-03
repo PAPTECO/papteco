@@ -27,7 +27,7 @@ function doLogin() {
 			console.log("datas", datas);
 
 			if (datas.type == "success") {
-				alert("login succ, page will goto index.html");
+//				alert("login succ, page will goto index.html");
 				window.location = "index.html";
 			} else {
 				alert(datas.message);

@@ -170,32 +170,19 @@
 			<!-- The navigation bar -->
 			<div id="navbar">
 				<ul class="nav">
-					<li><a href="dashboard.html">Dashboard</a></li>
-					<li><a href="users.jsp">Users</a></li>
+					<li><a href="index.html">Dashboard</a></li>
+					<li><a href="users.html">Users</a></li>
 					<li><a href="templates.html" onClick="changetoprj(0)">Templates</a></li>
 					<li><a href="members.html">Members</a></li>
-					<li><a href="clients.jsp">Clients</a></li>
+					<li><a href="clients.html">Clients</a></li>
 					<li><a href="#">Others</a>
 						<ul>
-							<li><a href="#">Change to Chinese</a></li>
-							<li><a href="#">About System</a></li>
+							<li><a href="#" onclick="aboutsys()">About System</a></li>
 						</ul></li>
 				</ul>
 			</div>
 			<!-- End of navigation bar" -->
 
-			<!-- Search bar -->
-			<div id="search">
-				<form action="http://unithemes.net/search/" method="POST">
-					<p>
-						<input id="psch" type="submit" value="" class="but" /> <input
-							type="text" name="q" value="Search project"
-							onfocus="if(this.value==this.defaultValue)this.value='';"
-							onblur="if(this.value=='')this.value=this.defaultValue;" />
-					</p>
-				</form>
-			</div>
-			<!-- End of Search bar -->
 
 		</div>
 		<!-- End of Header -->

@@ -2,13 +2,12 @@ package com.papteco.web.controllers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
@@ -19,14 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
-import cc.monggo.domain.LoginForm;
 
 import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.UsersBean;
 import com.papteco.web.beans.UsersFormBean;
 import com.papteco.web.services.UserServiceImpl;
+import com.papteco.web.utils.Roles2RightsConfiguration;
 import com.papteco.web.utils.WebUtils;
 
 @Controller
@@ -82,7 +79,15 @@ public class UsersController extends BaseController {
 		
 		try{
 			UsersBean user = preUserBean(bean);
+			UsersBean dbuser = userService.getUser(user.getUserName());
 			
+			if(dbuser==null){
+				throw new Exception("User not exits.");
+			}else{
+				if(StringUtils.isBlank(user.getPassword())){
+					user.setPassword(dbuser.getPassword());
+				}
+			}
 			userService.saveUser(user);
 			return this.successMessage();
 		}catch(Exception e){
@@ -116,11 +121,24 @@ public class UsersController extends BaseController {
 
 		StringBuffer sb = new StringBuffer();
 
-		sb.append("<table border='0' cellspacing='0' cellpadding='0'>");
-		sb.append("<tr><td>General manager</td><td>Create searches,Create project</td></tr>");
-		sb.append("<tr><td>Assistant to the general manager</td><td>Create searches,Create project</td></tr>");
+		sb.append("<table border='1' cellspacing='4' cellpadding='4'>");
+		
+		Enumeration keys = Roles2RightsConfiguration.getRolesSetting().keys();
+		while(keys.hasMoreElements()){
+			String key = (String) keys.nextElement();
+			sb.append("<tr><td style='padding:3px'>");
+			sb.append(key);
+			sb.append("</td><td style='padding:3px'>");
+			
+			String value = Roles2RightsConfiguration.getRolesSetting().getProperty(key);
+			for(String right:value.split(",")){
+				sb.append(Roles2RightsConfiguration.getRightsSetting().getProperty(right));
+				sb.append("<br>");
+			}
+			sb.append("</td></tr>");
+		}
 		sb.append("</table>");
-
+		
 		return this.successMessage(of("data",sb.toString()));
 	}
 
@@ -143,15 +161,12 @@ public class UsersController extends BaseController {
 			if(user != null){
 				return this.successMessage(of(
 						"username",user.getUserName(),
-						"password",user.getPassword(),
+						"password","",
 						"email",user.getEmail(),
 						"roles",this.populateUserRolsesModify(rolessetting.keySet(), user)));	
 			}else{
-				return this.successMessage(of(
-						"username","username1",
-						"password","",
-						"email","email1",
-						"roles",this.populateUserRolsesCreate(rolessetting.keySet())));	
+				return this.failMessage("User does not exists or has been deleted.Please refresh!");
+				
 			}
 		}
 	}
