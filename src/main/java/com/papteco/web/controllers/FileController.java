@@ -25,8 +25,10 @@ import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.DocTypeFieldSet;
 import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FileLockBean;
+import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.beans.QueueItem;
+import com.papteco.web.dbs.FileLockDAO;
 import com.papteco.web.dbs.UserIPDAO;
 import com.papteco.web.netty.OpenFileClientBuilder;
 import com.papteco.web.netty.ReleaseFileClientBuilder;
@@ -43,7 +45,7 @@ public class FileController extends BaseController {
 	private FileServiceImpl fileService;
 	@Autowired
 	private ProjectServiceImpl projectService;
-
+	
 	private String fileStructPath;
 	private String serverFilePath;
 
@@ -108,16 +110,35 @@ public class FileController extends BaseController {
 	@ResponseBody
 	public Map getPformRef(@RequestParam String prjId,
 			@RequestParam String date) throws Exception {
-		
+		int ref_i = 0;
 		System.out.println("getDocs:" + prjId + " date:"+date);
 		
-		//Cony TODO
-		// if client no startwith "1" search the max add 1
-		// else return this.failMessage("It is not admin document type"); 
-		
-		return this.successMessage(of("no","009"));
-		
-
+		ProjectBean project = projectService.getProject(prjId);
+		if(project != null){
+			String clientno = project.getClientNo();
+			if(clientno.startsWith("1")){
+				FolderBean p_folder = new FolderBean();
+				for(FolderBean folder : project.getFolderTree()){
+					if(folder.getDocType().equals("P")){
+						p_folder = folder;
+						break;
+					}
+				}
+				for(FileBean file : p_folder.getFileTree()){
+					String[] f = file.getFileName().split("-");
+					if(f[1].equals(date)){
+						int tmpref = Integer.valueOf(file.getRef());
+						if(tmpref > ref_i)
+							ref_i = tmpref;
+					}
+				}
+				return this.successMessage(of("no",formatedNumber(String.valueOf(ref_i+1), 3)));
+			}else{
+				
+				return this.successMessage(of("no",project.getProjectId()));
+			}
+		}
+		return this.successMessage(of("no","001"));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "secure/submitUploadFile")
@@ -321,7 +342,17 @@ public class FileController extends BaseController {
 		System.out.println("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
-		// if(!fileService.isFileLocked(fileid)){
+		FileLockBean filelock = fileService.getFileLock(fileid);
+		if (filelock != null) {
+			if(!filelock.getLockByUser().equals(username)){
+				//locked user not matching with current user
+				return this.failMessage("Another user is locking this file!");
+			}
+		}else{
+			fileService.saveFileLock(new FileLockBean(fileid, username,
+					new Date()));
+		}
+		
 		ProjectBean project = projectService.getProject(projectId);
 		if (project != null) {
 			String fileFolder = combineFolderPath(
@@ -340,25 +371,12 @@ public class FileController extends BaseController {
 			QueueItem openfile = new QueueItem();
 			openfile.setActionType("OPENFILE");
 			openfile.setParam(fileStructPath);
-			if (!fileService.isFileLocked(fileid)) {
-				fileService.saveFileLock(new FileLockBean(fileid, username,
-						new Date()));
-			}
 			new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean(
 					username).getPCIP(), openfile, serverFilePath,
 					fileStructPath)).start();
 		}
 
-		// }else{
-		// return ImmutableMap.of("open","fail");
-		// }
-		// TODO Cony
-		// order client to open doc locally and locked this file
-		if (true) {
-			return ImmutableMap.of("open", "succ");
-		} else {
-			return ImmutableMap.of("open", "fail");
-		}
+		return ImmutableMap.of("open", "succ");
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "secure/releaseFile")
@@ -367,33 +385,42 @@ public class FileController extends BaseController {
 			@RequestParam String docType, @RequestParam String filename,
 			@RequestParam String fileid, HttpSession session) throws Exception {
 		filename = EncoderDecoderUtil.decodeURIComponent(filename);
+		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 		System.out.println("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
-
-		if (fileService.isFileLocked(fileid)) {
+		FileLockBean filelock = fileService.getFileLock(fileid);
+		if (filelock == null) {
+			return this.failMessage("File is not locked!");
+		}else{
 			String taskid = TaskUtils.genTaskId();
-			TaskUtils.setTaskStatus(taskid, TaskUtils.STUS_START, "Starting release.");
-			ProjectBean project = projectService.getProject(projectId);
-			if (project != null) {
-				String fileFolder = combineFolderPath(
-						combineFolderPath(rootpath, project.getProjectCde()),
-						this.sysConfig.getFolderNameByFolderCde(docType));
-				File file = new File(fileFolder, filename);
+			if(!filelock.getLockByUser().equals(username)){
+				//release by user with RL right
+				FileLockDAO.deleteFileLockBean(fileid);
+		    	TaskUtils.setTaskStatus(taskid, TaskUtils.STUS_SUCC, "Admin Release Successfull.");
+		    	
+			}else{
+				TaskUtils.setTaskStatus(taskid, TaskUtils.STUS_START, "Starting release.");
+				ProjectBean project = projectService.getProject(projectId);
+				if (project != null) {
+					String fileFolder = combineFolderPath(
+							combineFolderPath(rootpath, project.getProjectCde()),
+							this.sysConfig.getFolderNameByFolderCde(docType));
+					File file = new File(fileFolder, filename);
 
-				serverFilePath = file.getPath();
-				fileStructPath = combineFolderPath(
-						project.getProjectCde(),
-						combineFolderPath(this.sysConfig
-								.getFolderNameByFolderCde(docType), filename));
-				// fileService.releaseFile(fileid);
-				new Thread(new ReleaseFileClientBuilder(UserIPDAO
-						.getUserIPBean(username).getPCIP(), serverFilePath,
-						fileStructPath, fileid, taskid)).start();
+					serverFilePath = file.getPath();
+					fileStructPath = combineFolderPath(
+							project.getProjectCde(),
+							combineFolderPath(this.sysConfig
+									.getFolderNameByFolderCde(docType), filename));
+					// fileService.releaseFile(fileid);
+					new Thread(new ReleaseFileClientBuilder(UserIPDAO
+							.getUserIPBean(username).getPCIP(), serverFilePath,
+							fileStructPath, fileid, taskid)).start();
 
+				}
 			}
-			
+
 			//3 mins timeout
 			int i=0;
 			while(i<90){
@@ -408,6 +435,6 @@ public class FileController extends BaseController {
 			}
 			return this.failMessage("Operation timeout, please retry");
 		}
-		return this.failMessage("File is not locked");
+		
 	}
 }

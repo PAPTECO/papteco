@@ -237,22 +237,11 @@ public class UsersController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "userlogout")
 	@ResponseBody
 	public Map userlogout(HttpSession session) throws Exception {
-
 		System.out.println("userlogout:" );
 
-		try {
-			if(true){
-				return this.successMessage();
-			}
-			else
-				return this.failMessage("Incorrect Password.");
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return this.failMessage(e.getMessage());
-
-		}
-
+		session.removeAttribute("LOGIN_USER");
+		session.removeAttribute("allowFunctions");
+		return this.successMessage();
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "userlogin")

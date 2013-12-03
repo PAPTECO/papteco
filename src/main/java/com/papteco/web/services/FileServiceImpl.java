@@ -34,6 +34,10 @@ public class FileServiceImpl extends BaseService {
 		}
 	}
 	
+	public FileLockBean getFileLock(String fileid){
+		return FileLockDAO.getFileLockBean(fileid);
+	}
+	
 	public void releaseFile(String fileid){
 		FileLockDAO.deleteFileLockBean(fileid);
 	}
