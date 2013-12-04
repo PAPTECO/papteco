@@ -209,4 +209,121 @@ function refreshDocBroad(projectId) {
 
 }
 
+function fillMyAccountBox(userid) {
 
+	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
+			function(dom, xhr, JSON, parser) {
+
+				dom.byId("createMyUserName").value = "";
+				dom.byId("createMyPassword").value = "";
+				dom.byId("createMyEmail").value = "";
+
+				dataset = {
+					createUserName : userid
+				};
+
+				console.log("request user roles", dataset);
+
+				xhr("getMyUsersRoleList", {
+					handleAs : "json",
+					data : JSON.stringify(dataset),
+					method : "post",
+					preventCache : true,
+					headers : {
+						'Content-Type' : 'application/json'
+					}
+				}).then(function(datas) {
+
+					console.log("return datas", datas);
+
+					if (datas.type == "success") {
+
+						if (userid) {
+							dom.byId("createMyUserName").value = datas.username;
+							dom.byId("createMyPassword").value = datas.password;
+							dom.byId("createMyEmail").value = datas.email;
+						}
+						myuserDialog.show();
+					} else if (datas.type == "fail") {
+
+						alert(datas.message);
+					}else {
+						alert("Fetch role lists error. ");
+					}
+
+				}, function(err) {
+					// Handle the error condition
+					console.log(err);
+					alert("Fetch role lists error. " + err);
+				}, function(evt) {
+					// Handle a progress event from the request if the
+					// browser supports XHR2
+					console.log(evt);
+					alert("Fetch role lists error. " + evt);
+				});
+
+			});
+
+}
+
+function submitMyUser() {
+
+	console.log("submitMyUser");
+	if (!myuserform.validate())
+		return;
+
+	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser",
+			"dojo/query" ], function(dom, xhr, JSON, parser, query) {
+		
+		if(dom.byId("createMyPassword").value){
+			if (!confirm("Password will be reset. Are you sure ?")) {
+				return;
+			}
+		}
+		
+		dataset = {
+			createUserName : dom.byId("createMyUserName").value,
+			createPassword : dom.byId("createMyPassword").value,
+			createEmail : dom.byId("createMyEmail").value
+		};
+		console.log("requestdataset", dataset);
+		
+		xhr("updateMyUserRequest", {
+			handleAs : "json",
+			data : JSON.stringify(dataset),
+			method : "post",
+			preventCache : true,
+			headers : {
+				'Content-Type' : 'application/json'
+			}
+		}).then(function(datas) {
+
+			console.log("datas", datas);
+
+			if (datas.type == "success") {
+				alert("Your information has been updated.");
+				hideMyUserDialog();
+
+				dom.byId("createMyUserName").value = "";
+				dom.byId("createMyPassword").value = "";
+				dom.byId("createMyEmail").value = "";
+			} else {
+				alert(datas.message);
+			}
+
+		}, function(err) {
+			// Handle the error condition
+			console.log(err);
+			alert("Project created fail ." + err);
+		}, function(evt) {
+			// Handle a progress event from the request if the
+			// browser supports XHR2
+			console.log(evt);
+			alert("Project created fail ." + evt);
+		});
+	});
+}
+
+function hideMyUserDialog(){
+	myuserDialog.hide();
+}

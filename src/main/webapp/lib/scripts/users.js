@@ -326,6 +326,8 @@ function loadingSelectionBox(tagId, userid) {
 }
 
 
+
+
 function deleteUser(username) {
 
 	console.log("deleteUser");
@@ -460,3 +462,5 @@ function hideUserDialog(){
 	createUserDialog.hide();
 	doUserSearch();
 }
+
+

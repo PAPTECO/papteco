@@ -110,6 +110,11 @@ a {
     text-decoration: none;
 }
 
+.dijitMyuserAccDialogPaneContentArea {
+    width: 360px !important;
+    height: 250px !important;
+}
+
 .dijitDialogPaneContentArea {
     width: 760px !important;
     height: 500px !important;
