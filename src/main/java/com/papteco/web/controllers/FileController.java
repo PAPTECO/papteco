@@ -115,7 +115,7 @@ public class FileController extends BaseController {
 		
 		ProjectBean project = projectService.getProject(prjId);
 		if(project != null){
-			String clientno = project.getClientNo();
+			String clientno = project.getClientNo( );
 			if(clientno.startsWith("1")){
 				FolderBean p_folder = new FolderBean();
 				for(FolderBean folder : project.getFolderTree()){
@@ -413,11 +413,12 @@ public class FileController extends BaseController {
 							project.getProjectCde(),
 							combineFolderPath(this.sysConfig
 									.getFolderNameByFolderCde(docType), filename));
-					// fileService.releaseFile(fileid);
+					projectService.updateFileBy(project, fileid, username, new Date());
+					
 					new Thread(new ReleaseFileClientBuilder(UserIPDAO
 							.getUserIPBean(username).getPCIP(), serverFilePath,
 							fileStructPath, fileid, taskid)).start();
-
+					
 				}
 			}
 

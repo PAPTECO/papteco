@@ -1,5 +1,6 @@
 package com.papteco.web.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -23,6 +24,23 @@ public class ProjectServiceImpl extends BaseService {
 
 	public ProjectBean getProject(String prjId) throws Exception {
 		return ProjectCacheDAO.getProjectTree(prjId);
+	}
+	
+	public void updateFileBy(ProjectBean project, String fileid, String username, Date date){
+		boolean flag = true;
+		for(int i=0; i<project.getFolderTree().size(); i++){
+			for(int j=0; j<project.getFolderTree().get(i).getFileTree().size(); j++){
+				if(project.getFolderTree().get(i).getFileTree().get(j).getFileId().equals(fileid)){
+					project.getFolderTree().get(i).getFileTree().get(j).setLastModifiedAt(date);
+					project.getFolderTree().get(i).getFileTree().get(j).setLastModifiedBy(username);
+					ProjectCacheDAO.saveProjectTree(project);
+					flag = false;
+					break;
+				}
+			}
+			if(!flag)
+				break;
+		}
 	}
 	
 	public void createProject(ProjectBean project, List<FolderBean> folderList) throws Exception {

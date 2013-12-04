@@ -84,11 +84,11 @@ public class UserDAO {
 					}
 				}
 			}else if(StringUtils.isNotBlank(username) && StringUtils.isBlank(rolekey)){
-				if(username.trim().equals(bean.getUserName().trim())){
+				if(bean.getUserName().contains(username.trim())){
 					result.add(bean);
 				}
 			}else{
-				if(username.trim().equals(bean.getUserName().trim())){
+				if(bean.getUserName().contains(username.trim())){
 					List<String> roles = bean.getRoles();
 					for(String role : roles){
 						if(role.contains(rolekey)){
