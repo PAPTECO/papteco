@@ -22,6 +22,7 @@
 	<!-- environment properties -->
 	<util:properties id="settings" location="classpath:environment.properties" />
 
+<!-- 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -30,7 +31,7 @@
 		<property name="suffix">
 			<value>.jsp</value>
 		</property>
-	</bean>
+	</bean> -->
 
 	<bean id="jacksonMessageConverter"
 		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
@@ -61,7 +62,7 @@
 				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
 				<bean
 					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-					<property name="prefix" value="/WEB-INF/views/" />
+					<property name="prefix" value="/WEB-INF/jsp/" />
 					<property name="suffix" value=".jsp" />
 				</bean>
 			</list>

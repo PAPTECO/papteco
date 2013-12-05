@@ -125,129 +125,29 @@
 		});
 	}
 </script>
+<script type="text/javascript" src="lib/scripts/templates.js"></script>
 <script type="text/javascript" src="lib/scripts/core.js"></script>
 <script type="text/javascript" src="lib/scripts/createprj.js"></script>
 <script type="text/javascript" src="lib/scripts/dosearch.js"></script>
 <script type="text/javascript" src="lib/scripts/docopr.js"></script>
 <script type="text/javascript" src="lib/scripts/uploadfile.js"></script>
-<script type="text/javascript" src="lib/scripts/shortcut.js"></script>
 <script type="text/javascript" src="lib/scripts/login.js"></script>
+
 <!-- End of Libraries -->
 </head>
 <body class="claro">
 
-	<!-- Container -->
-	<div id="container">
-
-		<!-- Header -->
-		<div id="header">
-
-			<!-- Top -->
-			<div id="top">
-				<!-- Logo -->
-				<div class="logo">
-					<a href="#" title="Administration Home" class="tooltip"><img
-						src="assets/logo.png" alt="Wide Admin" /></a>
-				</div>
-				<!-- End of Logo -->
-
-				<!-- Meta information -->
-				<div class="meta">
-					<p>Welcome, Johnatan Doe!</p>
-					<ul>
-						<li><a href="#" onclick="doLogout()" title="End administrator session"
-							class="tooltip"><span class="ui-icon ui-icon-power"></span>Logout</a></li>
-						<li><a href="#" title="Change current settings"
-							class="tooltip"><span class="ui-icon ui-icon-wrench"></span>Download Client</a></li>
-						<li><a href="#" title="Go to your account" onclick="fillMyAccountBox('admin')" class="tooltip"><span
-								class="ui-icon ui-icon-person"></span>My account</a></li>
-					</ul>
-				</div>
-				<!-- End of Meta information -->
-			</div>
-			<!-- End of Top-->
-
-			<!-- The navigation bar -->
-			<div id="navbar">
-				<ul class="nav">
-					<li><a href="index.html">Dashboard</a></li>
-					<li><a href="users.html">Users</a></li>
-					<li><a href="templates.html" onClick="changetoprj(0)">Templates</a></li>
-					<li><a href="members.html">Members</a></li>
-					<li><a href="clients.html">Clients</a></li>
-					<li><a href="#">Others</a>
-						<ul>
-							<li><a href="#" onclick="aboutSysDialog.show()">About System</a></li>
-						</ul></li>
-				</ul>
-			</div>
-			<!-- End of navigation bar" -->
-
-		</div>
-		<!-- End of Header -->
-	</div>
-	<!-- End of Container -->
+	<%@ include file="header.jsp"%>
 
 	<div data-dojo-id="mainbc"
 		data-dojo-type="dijit/layout/BorderContainer"
 		style="width: 100%; height: 100%; margin: 0px; padding: 0px;">
 
-		<div data-dojo-id="maincpleft"
-			data-dojo-type="dijit/layout/ContentPane"
-			data-dojo-props="region:'leading'" style="margin: 0px; padding: 0px;">
-			<div style="width: 250px; height: 100%;">
-				<div data-dojo-id="maincp_tc"
-					data-dojo-type="dijit/layout/TabContainer" class="leadingtabcus">
-
-					<div data-dojo-id="maincp_tc_cp1"
-						data-dojo-type="dijit/layout/ContentPane" title="Tools"
-						data-dojo-props="selected:true">
-						<a onclick="createProjectShowUp()" id="SearchButton3"
-							class="bWhite notext_wrap" title="" href="#">
-							<div>
-								<img src="assets/icons/create_documents.png" style="width: 48px" />
-							</div>
-							<div>Create Project</div>
-						</a> <a onclick="preserveNos()" id="PresrvButton"
-							class="bWhite notext_wrap" title="" href="#">
-							<div>
-								<img src="assets/icons/create_documents.png" style="width: 48px" />
-							</div>
-							<div>Preserve Number</div>
-						</a>
-					</div>
-					<div data-dojo-id="maincp_tc_cp2"
-						data-dojo-type="dijit/layout/ContentPane" title="Search">
-
-						<ul class="filesDown" id="shortcut_ul">
-							<li><span class="fileSuccess"></span> 202-039-4056
-								SampleProject1 <span class="remove"></span></li>
-							<li><span class="fileSuccess"></span> 202-039-4056
-								SampleProject2 <span class="remove"></span></li>
-							<li><span class="fileSuccess"></span> 202-039-4056
-								SampleProject3 <span class="remove"></span></li>
-						</ul>
-					</div>
-
-					<div data-dojo-id="maincp_tc_cp3"
-						data-dojo-type="dijit/layout/ContentPane" title="Projects">
-						<ul class="filesDown" id="prjshortcut_ul">
-							<li><span class="fileSearch"></span> Client is 203 <span
-								class="remove"></span></li>
-							<li><span class="fileSearch"></span> New searcher <span
-								class="remove"></span></li>
-							<li><span class="fileSearch"></span> Last modified within
-								7days <span class="remove"></span></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div data-dojo-id="maincpcenter"
 			data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="region:'center'" style="margin: 0px; padding: 0px;">
 
-			<div id="MainSearchTab" class="gridsize">
+			<div id="MainSearchTab" class="gridsize"  style="display: none">
 				<div class="blank_interrupt"></div>
 				<fieldset>
 					<legend>Search</legend>
@@ -275,15 +175,12 @@
 				<div id="gridDiv"></div>
 			</div>
 			<!-- MainSearchTab -->
-			<div id="DirectoryTab" style="display: none">
+			<div id="DirectoryTab">
 
 				<div id="blank_interrupt">&nbsp;</div>
 				<fieldset class="bgray">
 					<legend>
 
-						<a id="SearchButton2" onClick="backtosearch();"
-							class="insideFont bRed notext_wrap " title="" href="#">Back</a>
-						<div class="blank_interval notext_wrap">&nbsp;</div>
 						<a id="SearchButton3" class="insideFont bLightBlue notext_wrap"
 							title="" href="#" onClick="refreshProjectBroad(getProjectId())">Refresh</a>
 
@@ -293,10 +190,6 @@
 						<input type="hidden" id="prj_id"></input>
 						<input type="hidden" id="prj_cde"></input>
 						<h1 id="prj_name">Project Name</h1>
-						<div class="blank_interrupt"></div>
-						<a id="SearchButton2" onClick="initProjectShortcutName();projectstSaveDialog.show()"
-							class="insideFont bGreen notext_wrap " title="" href="#">+
-							Add To ShortCut</a>
 					</div>
 					<div style="padding: 30, 0, 30, 0">
 						<label for="sf" class="labelstyle">Creator: </label><label
@@ -370,20 +263,16 @@ if (r==false)
 
 				dataset = {
 						projectId:getProjectId(),
-						filename : encodeURIComponent(tn.item.id)
+						filename : tn.item.id
 				};
 
-				xhr("secure/deleteDocs", {
+				xhr("deleteDocs", {
 					handleAs : "json",
 					query : dataset,
 					method : "get",
 					preventCache : true
 				}).then(function(datas) {
-					console.log("debug...",datas);
-					if(datas["type"]=="fail"){
-						alert(datas["message"]);
-						return;
-					}
+
 					console.log("deleted",datas);
 					alert(tn.item.id + " has been deleted.");
 					refreshProjectBroad(getProjectId());
@@ -435,7 +324,7 @@ if (r==false)
 	return;
 
 editFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId); 
-
+refreshProjectBroad(getProjectId());
                     </script>Edit</li>
                     <li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
@@ -460,58 +349,9 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 			</div>
 
-			<div data-dojo-type="dijit/Dialog" data-dojo-id="myuserDialog"
-				title="Account Information"
-				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
-
-				<div data-dojo-type="dijit/form/Form" id="myuserform"
-					data-dojo-id="myuserform" encType="multipart/form-data" action=""
-					method="">                                                                                                                                                                                                                                                                            
-
-					<div class="dijitMyuserAccDialogPaneContentArea">
-
-						<div>
-							<fieldset style="float: left; height: 250px;">
-								<legend>Require Information </legend>
-								<table class="dijitdialog_index">
-									<tr>
-										<td><label for="name">User Name: </label></td>
-										<td><input id="createMyUserName" required="true" readOnly
-											data-dojo-type="dijit/form/ValidationTextBox" /></div></td>
-									</tr>
-									<tr>
-										<td><label for="name">Password: </label></td>
-										<td><input id="createMyPassword" type="password" /></td>
-									</tr>
-									<tr>
-										<td><label for="name">Email: </label></td>
-										<td><input id="createMyEmail" required="true"
-											data-dojo-type="dijit/form/ValidationTextBox" /></td>
-									</tr>
-
-								</table>
-								<div class="dijitDialogPaneActionBar">
-									<button data-dojo-id="createprjsubmit"
-										data-dojo-type="dijit/form/Button" type="button"
-										onClick="submitMyUser()">Submit</button>
-									<button data-dojo-type="dijit/form/Button" type="button"
-										onClick="hideMyUserDialog()">Cancel</button>
-								</div>
-							</fieldset>
-						</div>
-
-
-					</div>
-				</div>
-
-			</div>
-			
 		<div data-dojo-type="dijit/Dialog" data-dojo-id="waitingDialog"
 			title="Release object ..."><div id="waitingDialogtext"></div></div>
 
-		<div data-dojo-type="dijit/Dialog" data-dojo-id="aboutSysDialog"
-			title="About"><div id="aboutDialogtext">Version 1.0.0</div></div>
-			
 			<div data-dojo-type="dijit/Dialog"
 				data-dojo-id="uploadFileFormDialog" title="Upload documents"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">

@@ -136,58 +136,7 @@
 </head>
 <body class="claro">
 
-	<!-- Container -->
-	<div id="container">
-
-		<!-- Header -->
-		<div id="header">
-
-			<!-- Top -->
-			<div id="top">
-				<!-- Logo -->
-				<div class="logo">
-					<a href="#" title="Administration Home" class="tooltip"><img
-						src="assets/logo.png" alt="Wide Admin" /></a>
-				</div>
-				<!-- End of Logo -->
-
-				<!-- Meta information -->
-				<div class="meta">
-					<p>Welcome, Johnatan Doe!</p>
-					<ul>
-						<li><a href="#" onclick="doLogout()" title="End administrator session"
-							class="tooltip"><span class="ui-icon ui-icon-power"></span>Logout</a></li>
-						<li><a href="#" title="Change current settings"
-							class="tooltip"><span class="ui-icon ui-icon-wrench"></span>Settings</a></li>
-						<li><a href="#" title="Go to your account" class="tooltip"><span
-								class="ui-icon ui-icon-person"></span>My account</a></li>
-					</ul>
-				</div>
-				<!-- End of Meta information -->
-			</div>
-			<!-- End of Top-->
-
-			<!-- The navigation bar -->
-			<div id="navbar">
-				<ul class="nav">
-					<li><a href="index.html">Dashboard</a></li>
-					<li><a href="users.html">Users</a></li>
-					<li><a href="templates.html" onClick="changetoprj(0)">Templates</a></li>
-					<li><a href="members.html">Members</a></li>
-					<li><a href="clients.html">Clients</a></li>
-					<li><a href="#">Others</a>
-						<ul>
-							<li><a href="#" onclick="aboutsys()">About System</a></li>
-						</ul></li>
-				</ul>
-			</div>
-			<!-- End of navigation bar" -->
-
-
-		</div>
-		<!-- End of Header -->
-	</div>
-	<!-- End of Container -->
+	<%@ include file="header.jsp"%>
 
 	<div data-dojo-id="mainbc"
 		data-dojo-type="dijit/layout/BorderContainer"

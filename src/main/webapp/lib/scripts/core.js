@@ -72,3 +72,31 @@ function currentYearMonthDay() {
 
 	return rst;
 }
+
+function gotoPage(address) {
+	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser" ],
+			function(dom, xhr, JSON, parser) {
+
+				xhr(address, {
+					handleAs : "json",
+					method : "get",
+					preventCache : true
+				}).then(function(datas) {
+
+					console.log("debug...", datas);
+					if (datas["type"] == "fail") {
+						alert(datas["message"]);
+						return;
+					}
+					
+				}, function(err) {
+					// Handle the error condition
+					console.log(err);
+				}, function(evt) {
+					// Handle a progress event from the request if the
+					// browser supports XHR2
+					console.log(evt);
+				});
+				window.location = address;
+			});
+}
