@@ -24,12 +24,14 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 
+import java.util.concurrent.Callable;
+
 import com.papteco.web.beans.QueueItem;
 
 /**
  * Modification of {@link EchoClient} which utilizes Java object serialization.
  */
-public class OpenFileClientBuilder extends BasicBuilder implements Runnable{
+public class OpenFileClientBuilder extends BasicBuilder implements Callable{
 
     private final String host;
     private QueueItem openfile;
@@ -44,32 +46,6 @@ public class OpenFileClientBuilder extends BasicBuilder implements Runnable{
     	this.openfile = openfile;
     	this.filepath = filepath;
     	this.fileStructPath = fileStructPath;
-    }
-
-    public void run() {
-        EventLoopGroup group = new NioEventLoopGroup();
-        try {
-            Bootstrap b = new Bootstrap();
-            b.group(group)
-             .channel(NioSocketChannel.class)
-             .handler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(
-                            new ObjectEncoder(),
-                            new NewObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new OpenFileClientHandler(openfile, filepath, fileStructPath));
-                }
-             });
-
-            // Start the connection attempt.
-            b.connect(host, PortTranslater(envsetting.getProperty("open_file_port"))).sync().channel().closeFuture().sync();
-        } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-            group.shutdownGracefully();
-        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -94,4 +70,32 @@ public class OpenFileClientBuilder extends BasicBuilder implements Runnable{
 //
 //        new SustainableAppConnClientBuilder(host, port, firstMessageSize).run();
     }
+    
+	public Object call() throws Exception {
+		EventLoopGroup group = new NioEventLoopGroup();
+        try {
+            Bootstrap b = new Bootstrap();
+            b.group(group)
+             .channel(NioSocketChannel.class)
+             .handler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                public void initChannel(SocketChannel ch) throws Exception {
+                    ch.pipeline().addLast(
+                            new ObjectEncoder(),
+                            new NewObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                            new OpenFileClientHandler(openfile, filepath, fileStructPath));
+                }
+             });
+
+            // Start the connection attempt.
+            b.connect(host, PortTranslater(envsetting.getProperty("open_file_port"))).sync().channel().closeFuture().sync();
+            
+        } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			throw e;
+		} finally {
+            group.shutdownGracefully();
+        }
+        return "Success";
+	}
 }

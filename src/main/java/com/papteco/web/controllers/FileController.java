@@ -3,6 +3,7 @@ package com.papteco.web.controllers;
 import java.io.File;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.FutureTask;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,6 +27,7 @@ import com.papteco.web.beans.DocTypeFieldSet;
 import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FileLockBean;
 import com.papteco.web.beans.FolderBean;
+import com.papteco.web.beans.IPItem;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.beans.QueueItem;
 import com.papteco.web.dbs.FileLockDAO;
@@ -45,7 +47,7 @@ public class FileController extends BaseController {
 	private FileServiceImpl fileService;
 	@Autowired
 	private ProjectServiceImpl projectService;
-	
+
 	private String fileStructPath;
 	private String serverFilePath;
 
@@ -81,7 +83,8 @@ public class FileController extends BaseController {
 			trgFileName.append("-");
 		}
 
-		trgFileName.append(StringEscapeUtils.unescapeHtml(bean.getDescription()));
+		trgFileName
+				.append(StringEscapeUtils.unescapeHtml(bean.getDescription()));
 		trgFileName.append("-");
 		trgFileName.append("Rev");
 		if (bean.getRev().length() < 3)
@@ -105,48 +108,50 @@ public class FileController extends BaseController {
 		}
 		return trgFileName.toString();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "getPformRef")
 	@ResponseBody
-	public Map getPformRef(@RequestParam String prjId,
-			@RequestParam String date) throws Exception {
+	public Map getPformRef(@RequestParam String prjId, @RequestParam String date)
+			throws Exception {
 		int ref_i = 0;
-		System.out.println("getDocs:" + prjId + " date:"+date);
-		
+		System.out.println("getDocs:" + prjId + " date:" + date);
+
 		ProjectBean project = projectService.getProject(prjId);
-		if(project != null){
-			String clientno = project.getClientNo( );
-			if(clientno.startsWith("1")){
+		if (project != null) {
+			String clientno = project.getClientNo();
+			if (clientno.startsWith("1")) {
 				FolderBean p_folder = new FolderBean();
-				for(FolderBean folder : project.getFolderTree()){
-					if(folder.getDocType().equals("P")){
+				for (FolderBean folder : project.getFolderTree()) {
+					if (folder.getDocType().equals("P")) {
 						p_folder = folder;
 						break;
 					}
 				}
-				for(FileBean file : p_folder.getFileTree()){
+				for (FileBean file : p_folder.getFileTree()) {
 					String[] f = file.getFileName().split("-");
-					if(f[1].equals(date)){
+					if (f[1].equals(date)) {
 						int tmpref = Integer.valueOf(file.getRef());
-						if(tmpref > ref_i)
+						if (tmpref > ref_i)
 							ref_i = tmpref;
 					}
 				}
-				return this.successMessage(of("no",formatedNumber(String.valueOf(ref_i+1), 3)));
-			}else{
-				
-				return this.successMessage(of("no",project.getProjectId()));
+				return this.successMessage(of("no",
+						formatedNumber(String.valueOf(ref_i + 1), 3)));
+			} else {
+
+				return this.successMessage(of("no", project.getProjectId()));
 			}
 		}
-		return this.successMessage(of("no","001"));
+		return this.successMessage(of("no", "001"));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "secure/submitUploadFile")
 	@ResponseBody
-	public Map submitUploadFile(DocTypeFieldSet bean, Model model, HttpSession session)
-			throws Exception {
+	public Map submitUploadFile(DocTypeFieldSet bean, Model model,
+			HttpSession session) throws Exception {
 
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 
 		if (StringUtils.isNotBlank(bean.getUploadedCopyForm())
 				&& !"undefined".equals(bean.getUploadedCopyForm())) {
@@ -158,7 +163,7 @@ public class FileController extends BaseController {
 						combineFolderPath(rootpath, "Templates"),
 						this.sysConfig.getFolderNameByFolderCde(bean
 								.getUpload_doctype()));
-			}else{
+			} else {
 				fromfileFolder = combineFolderPath(
 						combineFolderPath(rootpath, bean.getProjectCde()),
 						this.sysConfig.getFolderNameByFolderCde(bean
@@ -171,8 +176,9 @@ public class FileController extends BaseController {
 
 			String fileName = prepareFileName(bean);
 
-			File fromfile = new File(fromfileFolder, StringEscapeUtils.unescapeHtml(bean.getUploadedCopyForm()));
-			
+			File fromfile = new File(fromfileFolder,
+					StringEscapeUtils.unescapeHtml(bean.getUploadedCopyForm()));
+
 			File tofile = new File(fileFolder, fileName);
 			FileBean fileBean = new FileBean();
 			fileBean.setFileId(FilesUtils.genFileId());
@@ -211,11 +217,26 @@ public class FileController extends BaseController {
 				openfile.setParam(fileStructPath);
 				fileService.saveFileLock(new FileLockBean(fileBean.getFileId(),
 						username, new Date()));
-				new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean(
-						username).getPCIP(), openfile, serverFilePath,
-						fileStructPath)).start();
-				return this.successMessage(of("filename",
-						EncoderDecoderUtil.encodeURIComponent(fileBean.getFileName())));
+				
+				// get remote user ip
+				IPItem item = UserIPDAO.getUserIPBean(username);
+
+				if (item == null) {
+					return this.failMessage("Client is not run, could not edit");
+				} else {
+					OpenFileClientBuilder callback = new OpenFileClientBuilder(
+							item.getPCIP(), openfile, serverFilePath, fileStructPath);
+					FutureTask t = new FutureTask(callback);
+					new Thread(t).start();
+					try {
+						t.get();
+						return this.successMessage(of("filename", EncoderDecoderUtil
+								.encodeURIComponent(fileBean.getFileName())));
+					} catch (Exception e) {
+						return this.failMessage(e.getMessage());
+					}
+
+				}
 			}
 
 		} else {
@@ -245,9 +266,9 @@ public class FileController extends BaseController {
 				bean.getUploadfile().transferTo(file);
 				fileService.saveUploadFile(bean.getProjectId(),
 						bean.getUpload_doctype(), fileBean);
-				return this.successMessage(of("filename",
-						EncoderDecoderUtil.encodeURIComponent(fileBean.getFileName())));
-				
+				return this.successMessage(of("filename", EncoderDecoderUtil
+						.encodeURIComponent(fileBean.getFileName())));
+
 			}
 		}
 
@@ -337,46 +358,64 @@ public class FileController extends BaseController {
 			@RequestParam String docType, @RequestParam String filename,
 			@RequestParam String fileid, HttpSession session) throws Exception {
 		filename = EncoderDecoderUtil.decodeURIComponent(filename);
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 
 		System.out.println("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
 		FileLockBean filelock = fileService.getFileLock(fileid);
 		if (filelock != null) {
-			if(!filelock.getLockByUser().equals(username)){
-				//locked user not matching with current user
+			if (!filelock.getLockByUser().equals(username)) {
+				// locked user not matching with current user
 				return this.failMessage("Another user is locking this file!");
 			}
-		}else{
+		} else {
 			fileService.saveFileLock(new FileLockBean(fileid, username,
 					new Date()));
 		}
-		
+
 		ProjectBean project = projectService.getProject(projectId);
-		if (project != null) {
-			String fileFolder = combineFolderPath(
-					combineFolderPath(rootpath, project.getProjectCde()),
-					this.sysConfig.getFolderNameByFolderCde(docType));
-			File file = new File(fileFolder, filename);
 
-			serverFilePath = file.getPath();
-			fileStructPath = combineFolderPath(
-					project.getProjectCde(),
-					combineFolderPath(
-							this.sysConfig.getFolderNameByFolderCde(docType),
-							filename));
+		if (project == null)
+			return this.failMessage("Project does not exists.");
 
-			// open add rev file on local
-			QueueItem openfile = new QueueItem();
-			openfile.setActionType("OPENFILE");
-			openfile.setParam(fileStructPath);
-			new Thread(new OpenFileClientBuilder(UserIPDAO.getUserIPBean(
-					username).getPCIP(), openfile, serverFilePath,
-					fileStructPath)).start();
+		String fileFolder = combineFolderPath(
+				combineFolderPath(rootpath, project.getProjectCde()),
+				this.sysConfig.getFolderNameByFolderCde(docType));
+		File file = new File(fileFolder, filename);
+
+		serverFilePath = file.getPath();
+		fileStructPath = combineFolderPath(
+				project.getProjectCde(),
+				combineFolderPath(
+						this.sysConfig.getFolderNameByFolderCde(docType),
+						filename));
+
+		// open add rev file on local
+		QueueItem openfile = new QueueItem();
+		openfile.setActionType("OPENFILE");
+		openfile.setParam(fileStructPath);
+
+		// get remote user ip
+		IPItem item = UserIPDAO.getUserIPBean(username);
+
+		if (item == null) {
+			return this.failMessage("Client is not run, could not edit");
+		} else {
+			OpenFileClientBuilder callback = new OpenFileClientBuilder(
+					item.getPCIP(), openfile, serverFilePath, fileStructPath);
+			FutureTask t = new FutureTask(callback);
+			new Thread(t).start();
+			try {
+				t.get();
+				return this.successMessage();
+			} catch (Exception e) {
+				return this.failMessage(e.getMessage());
+			}
+
 		}
 
-		return ImmutableMap.of("open", "succ");
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "secure/releaseFile")
@@ -385,22 +424,25 @@ public class FileController extends BaseController {
 			@RequestParam String docType, @RequestParam String filename,
 			@RequestParam String fileid, HttpSession session) throws Exception {
 		filename = EncoderDecoderUtil.decodeURIComponent(filename);
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 		System.out.println("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
 		FileLockBean filelock = fileService.getFileLock(fileid);
 		if (filelock == null) {
 			return this.failMessage("File is not locked!");
-		}else{
+		} else {
 			String taskid = TaskUtils.genTaskId();
-			if(!filelock.getLockByUser().equals(username)){
-				//release by user with RL right
+			if (!filelock.getLockByUser().equals(username)) {
+				// release by user with RL right
 				FileLockDAO.deleteFileLockBean(fileid);
-		    	TaskUtils.setTaskStatus(taskid, TaskUtils.STUS_SUCC, "Admin Release Successfull.");
-		    	
-			}else{
-				TaskUtils.setTaskStatus(taskid, TaskUtils.STUS_START, "Starting release.");
+				TaskUtils.setTaskStatus(taskid, TaskUtils.STUS_SUCC,
+						"Admin Release Successfull.");
+
+			} else {
+				TaskUtils.setTaskStatus(taskid, TaskUtils.STUS_START,
+						"Starting release.");
 				ProjectBean project = projectService.getProject(projectId);
 				if (project != null) {
 					String fileFolder = combineFolderPath(
@@ -412,30 +454,32 @@ public class FileController extends BaseController {
 					fileStructPath = combineFolderPath(
 							project.getProjectCde(),
 							combineFolderPath(this.sysConfig
-									.getFolderNameByFolderCde(docType), filename));
-					projectService.updateFileBy(project, fileid, username, new Date());
-					
+									.getFolderNameByFolderCde(docType),
+									filename));
+					projectService.updateFileBy(project, fileid, username,
+							new Date());
+
 					new Thread(new ReleaseFileClientBuilder(UserIPDAO
 							.getUserIPBean(username).getPCIP(), serverFilePath,
 							fileStructPath, fileid, taskid)).start();
-					
+
 				}
 			}
 
-			//3 mins timeout
-			int i=0;
-			while(i<90){
+			// 3 mins timeout
+			int i = 0;
+			while (i < 90) {
 				i++;
 				Thread.sleep(2000);
-				
+
 				String[] task = TaskUtils.getTaskStatus(taskid);
-				
-				if(task != null && task[0] != "START" ){
+
+				if (task != null && task[0] != "START") {
 					return this.successMessage(of("message", task[1]));
 				}
 			}
 			return this.failMessage("Operation timeout, please retry");
 		}
-		
+
 	}
 }
