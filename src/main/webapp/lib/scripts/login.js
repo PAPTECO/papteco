@@ -36,12 +36,12 @@ function doLogin() {
 		}, function(err) {
 			// Handle the error condition
 			console.log(err);
-			alert("Project created fail ." + err);
+			alert("Login fail. As " + err);
 		}, function(evt) {
 			// Handle a progress event from the request if the
 			// browser supports XHR2
 			console.log(evt);
-			alert("Project created fail ." + evt);
+			alert("Login fail. As " + evt);
 		});
 	});
 }
@@ -73,7 +73,7 @@ function doLogout() {
 
 			if (datas.type == "success") {
 //				alert("login succ, page will goto index.html");
-				window.location = "login.html";
+				window.location = "login.jsp";
 			} else {
 				alert(datas.message);
 			}

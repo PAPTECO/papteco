@@ -35,9 +35,9 @@ public class PageController extends BaseController {
 	   return "members";  
 	}
 	
-	@RequestMapping("/client")  
+	@RequestMapping("/clients")  
 	public String clientResolver() {  
-	   return "client";  
+	   return "clients";  
 	}
 	
 	@RequestMapping("/validateUser")

@@ -72,7 +72,7 @@ checkifLogin();
 					<li><a href="index">Dashboard</a></li>
 					<li><a href="members">Members</a></li>
 					<li><a href="users">PIMS Users</a></li>
-					<li><a href="clients">Clients</a></li>
+					<!-- <li><a href="clients">Clients</a></li> -->
 					<li><a href="templates">Templates</a></li>
 					<li><a href="#">Others</a>
 						<ul>

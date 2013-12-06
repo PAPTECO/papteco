@@ -203,6 +203,7 @@ ul {
     background: url("../assets/repgray2.png") repeat-x scroll 0 0 #FFFFFF;
 text-align:center;
 color:white;
+width:100%;
 }
 
 .gridsize{
@@ -235,4 +236,57 @@ color:white;
 
 .normalcolor{
 	color:black;
+}
+
+.member_bg{
+	background: url("../assets/bg_tile.png") repeat scroll 0 0 #FFFFFF;
+	text-align:center;
+}
+
+.member_center{
+	background: url("../assets/main_container_pattern.png") repeat scroll 0 0 #FFFFFF;
+
+	margin-left:100px;
+	margin-right:100px;
+	text-align:center;
+}
+
+.member_divider{
+	background: url("../assets/divider.png") repeat-x scroll center center transparent;
+	padding: 2px 0px;
+	margin: 7px 0px;
+}
+
+.member_box{
+	width:100%;
+	text-align:left;
+}
+
+.member_pic{
+	width:30%;
+	padding-left:100px;
+}
+
+.member_info{
+	float:left;
+	width:60%;
+}
+
+.member_name{
+	color: #93A8BD;
+    font-family: 'Whitney Cond A','Whitney Cond B';
+    font-size: 3.6em !important;
+    font-style: normal;
+    font-weight: 300;
+}
+
+.member_desc{
+	font-size: 13px;
+	margin-bottom: 1.571em;
+	line-height: 1.571em;
+	color: #8596A7;
+    font-family: 'Gotham SSm A','Gotham SSm B';
+    font-style: normal;
+    font-weight: 300;
+    text-shadow: 0 1px 1px #333333;
 }

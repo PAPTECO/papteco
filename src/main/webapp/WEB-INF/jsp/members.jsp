@@ -15,18 +15,6 @@
 	href="lib/dijit/themes/claro/claro.css">
 <link type="text/css" rel="stylesheet" href="css/customs.css">
 
-<!-- for grid display -->
-<link type="text/css" rel="stylesheet"
-	href="lib/dojox/grid/enhanced/resources/claro/EnhancedGrid.css">
-<link type="text/css" rel="stylesheet"
-	href="lib/dojox/grid/enhanced/resources/EnhancedGrid_rtl.css">
-
-<link type="text/css" rel="stylesheet"
-	href="lib/dojox/grid/resources/Grid.css">
-<link type="text/css" rel="stylesheet"
-	href="lib/dojox/grid/resources/claroGrid.css">
-
-<link rel="stylesheet" href="lib/dojox/form/resources/FileInput.css" />
 
 <script>
 	dojoConfig = {
@@ -50,17 +38,6 @@
 	require([ "dojox/grid/LazyTreeGrid", "dijit/tree/ForestStoreModel",
 			"dojo/data/ItemFileWriteStore" ]);
 
-	/** for dialog**/
-	require([ "dojo/parser", "dijit/Dialog", "dijit/form/Button",
-			"dijit/form/TextBox", "dijit/form/DateTextBox",
-			"dijit/form/TimeTextBox" ]);
-
-	/** for textara**/
-	require([ "dojo/parser", "dijit/form/Textarea" ]);
-
-	/** for upload**/
-	require([ "dojox/form/FileInput" ]);
-
 	/** for tab container**/
 	require([ "dojo/parser", "dijit/layout/TabContainer",
 			"dijit/layout/ContentPane" ]);
@@ -68,68 +45,8 @@
 	require([ "dojo/parser", "dijit/Menu", "dijit/MenuItem",
 			"dijit/MenuSeparator", "dijit/PopupMenuItem", "dijit/ColorPalette" ]);
 
-	/** for folder tree*/
-	require([ "dojo/parser", "dojo/data/ItemFileReadStore", "dijit/Tree" ]);
-
-	require([ "dojo/parser", "dojo/store/Memory", "dojo/query!css2",
-			"dijit/Menu", "dijit/MenuItem", "dijit/tree/ObjectStoreModel",
-			"dijit/Tree" ]);
-
-	/** for folder tree end*/
-
-	require([ "dojo/parser", "dojo/store/Memory",
-			"dijit/tree/ObjectStoreModel", "dijit/Tree" ]);
-
-	require([ "dojo/parser", "dijit/form/DateTextBox" ]);
-
-	// for validation on input box
-	require([ "dojo/parser", "dijit/form/ValidationTextBox" ]);
-
-	require([ "dojox/grid/TreeGrid" ]);
-
-	require([ "dijit/form/Button", "dojo/dom", "dojo/domReady!" ], function(
-			Button, dom) {
-		// Create a button programmatically:
-		var myButton = new Button({
-			label : "Search",
-			onClick : function() {
-				// Do something:
-				dom.byId("result1").innerHTML += "Thank you! ";
-			}
-		}, "SearchButton");
-	});
-
-	function backtosearch() {
-		require([ "dojo/_base/fx", "dojo/dom-style" ], function(fx, style) {
-			// Function linked to the button to trigger the fade.
-			function fadeIt(tabname) {
-				style.set(tabname, "opacity", "1");
-				var fadeArgs = {
-					node : tabname
-				};
-				fx.fadeOut(fadeArgs).play();
-				style.set(tabname, "display", "none");
-			}
-			function fadeItShow(tabname) {
-				style.set(tabname, "opacity", "0");
-				style.set(tabname, "display", "block");
-				var fadeArgs = {
-					node : tabname
-				};
-				fx.fadeIn(fadeArgs).play();
-
-			}
-			fadeItShow("MainSearchTab");
-			fadeIt("DirectoryTab");
-
-		});
-	}
 </script>
 <script type="text/javascript" src="lib/scripts/core.js"></script>
-<script type="text/javascript" src="lib/scripts/createprj.js"></script>
-<script type="text/javascript" src="lib/scripts/dosearch.js"></script>
-<script type="text/javascript" src="lib/scripts/docopr.js"></script>
-<script type="text/javascript" src="lib/scripts/uploadfile.js"></script>
 <script type="text/javascript" src="lib/scripts/login.js"></script>
 
 <!-- End of Libraries -->
@@ -138,281 +55,73 @@
 
 	<%@ include file="header.jsp"%>
 
-	<div data-dojo-id="mainbc"
-		data-dojo-type="dijit/layout/BorderContainer"
-		style="width: 100%; height: 100%; margin: 0px; padding: 0px;">
+	<div style="width: 100%; height: 100%; margin: 0px; padding: 0px;">
 
-		<div data-dojo-id="maincpcenter"
-			data-dojo-type="dijit/layout/ContentPane"
-			data-dojo-props="region:'center'" style="margin: 0px; padding: 0px;">
-
-			<div id="MainSearchTab" class="gridsize"  style="display: none">
-				<div class="blank_interrupt"></div>
-				<fieldset>
-					<legend>Search</legend>
-					<div class="content_search_area notext_wrap">
-						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
-						<div class="notext_wrap blank_interval">Client No</div>
-						<input id="searchclient" />
-						
-						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
-						<div class="notext_wrap blank_interval">Any Key</div>
-						<input type="text" name="search_anykey" id="search_anykey"
-							value="" data-dojo-type="dijit/form/ValidationTextBox"
-							data-dojo-props="regExp:'[\\w]+', invalidMessage:'Invalid Non-Space Text.'" />
-						<div class="notext_wrap" style="padding-left: 20px">&nbsp;</div>
-						<a id="SearchButton1" class="insideFont bLightBlue notext_wrap"
-							title="" href="#" onClick="doSearch()">Search</a>
-						<div class="blank_interval notext_wrap">&nbsp;</div>
-						<a id="SearchButton1" class="insideFont bGreen notext_wrap"
-							title="" href="#" onclick="initSearchShortcutName();searchSaveDialog.show()">+Add to
-							Custom Filters</a>
-						<div id="result1">
+		<div class="member_bg">
+				<div class="member_center">
+				&nbsp;<br>
+				<table class="member_box">
+					<tr >
+					<td class="member_pic"><img src="membrs/obama.png" width="170"></img><td>
+					<td class="member_info"><div class="member_name">
+						Barack Obama
 						</div>
-					</div>
-				</fieldset>
-				<div id="gridDiv"></div>
-			</div>
-			<!-- MainSearchTab -->
-			<div id="DirectoryTab">
-
-<fieldset class="bLightBlue">
-					<legend>
-					</legend>
-					<div style="float: left; padding: 30px">
-						<input type="hidden" id="prj_id"></input>
-						<input type="hidden" id="prj_cde"></input>
-						<h1 id="prj_name">Fabian</h1>
-					</div>
-					<div style="padding: 30, 0, 30, 0">
-						<label for="sf" class="labelstyle">Title: </label><label
-							for="sf" class="labelContentstyle" id="prj_creator">Duty Manager</label>
-
-						<div class="blank_interrupt"></div>
-						<span style="width: auto;" id="prj_desc">Here's an example
-							of creating a Tree in markup. It's not wrapping the store in
-							Observable(), so that store updates won't be reflected into the
-							tree. (Wrapping the store in Observable is not easy to do through
-							markup. If you need the functionality, we suggest creating the
-							store in JavaScript, or create your own custom store. In any
-							case, the dijit.tree.Model and dijit.Tree themselves can still be
-							created in markup.) </span>
-					</div>
-				</fieldset>
-				
-				<fieldset>
-					<legend>
-					</legend>
-					<div style="float: left; padding: 30px">
-						<input type="hidden" id="prj_id"></input>
-						<input type="hidden" id="prj_cde"></input>
-						<h1 id="prj_name">Fabian</h1>
-					</div>
-					<div style="padding: 30, 0, 30, 0">
-						<label for="sf" class="labelstyle">Title: </label><label
-							for="sf" class="labelContentstyle" id="prj_creator">Duty Manager</label>
-
-						<div class="blank_interrupt"></div>
-						<span style="width: auto;" id="prj_desc">Here's an example
-							of creating a Tree in markup. It's not wrapping the store in
-							Observable(), so that store updates won't be reflected into the
-							tree. (Wrapping the store in Observable is not easy to do through
-							markup. If you need the functionality, we suggest creating the
-							store in JavaScript, or create your own custom store. In any
-							case, the dijit.tree.Model and dijit.Tree themselves can still be
-							created in markup.) </span>
-					</div>
-				</fieldset>
-				
-				<fieldset class="bLightBlue">
-					<legend>
-					</legend>
-					<div style="float: left; padding: 30px">
-						<input type="hidden" id="prj_id"></input>
-						<input type="hidden" id="prj_cde"></input>
-						<h1 id="prj_name">Fabian</h1>
-					</div>
-					<div style="padding: 30, 0, 30, 0">
-						<label for="sf" class="labelstyle">Title: </label><label
-							for="sf" class="labelContentstyle" id="prj_creator">Duty Manager</label>
-
-						<div class="blank_interrupt"></div>
-						<span style="width: auto;" id="prj_desc">Here's an example
-							of creating a Tree in markup. It's not wrapping the store in
-							Observable(), so that store updates won't be reflected into the
-							tree. (Wrapping the store in Observable is not easy to do through
-							markup. If you need the functionality, we suggest creating the
-							store in JavaScript, or create your own custom store. In any
-							case, the dijit.tree.Model and dijit.Tree themselves can still be
-							created in markup.) </span>
-					</div>
-				</fieldset>
-
-
-			</div>
-
-		<div data-dojo-type="dijit/Dialog" data-dojo-id="waitingDialog"
-			title="Release object ..."><div id="waitingDialogtext"></div></div>
-
-			<div data-dojo-type="dijit/Dialog"
-				data-dojo-id="uploadFileFormDialog" title="Upload documents"
-				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
-
-				<form method="post" action="submitUploadFile" id="uploadFileForm"
-					enctype="multipart/form-data">
-					<div class="dijitDialogPaneContentArea">
-						<span><label for="date" id="upload_doctype_id_header">Document
-								Type: </label><input id="upload_doctype"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><label
-							for="date" id="uploader_header">From File: </label><input
-							name="uploadfile" type="file" id="uploader" style="display:none"/><input class="uploadfileqryonly" id="uploadedCopyForm" readOnly name="uploadedCopyForm" value="" size="30" style="display:none"/><input id="isRev" name="isRev" type="hidden"> </span>
-
-						<div id="insert_content"></div>
-
-					</div>
-
-					<div class="dijitDialogPaneActionBar">
-						<input label="Upload" data-dojo-type="dijit/form/Button"
-							onClick="validateUploadForm();" type="button" />
-						<button data-dojo-type="dijit/form/Button" type="button"
-							onClick="uploadFileFormDialog.hide()">Cancel</button>
-					</div>
-				</form>
-			</div>
-
-			<div data-dojo-type="dijit/Dialog" data-dojo-id="presrvDialog"
-				title="Preserve numbers"
-				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
-
-				<div>
-					<table class="dijitdialog_index">
-						<tr>
-							<td><label for="name">From: </label></td>
-							<td><input type="text"
-								id="presrv_from" value="" class="dialogText"></td>
-							<td><label for="name">To: </label></td>
-							<td><input type="text"
-								id="presrv_to" value="" class="dialogText"></td>
-						</tr>
-					</table>
-				</div>
-
-				<div class="dijitDialogPaneActionBar">
-					<button id="submitPresrvnos" data-dojo-type="dijit/form/Button" type="button"
-						onClick="submitPresrvNos()" data-dojo-id="submitPresrvnos">Save</button>
-					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="presrvDialog.hide()" data-dojo-id="canncelPresrvnos">Cancel</button>
-				</div>
-			</div>
-
-
-			<div data-dojo-type="dijit/Dialog" data-dojo-id="searchSaveDialog"
-				title="Search save"
-				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
-
-				<div>
-					<table class="dijitdialog_index">
-						<tr>
-							<td><label for="name">Search Name: </label></td>
-							<td><input data-dojo-type="dijit/form/TextBox" type="text"
-								id="search_sav_name" value="New searcher" class="dialogText"></td>
-						</tr>
-					</table>
-				</div>
-
-				<div class="dijitDialogPaneActionBar">
-					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="submitSaveSearch()">Save</button>
-					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="searchSaveDialog.hide()">Cancel</button>
-				</div>
-			</div>
-
-			<div data-dojo-type="dijit/Dialog" data-dojo-id="projectstSaveDialog"
-				title="Project shortcut save"
-				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
-
-				<div>
-					<table class="dijitdialog_index">
-						<tr>
-							<td><label for="name">ShortCut Name: </label></td>
-							<td><input data-dojo-type="dijit/form/TextBox" type="text"
-								id="prj_sav_name" value="New shortcutname" class="dialogText"></td>
-						</tr>
-					</table>
-				</div>
-
-				<div class="dijitDialogPaneActionBar">
-					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="submitPrjSaveSearch()">Save</button>
-					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="projectstSaveDialog.hide()">Cancel</button>
-				</div>
-			</div>
-
-
-			<div data-dojo-type="dijit/Dialog" data-dojo-id="createProjectDialog"
-				title="Create New Project"
-				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
-
-				<div data-dojo-type="dijit/form/Form" id="prjcreateform"
-					data-dojo-id="prjcreateform" encType="multipart/form-data"
-					action="" method="">
-
-					<div class="dijitDialogPaneContentArea">
-
-						<div style="float: left">
-							<fieldset style="float: left">
-								<legend>Require Information</legend>
-								<table class="dijitdialog_index">
-									<tr>
-										<td><label for="name">Client No: </label></td>
-										<td><input id="clientSelect" /></td>
-									</tr>
-									<tr>
-										<td><label for="name">Create Date: </label></td>
-										<td><input id="prjym" /></td>
-									</tr>
-									<tr>
-										<td><label for="name">Unique No: </label></td>
-										<td><input id="prjno" style="width: 130px;" /><span id="prjPreserve"></span></td>
-									</tr>
-									<tr>
-										<td><label for="name">Short Desc: </label></td>
-										<td><input id="prjshortdesc"
-											style="width: 330px; height: 24px" required="true"
-											data-dojo-type="dijit/form/ValidationTextBox" /></td>
-									</tr>
-									<tr>
-										<td><label for="desc">Long Desc: </label></td>
-										<td><textarea id="prjlongdesc" name="prjlongdesc"
-												data-dojo-type="dijit/form/Textarea" rows="4"
-												style="width: 340px;"></textarea></td>
-									</tr>
-
-								</table>
-								<div class="dijitDialogPaneActionBar">
-									<button data-dojo-id="createprjsubmit"
-										data-dojo-type="dijit/form/Button" type="button"
-										onClick="submitCreateProject()">Create</button>
-									<button data-dojo-type="dijit/form/Button" type="button"
-										onClick="createProjectDialog.hide()">Cancel</button>
-								</div>
-							</fieldset>
+						<div class="member_desc">
+						Obama was born on August 4, 1961,[1] at Kapi olani Maternity & Gynecological Hospital (now Kapi olani Medical Center for Women and Children) in Honolulu, Hawaii,[2][3][4] and is the first President to have been born in Hawaii.[5] His mother, Stanley Ann Dunham, was born in Wichita, Kansas, and was of mostly English ancestry.[6] His father, Barack Obama, Sr., was a Luo from Nyang'oma Kogelo, Kenya.
+						</div></td>
+					</tr>
+				</table>
+				<div class="member_divider"></div>
+				<table class="member_box">
+					<tr >
+					<td class="member_pic"><img src="membrs/obama.png" width="170"></img><td>
+					<td class="member_info"><div class="member_name">
+						Barack Obama
 						</div>
-
-						<fieldset>
-							<legend>Folders</legend>
-							<div id="createProjectFolders"></div>
-						</fieldset>
-					</div>
+						<div class="member_desc">
+						Obama was born on August 4, 1961,[1] at Kapi olani Maternity & Gynecological Hospital (now Kapi olani Medical Center for Women and Children) in Honolulu, Hawaii,[2][3][4] and is the first President to have been born in Hawaii.[5] His mother, Stanley Ann Dunham, was born in Wichita, Kansas, and was of mostly English ancestry.[6] His father, Barack Obama, Sr., was a Luo from Nyang'oma Kogelo, Kenya.
+						</div></td>
+					</tr>
+				</table>
+				<div class="member_divider"></div>
+				<table class="member_box">
+					<tr >
+					<td class="member_pic"><img src="membrs/obama.png" width="170"></img><td>
+					<td class="member_info"><div class="member_name">
+						Barack Obama
+						</div>
+						<div class="member_desc">
+						Obama was born on August 4, 1961,[1] at Kapi olani Maternity & Gynecological Hospital (now Kapi olani Medical Center for Women and Children) in Honolulu, Hawaii,[2][3][4] and is the first President to have been born in Hawaii.[5] His mother, Stanley Ann Dunham, was born in Wichita, Kansas, and was of mostly English ancestry.[6] His father, Barack Obama, Sr., was a Luo from Nyang'oma Kogelo, Kenya.
+						</div></td>
+					</tr>
+				</table>
+				<div class="member_divider"></div>
+				<table class="member_box">
+					<tr >
+					<td class="member_pic"><img src="membrs/obama.png" width="170"></img><td>
+					<td class="member_info"><div class="member_name">
+						Barack Obama
+						</div>
+						<div class="member_desc">
+						Obama was born on August 4, 1961,[1] at Kapi olani Maternity & Gynecological Hospital (now Kapi olani Medical Center for Women and Children) in Honolulu, Hawaii,[2][3][4] and is the first President to have been born in Hawaii.[5] His mother, Stanley Ann Dunham, was born in Wichita, Kansas, and was of mostly English ancestry.[6] His father, Barack Obama, Sr., was a Luo from Nyang'oma Kogelo, Kenya.
+						</div></td>
+					</tr>
+				</table>
+				<div class="member_divider"></div>
+				<table class="member_box">
+					<tr >
+					<td class="member_pic"><img src="membrs/obama.png" width="170"></img><td>
+					<td class="member_info"><div class="member_name">
+						Barack Obama
+						</div>
+						<div class="member_desc">
+						Obama was born on August 4, 1961,[1] at Kapi olani Maternity & Gynecological Hospital (now Kapi olani Medical Center for Women and Children) in Honolulu, Hawaii,[2][3][4] and is the first President to have been born in Hawaii.[5] His mother, Stanley Ann Dunham, was born in Wichita, Kansas, and was of mostly English ancestry.[6] His father, Barack Obama, Sr., was a Luo from Nyang'oma Kogelo, Kenya.
+						</div></td>
+					</tr>
+				</table>
 				</div>
-
-			</div>
-
 		</div>
-		<div data-dojo-id="maincpbottom" class="buttom"
-			data-dojo-type="dijit/layout/ContentPane"
-			data-dojo-props="region:'bottom'">
+		<div class="buttom">
 
 			<div>PAPTECO Engineering & Sales (GZ) Co., Ltd.</div>
 			<div>China: Room 706, Building #6, HighSun Xing Yue, N0. 383
@@ -423,8 +132,6 @@
 			<div>Copyright 2013-2014 by Papteco. All Rights Reserved.</div>
 		</div>
 		<!-- end of bottom-->
-		<div data-dojo-type="dijit/Dialog" data-dojo-id="loadingDialog"
-			title="Loading...">Please wait...</div>
 
 	</div>
 </body>
