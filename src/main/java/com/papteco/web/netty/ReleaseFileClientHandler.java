@@ -56,7 +56,7 @@ public class ReleaseFileClientHandler extends ChannelInboundHandlerAdapter {
     @Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		// TODO Auto-generated method stub
-    	ctx.close();
+//    	ctx.close();
 	}
     
     @Override
@@ -83,6 +83,7 @@ public class ReleaseFileClientHandler extends ChannelInboundHandlerAdapter {
     	}
     	FileLockDAO.deleteFileLockBean(fileid);
     	TaskUtils.setTaskStatus(taskid, TaskUtils.STUS_SUCC, "Release Successfull.");
+    	ctx.close();
     }
 
     @Override

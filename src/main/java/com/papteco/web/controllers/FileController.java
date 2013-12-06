@@ -3,6 +3,7 @@ package com.papteco.web.controllers;
 import java.io.File;
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.DocTypeFieldSet;
 import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FileLockBean;
@@ -232,6 +232,8 @@ public class FileController extends BaseController {
 						t.get();
 						return this.successMessage(of("filename", EncoderDecoderUtil
 								.encodeURIComponent(fileBean.getFileName())));
+					} catch (ExecutionException e){
+						return this.failMessage("Client for user: " + item.getPCID() + " wasn't running!");
 					} catch (Exception e) {
 						return this.failMessage(e.getMessage());
 					}
@@ -410,6 +412,8 @@ public class FileController extends BaseController {
 			try {
 				t.get();
 				return this.successMessage();
+			} catch (ExecutionException e){
+				return this.failMessage("Client for user: " + item.getPCID() + " wasn't running!");
 			} catch (Exception e) {
 				return this.failMessage(e.getMessage());
 			}
@@ -459,10 +463,18 @@ public class FileController extends BaseController {
 					projectService.updateFileBy(project, fileid, username,
 							new Date());
 
-					new Thread(new ReleaseFileClientBuilder(UserIPDAO
+					ReleaseFileClientBuilder callback = new ReleaseFileClientBuilder(UserIPDAO
 							.getUserIPBean(username).getPCIP(), serverFilePath,
-							fileStructPath, fileid, taskid)).start();
-
+							fileStructPath, fileid, taskid);
+					FutureTask t = new FutureTask(callback);
+					new Thread(t).start();
+					try {
+						t.get();
+					} catch (ExecutionException e){
+						return this.failMessage("Client for user: " + username + " wasn't running!");
+					} catch (Exception e) {
+						return this.failMessage(e.getMessage());
+					}
 				}
 			}
 

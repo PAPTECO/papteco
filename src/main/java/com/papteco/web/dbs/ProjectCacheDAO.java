@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,8 @@ import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.PreserveNosBean;
 import com.papteco.web.beans.ProjectBean;
+import com.papteco.web.utils.FoldersUtils;
+import com.papteco.web.utils.SystemConfiguration;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.persist.EntityCursor;
@@ -27,7 +31,10 @@ import com.sleepycat.persist.StoreConfig;
 
 @Component
 public class ProjectCacheDAO {
-
+	@Autowired
+	SystemConfiguration sysConfig;
+	@Autowired
+	protected FoldersUtils foldersUtils;
 	@Value("#{settings[datapath]}")
 	protected String datapath;
 	
@@ -40,8 +47,28 @@ public class ProjectCacheDAO {
 			f.mkdirs();
 		}
 		new ProjectCacheDAO(datapath);
+		ProjectBean templatePrj = getProjectTree("0");
+		if(templatePrj == null){
+			templatePrj = templateCreateSample();
+			foldersUtils.createProjectFolders(foldersUtils.prepareProjectPath(templatePrj.getProjectCde()), templatePrj.getFolderTree());
+			saveProjectTree(templatePrj);
+		}
 	}  
-
+	public ProjectBean templateCreateSample(){
+		ProjectBean tmpProject = new ProjectBean();
+		tmpProject.setProjectId("0");
+		tmpProject.setProjectCde("Templates");
+		tmpProject.setClientNo("0");
+		tmpProject.setCreateDate("2010-02-09");
+		tmpProject.setUniqueNo("0");
+		tmpProject.setCreatedAt(new Date());
+		tmpProject.setCreatedBy("admin");
+		tmpProject.setShortDesc("");
+		tmpProject.setLongDesc("");
+		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
+		return tmpProject;
+	}
+	
 	public ProjectCacheDAO(String databasePath) {
 
 		// Open a transactional Berkeley DB engine environment.

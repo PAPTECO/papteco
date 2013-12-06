@@ -24,10 +24,12 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 
+import java.util.concurrent.Callable;
+
 /**
  * Modification of {@link EchoClient} which utilizes Java object serialization.
  */
-public class ReleaseFileClientBuilder extends BasicBuilder implements Runnable{
+public class ReleaseFileClientBuilder extends BasicBuilder implements Callable{
 
     private final String host;
     private String filepath;
@@ -46,7 +48,7 @@ public class ReleaseFileClientBuilder extends BasicBuilder implements Runnable{
     	this.taskid = taskid;
     }
 
-    public void run() {
+    public Object call() throws Exception {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
@@ -71,6 +73,7 @@ public class ReleaseFileClientBuilder extends BasicBuilder implements Runnable{
 		} finally {
             group.shutdownGracefully();
         }
+        return "Success";
     }
 
     public static void main(String[] args) throws Exception {

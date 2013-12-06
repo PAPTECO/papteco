@@ -1,6 +1,7 @@
 package com.papteco.web.dbs;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +24,10 @@ public class UserDAO {
 
 	@Value("#{settings[datapath]}")
 	protected String datapath;
+	@Value("#{settings[sysadmin_ind]}")
+	protected boolean sysadmin_ind;
+	@Value("#{settings[sysadmin_pwd]}")
+	protected String sysadmin_pwd;
 	
 	private static PrimaryIndex<String, UsersBean> usersIndex;
 
@@ -33,6 +38,19 @@ public class UserDAO {
 			f.mkdirs();
 		}
 		new UserDAO(datapath);
+		if(sysadmin_ind){
+			UsersBean sysadmin = getUser("sysadmin");
+			if(sysadmin == null){
+				sysadmin = new UsersBean();
+				sysadmin.setUserName("sysadmin");
+				sysadmin.setPassword(sysadmin_pwd);
+				sysadmin.setEmail("");
+				List<String> roles = new ArrayList<String>();
+				roles.add("Administrator");
+				sysadmin.setRoles(roles);
+				saveUser(sysadmin);
+			}
+		}
 	}  
 
 	public UserDAO(String databasePath) {

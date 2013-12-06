@@ -59,13 +59,6 @@ public class ProjectController extends BaseController {
 			if(projectService.isPrjIdExisting(bean.getUniqueno())){
 				return this.failMessage("The Unique No. was existing : "+bean.getUniqueno());
 			}else{
-				//TODO Cony,
-				//Test only
-				if(!projectService.isPrjIdExisting(bean.getUniqueno())){
-					projectService.createProject(templateCreateSample(),
-							this.sysConfig.prepareFolderStructure());
-				}
-				
 				projectService.createProject(tmpProject,
 						this.sysConfig.prepareFolderStructure());
 
@@ -79,21 +72,6 @@ public class ProjectController extends BaseController {
 		}
 	}
 	
-	public ProjectBean templateCreateSample(){
-		ProjectBean tmpProject = new ProjectBean();
-		tmpProject.setProjectId("0");
-		tmpProject.setProjectCde("Templates");
-		tmpProject.setClientNo("0");
-		tmpProject.setCreateDate("2010-02-09");
-		tmpProject.setUniqueNo("0");
-		tmpProject.setCreatedAt(new Date());
-		tmpProject.setCreatedBy("admin");
-		tmpProject.setShortDesc("");
-		tmpProject.setLongDesc("");
-		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
-		return tmpProject;
-	}
-
 	@RequestMapping(method = RequestMethod.GET, value = "secure/doSearch")
 	@ResponseBody
 	public List doSearch(@RequestParam String searchClinetno,

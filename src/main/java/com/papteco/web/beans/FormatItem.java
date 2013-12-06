@@ -40,7 +40,15 @@ public class FormatItem implements Serializable {
 	private ActionEnum formalPrice = ActionEnum.notApplicable;
 	private ActionEnum estimatedCost = ActionEnum.notApplicable;
 	private ActionEnum rev = ActionEnum.autoFillCanOverwrite;
-
+	private ActionEnum additionnal1;
+	private ActionEnum additionnal2;
+	private ActionEnum additionnal3;
+	private ActionEnum additionnal4;
+	private ActionEnum additionnal5;
+	private ActionEnum additionnal6;
+	private ActionEnum additionnal7;
+	private ActionEnum additionnal8;
+	private ActionEnum additionnal9;
 	public ActionEnum getL1() {
 		return l1;
 	}
@@ -239,6 +247,78 @@ public class FormatItem implements Serializable {
 
 	public void setRev(ActionEnum rev) {
 		this.rev = rev;
+	}
+
+	public ActionEnum getAdditionnal1() {
+		return additionnal1;
+	}
+
+	public void setAdditionnal1(ActionEnum additionnal1) {
+		this.additionnal1 = additionnal1;
+	}
+
+	public ActionEnum getAdditionnal2() {
+		return additionnal2;
+	}
+
+	public void setAdditionnal2(ActionEnum additionnal2) {
+		this.additionnal2 = additionnal2;
+	}
+
+	public ActionEnum getAdditionnal3() {
+		return additionnal3;
+	}
+
+	public void setAdditionnal3(ActionEnum additionnal3) {
+		this.additionnal3 = additionnal3;
+	}
+
+	public ActionEnum getAdditionnal4() {
+		return additionnal4;
+	}
+
+	public void setAdditionnal4(ActionEnum additionnal4) {
+		this.additionnal4 = additionnal4;
+	}
+
+	public ActionEnum getAdditionnal5() {
+		return additionnal5;
+	}
+
+	public void setAdditionnal5(ActionEnum additionnal5) {
+		this.additionnal5 = additionnal5;
+	}
+
+	public ActionEnum getAdditionnal6() {
+		return additionnal6;
+	}
+
+	public void setAdditionnal6(ActionEnum additionnal6) {
+		this.additionnal6 = additionnal6;
+	}
+
+	public ActionEnum getAdditionnal7() {
+		return additionnal7;
+	}
+
+	public void setAdditionnal7(ActionEnum additionnal7) {
+		this.additionnal7 = additionnal7;
+	}
+
+	public ActionEnum getAdditionnal8() {
+		return additionnal8;
+	}
+
+	public void setAdditionnal8(ActionEnum additionnal8) {
+		this.additionnal8 = additionnal8;
+	}
+
+	public ActionEnum getAdditionnal9() {
+		return additionnal9;
+	}
+
+	public void setAdditionnal9(ActionEnum additionnal9) {
+		this.additionnal9 = additionnal9;
 	}
 
 	@Override
