@@ -49,6 +49,13 @@ public class UserDAO {
 				roles.add("Administrator");
 				sysadmin.setRoles(roles);
 				saveUser(sysadmin);
+			} else{
+				if(!sysadmin.getRoles().contains("Administrator")){
+					List<String> roles = sysadmin.getRoles();
+					roles.add("Administrator");
+					sysadmin.setRoles(roles);
+					saveUser(sysadmin);
+				}
 			}
 		}
 	}  
