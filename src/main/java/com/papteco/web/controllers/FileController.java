@@ -460,20 +460,26 @@ public class FileController extends BaseController {
 							combineFolderPath(this.sysConfig
 									.getFolderNameByFolderCde(docType),
 									filename));
-					projectService.updateFileBy(project, fileid, username,
-							new Date());
+					// get remote user ip
+					IPItem item = UserIPDAO.getUserIPBean(username);
 
-					ReleaseFileClientBuilder callback = new ReleaseFileClientBuilder(UserIPDAO
-							.getUserIPBean(username).getPCIP(), serverFilePath,
-							fileStructPath, fileid, taskid);
-					FutureTask t = new FutureTask(callback);
-					new Thread(t).start();
-					try {
-						t.get();
-					} catch (ExecutionException e){
-						return this.failMessage("Client for user: " + username + " wasn't running!");
-					} catch (Exception e) {
-						return this.failMessage(e.getMessage());
+					if (item == null) {
+						return this.failMessage("Client is not run, could not edit");
+					} else {
+						projectService.updateFileBy(project, fileid, username,
+								new Date());
+
+						ReleaseFileClientBuilder callback = new ReleaseFileClientBuilder(item.getPCIP(), serverFilePath,
+								fileStructPath, fileid, taskid);
+						FutureTask t = new FutureTask(callback);
+						new Thread(t).start();
+						try {
+							t.get();
+						} catch (ExecutionException e){
+							return this.failMessage("Client for user: " + item.getPCID() + " wasn't running!");
+						} catch (Exception e) {
+							return this.failMessage(e.getMessage());
+						}
 					}
 				}
 			}
