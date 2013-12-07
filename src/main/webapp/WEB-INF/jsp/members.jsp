@@ -48,7 +48,7 @@
 </script>
 <script type="text/javascript" src="lib/scripts/core.js"></script>
 <script type="text/javascript" src="lib/scripts/login.js"></script>
-
+<script type="text/javascript" src="lib/scripts/docopr.js"></script>
 <!-- End of Libraries -->
 </head>
 <body class="claro">

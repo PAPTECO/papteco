@@ -410,51 +410,7 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 			</div>
 
-			<div data-dojo-type="dijit/Dialog" data-dojo-id="myuserDialog"
-				title="Account Information"
-				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
-
-				<div data-dojo-type="dijit/form/Form" id="myuserform"
-					data-dojo-id="myuserform" encType="multipart/form-data" action=""
-					method="">                                                                                                                                                                                                                                                                            
-
-					<div class="dijitMyuserAccDialogPaneContentArea">
-
-						<div>
-							<fieldset style="float: left; height: 250px;">
-								<legend>Require Information </legend>
-								<table class="dijitdialog_index">
-									<tr>
-										<td><label for="name">User Name: </label></td>
-										<td><input id="createMyUserName" required="true" readOnly
-											data-dojo-type="dijit/form/ValidationTextBox" /></div></td>
-									</tr>
-									<tr>
-										<td><label for="name">Password: </label></td>
-										<td><input id="createMyPassword" type="password" /></td>
-									</tr>
-									<tr>
-										<td><label for="name">Email: </label></td>
-										<td><input id="createMyEmail" required="true"
-											data-dojo-type="dijit/form/ValidationTextBox" /></td>
-									</tr>
-
-								</table>
-								<div class="dijitDialogPaneActionBar">
-									<button data-dojo-id="createprjsubmit"
-										data-dojo-type="dijit/form/Button" type="button"
-										onClick="submitMyUser()">Submit</button>
-									<button data-dojo-type="dijit/form/Button" type="button"
-										onClick="hideMyUserDialog()">Cancel</button>
-								</div>
-							</fieldset>
-						</div>
-
-
-					</div>
-				</div>
-
-			</div>
+			
 			
 		<div data-dojo-type="dijit/Dialog" data-dojo-id="waitingDialog"
 			title="Release object ..."><div id="waitingDialogtext"></div></div>
