@@ -300,7 +300,7 @@ function loadingSelectionBox(tagId, userid) {
 							dom.byId("createPassword").value = datas.password;
 							dom.byId("createUserName").readOnly = true;
 							dom.byId("createEmail").value = datas.email;
-							dom.byId("deletetag").innerHTML = "<a onClick='deleteUser("+datas.username+");' class='insideFont bRed notext_wrap' href='#'>X</a>";
+							dom.byId("deletetag").innerHTML = "<a onClick=\"deleteUser('"+datas.username+"');\" class='insideFont bRed notext_wrap' href='#'>X</a>";
 						}
 						createUserDialog.show();
 					} else if (datas.type == "fail") {
@@ -330,8 +330,11 @@ function loadingSelectionBox(tagId, userid) {
 
 function deleteUser(username) {
 
-	console.log("deleteUser");
+	console.log("deleteUser"+username);
 
+	if(!confirm(username+ " will be deteled. Are you sure?"))
+		return;
+	
 	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser",
 			"dojo/query" ], function(dom, xhr, JSON, parser, query) {
 		
