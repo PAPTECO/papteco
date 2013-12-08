@@ -44,9 +44,11 @@ require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
 				: filename.length;
 		
 		//display docname
-		doc_name = filename.substring(0, toIndex);
-		dojo.byId("doc_name").innerHTML = doc_name;
 		
+//		doc_name = filename.substring(0, toIndex);
+//		alert(filename.substring(0, toIndex));
+		dojo.byId("doc_name").innerHTML = filename.substring(0, toIndex);
+		console.log("doc_name",dojo.byId("doc_name"));
 		
 		// dojo.byId("doc_last_modi_at").innerHTML = docTree.getLabel(item);
 
@@ -78,7 +80,7 @@ require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
 
 			if (item.field_details) {
 				window.open("secure/viewDocs?projectId=" + item.projectId
-						+ "&filename=" + docTree.getLabel(item));
+						+ "&filename=" + filename.substring(0, toIndex));
 			} else {
 				alert('Please select file.');
 			}

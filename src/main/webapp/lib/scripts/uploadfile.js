@@ -23,10 +23,12 @@ function editFile(projectId,foldertype, editfilename,fileid) {
 					}
 				}).then(function(datas) {
 
-					console.log("debug...",datas);
+					console.log("edit debug...",datas);
 					if(datas["type"]=="fail"){
 						alert(datas["message"]);
 						return;
+					}else if(datas.message){
+						alert(datas.message);
 					}
 					console.log("edited",datas);
 					refreshProjectBroad(getProjectId());
@@ -232,7 +234,12 @@ function setVal2(value,previouslyFileName) {
 					//p-form
 					console.log("Doctype:",value);
 					if(value == "P"){
-						requestPformRef();	
+						if(previouslyFileName){
+							
+						}else{
+							//suggest no.
+							requestPformRef();	
+						}
 					}
 					
 
@@ -369,20 +376,29 @@ function validateUploadForm() {
 					})
 							.then(
 									function(xmldoc) { 
-										console.log(xmldoc);
+										console.log("json",xmldoc);
+//										alert(xmldoc);
 										data = xmldoc.body.textContent;
 										console.log(data);
 										r= json.parse(data);
 										console.log(r);
 										
-										if (r.type=="success") {
-											alert(decodeURIComponent(r.filename)+" has been uploaded.");
+										console.log("edit debug...",r);
+										if(r.type=="fail"){
+											alert(r.message);
+											return;
+										}else if(r.type=="success"){
+											if(r.message){
+												alert(r.message);
+											}
+											else{
+												alert(decodeURIComponent(r.filename)+" has been uploaded.");
+											}
 											dom.byId("uploadFileForm").reset();
 											uploadFileFormDialog.hide();
 											refreshProjectBroad(getProjectId());
-										} else {
-											alert(r.message);
 										}
+										
 									}, function(err) {
 										alert("Error occurs " + err);
 

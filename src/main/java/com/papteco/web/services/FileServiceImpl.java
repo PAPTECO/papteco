@@ -72,6 +72,21 @@ public class FileServiceImpl extends BaseService {
 			if(filename.equals(fname)){
 				return true;
 			}
+			// validate P form ignore template
+			if(!"0".equals(projectId)){
+				String[] oldf = fname.split("-");
+				String[] newf = filename.split("-");
+				if(newf[0].startsWith("P")){
+					System.out.println("Pform:"+newf);
+					if((oldf[0]+oldf[1]+oldf[2]).equals(
+							(newf[0]+newf[1]+newf[2]))&&
+							oldf[oldf.length-1].equals(newf[newf.length-1])){
+						return true;
+					}
+					
+				}
+			}
+			
 		}
 		return false;
 	}

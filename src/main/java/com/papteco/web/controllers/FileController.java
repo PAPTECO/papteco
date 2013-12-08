@@ -222,7 +222,7 @@ public class FileController extends BaseController {
 				IPItem item = UserIPDAO.getUserIPBean(username);
 
 				if (item == null) {
-					return this.failMessage("Client is not run, could not edit");
+					return this.successMessage(of("message","File is created successfully. Program attempts to open file but detected client had not open."));
 				} else {
 					OpenFileClientBuilder callback = new OpenFileClientBuilder(
 							item.getPCIP(), openfile, serverFilePath, fileStructPath);
@@ -233,7 +233,7 @@ public class FileController extends BaseController {
 						return this.successMessage(of("filename", EncoderDecoderUtil
 								.encodeURIComponent(fileBean.getFileName())));
 					} catch (ExecutionException e){
-						return this.failMessage("Client for user: " + item.getPCID() + " wasn't running!");
+						return this.successMessage(of("message","File is created successfully. Program attempts to open file but detected client had not open."));
 					} catch (Exception e) {
 						return this.failMessage(e.getMessage());
 					}
@@ -273,6 +273,17 @@ public class FileController extends BaseController {
 
 			}
 		}
+
+	}
+	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "secure/s2ubmitUploadFile")
+	@ResponseBody
+	public String submitUploadFile2(DocTypeFieldSet bean, Model model,
+			HttpSession session) throws Exception {
+
+		return "<textarea name='textarea' id='textarea'>datasss</textarea>";
+		
 
 	}
 
@@ -403,7 +414,7 @@ public class FileController extends BaseController {
 		IPItem item = UserIPDAO.getUserIPBean(username);
 
 		if (item == null) {
-			return this.failMessage("Client is not run, could not edit");
+			return this.successMessage(of("message","File is locked successfully. Please open client first."));
 		} else {
 			OpenFileClientBuilder callback = new OpenFileClientBuilder(
 					item.getPCIP(), openfile, serverFilePath, fileStructPath);
@@ -413,9 +424,9 @@ public class FileController extends BaseController {
 				t.get();
 				return this.successMessage();
 			} catch (ExecutionException e){
-				return this.failMessage("Client for user: " + item.getPCID() + " wasn't running!");
+				return this.successMessage(of("message","File is locked successfully. Please open client first."));
 			} catch (Exception e) {
-				return this.failMessage(e.getMessage());
+				return this.failMessage("File is locked successfully." +e.getMessage());
 			}
 
 		}
