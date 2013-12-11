@@ -267,6 +267,17 @@ public class WebUtils {
 			}
 			result.add(0, result.get(0).substring(0,1));
 			result.set(1, result.get(1).substring(1));
+			if(result.get(3).contains(" ")){
+				int ind = 3;
+				for(String tmpstr : result.get(3).split(" ")){
+					result.add(ind, tmpstr);
+					ind++;
+				}
+				result.remove(ind);
+				
+				result.add(2, result.get(2).substring(0,1));
+				result.set(3, result.get(3).substring(1));
+			}
 		}
 		
 		return result.size()==0?null:result.toArray(new String[result.size()]);
@@ -384,6 +395,7 @@ public class WebUtils {
 			result = "<td><textarea class='uploadfileqryonly' id='note' name='note' cols ='10' rows = '2' onkeyup='chkvaldpty(this)'></textarea></td>";
 		} else if ("drawintType".equals(col.getFieldName())) {
 			result = drawingtypeSelect;
+			result = result.replace("<option value='"+overwriteValue+"'>", "<option value='"+overwriteValue+"' selected>");
 		} else {
 
 			if ("ref".equals(col.getFieldName())) {
