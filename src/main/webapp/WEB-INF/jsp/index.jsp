@@ -152,19 +152,21 @@
 					<div data-dojo-id="maincp_tc_cp1"
 						data-dojo-type="dijit/layout/ContentPane" title="Tools"
 						data-dojo-props="selected:true">
-						<a onclick="createProjectShowUp()" id="SearchButton3"
-							class="bWhite notext_wrap" title="" href="#">
+						<div style="cursor: pointer" onclick="createProjectShowUp()" id="SearchButton3"
+							class="bWhite notext_wrap" title="">
 							<div>
-								<img src="assets/icons/create_documents.png" style="width: 48px" />
+								<img src="assets/icons/my_projects_folder.png" style="width: 48px" />
 							</div>
 							<div>Create Project</div>
-						</a> <a onclick="preserveNos()" id="PresrvButton"
-							class="bWhite notext_wrap" title="" href="#">
+						</div>
+						<br> 
+						<div style="cursor: pointer" onclick="preserveNos()" id="PresrvButton"
+							class="bWhite notext_wrap" title="">
 							<div>
-								<img src="assets/icons/create_documents.png" style="width: 48px" />
+								<img src="assets/icons/1387310090_Numbers-128.png" style="width: 48px" />
 							</div>
 							<div>Preserve Number</div>
-						</a>
+						</div>
 					</div>
 					<div data-dojo-id="maincp_tc_cp2"
 						data-dojo-type="dijit/layout/ContentPane" title="Search">
@@ -172,10 +174,7 @@
 						<ul class="filesDown" id="shortcut_ul">
 							<li><span class="fileSuccess"></span> 202-039-4056
 								SampleProject1 <span class="remove"></span></li>
-							<li><span class="fileSuccess"></span> 202-039-4056
-								SampleProject2 <span class="remove"></span></li>
-							<li><span class="fileSuccess"></span> 202-039-4056
-								SampleProject3 <span class="remove"></span></li>
+							
 						</ul>
 					</div>
 
@@ -184,10 +183,7 @@
 						<ul class="filesDown" id="prjshortcut_ul">
 							<li><span class="fileSearch"></span> Client is 203 <span
 								class="remove"></span></li>
-							<li><span class="fileSearch"></span> New searcher <span
-								class="remove"></span></li>
-							<li><span class="fileSearch"></span> Last modified within
-								7days <span class="remove"></span></li>
+							
 						</ul>
 					</div>
 				</div>

@@ -152,19 +152,21 @@
 					<div data-dojo-id="maincp_tc_cp1"
 						data-dojo-type="dijit/layout/ContentPane" title="Tools"
 						data-dojo-props="selected:true">
-						<a onclick="createRolesSelection()" id="SearchButton3"
+						<div style="cursor:pointer" onclick="createRolesSelection()" id="SearchButton3"
 							class="bWhite notext_wrap" title="" href="#">
 							<div>
-								<img src="assets/icons/create_documents.png" style="width: 48px" />
+								<img src="assets/icons/1387312350_human-folder-public.png" style="width: 48px" />
 							</div>
 							<div>Create Users</div>
-						</a> <a onclick="roleDisplay()" id="roleDisplayButton"
+						</div>
+						<br>
+						<div style="cursor:pointer" onclick="roleDisplay()" id="roleDisplayButton"
 							class="bWhite notext_wrap" title="" href="#">
 							<div>
-								<img src="assets/icons/create_documents.png" style="width: 48px" />
+								<img src="assets/icons/1387312500_readme.png" style="width: 48px" />
 							</div>
 							<div>Roles</div>
-						</a>
+						</div>
 					</div>
 
 				</div>
@@ -220,7 +222,8 @@
 									</tr>
 									<tr>
 										<td><label for="name">Password: </label></td>
-										<td><input id="createPassword" type="password" /></td>
+										<td><input id="createPassword" type="password" required="false"
+											data-dojo-type="dijit/form/ValidationTextBox"/></td>
 									</tr>
 									<tr>
 										<td><label for="name">Email: </label></td>

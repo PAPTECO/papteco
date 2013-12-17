@@ -221,6 +221,8 @@ function changetosearch(client,anykey){
 	require([ "dojo/dom"], function(dom) {
 		dom.byId("searchclient").value = client;
 		dom.byId("search_anykey").value = anykey;
+		backtosearch();
+		doSearch();
 	});
 }
 
