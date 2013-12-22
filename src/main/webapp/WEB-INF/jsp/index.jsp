@@ -134,7 +134,7 @@
 <script type="text/javascript" src="lib/scripts/login.js"></script>
 <!-- End of Libraries -->
 </head>
-<body class="claro">
+<body class="claro" onload="doSearch()">
 
 	<%@ include file="header.jsp"%>
 
