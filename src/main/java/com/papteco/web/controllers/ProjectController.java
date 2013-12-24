@@ -234,6 +234,15 @@ public class ProjectController extends BaseController {
 
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "deleteProject")
+	@ResponseBody
+	public Map deleteProject(@RequestParam String projectId)
+			throws Exception {
+		//DELETE PROJECT
+		
+		return this.successMessage();
+	}
+	
 	private String genProjectCreateDate(CreateProjectFormBean bean) {
 		return bean.getCreateDate().substring(2, 6);
 	}
