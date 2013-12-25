@@ -352,28 +352,27 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 		<div data-dojo-type="dijit/Dialog" data-dojo-id="waitingDialog"
 			title="Release object ..."><div id="waitingDialogtext"></div></div>
 
-			<div data-dojo-type="dijit/Dialog"
+			<div data-dojo-type="dijit/Dialog" style="overflow-y:visible;background-color:white" 
 				data-dojo-id="uploadFileFormDialog" title="Upload documents"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
 				<form method="post" action="submitUploadFile" id="uploadFileForm"
 					enctype="multipart/form-data">
-					<div class="dijitDialogPaneContentArea">
+					<div class="dijitDialogPaneContentArea" >
 						<span><label for="date" id="upload_doctype_id_header">Document
 								Type: </label><input id="upload_doctype"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><label
 							for="date" id="uploader_header">From File: </label><input
 							name="uploadfile" type="file" id="uploader" style="display:none"/><input class="uploadfileqryonly" id="uploadedCopyForm" readOnly name="uploadedCopyForm" value="" size="30" style="display:none"/><input id="isRev" name="isRev" type="hidden"> </span>
 
 						<div id="insert_content"></div>
-
+						<div class="dijitDialogPaneActionBar">
+							<input label="Upload" data-dojo-type="dijit/form/Button"
+								onClick="validateUploadForm();" type="button" />
+							<button data-dojo-type="dijit/form/Button" type="button"
+								onClick="uploadFileFormDialog.hide()">Cancel</button>
+						</div>
 					</div>
-
-					<div class="dijitDialogPaneActionBar">
-						<input label="Upload" data-dojo-type="dijit/form/Button"
-							onClick="validateUploadForm();" type="button" />
-						<button data-dojo-type="dijit/form/Button" type="button"
-							onClick="uploadFileFormDialog.hide()">Cancel</button>
-					</div>
+					
 				</form>
 			</div>
 

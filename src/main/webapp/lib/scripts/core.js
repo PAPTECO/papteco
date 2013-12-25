@@ -59,7 +59,7 @@ function currentYearMonthDay() {
 
 	var dateobj = new Date();
 	var m = dateobj.getMonth() + 1;
-	var d = dateobj.getDay();
+	var d = dateobj.getDate();
 	var rst = ""
 	if (m < 10)
 		rst = dateobj.getFullYear() + "0" + m;
@@ -69,7 +69,7 @@ function currentYearMonthDay() {
 		rst = rst + "0" + d;
 	else
 		rst = rst + "" + d;
-
+	console.log("m",m,"d",d);
 	return rst;
 }
 

@@ -71,6 +71,8 @@ require([ 'dojox/grid/EnhancedGrid', 'dojox/grid/enhanced/plugins/Pagination',
 	});
 
 	loadingRoles("search_roles", false);
+	
+	doUserSearch();
 });
 
 var templatesInfo;

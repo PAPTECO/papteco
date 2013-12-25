@@ -234,12 +234,12 @@ public class ProjectController extends BaseController {
 
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "deleteProject")
+	@RequestMapping(method = RequestMethod.POST, value = "secure/deleteProject")
 	@ResponseBody
-	public Map deleteProject(@RequestParam String projectId)
+	public Map deleteProject(@RequestBody String projectId)
 			throws Exception {
 		//DELETE PROJECT
-		
+		System.out.println("going to deleteProject:"+projectId);
 		return this.successMessage();
 	}
 	

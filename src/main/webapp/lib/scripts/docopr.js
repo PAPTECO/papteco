@@ -329,3 +329,56 @@ function submitMyUser() {
 function hideMyUserDialog(){
 	myuserDialog.hide();
 }
+
+function deleteProject() {
+
+	console.log("deleteProject");
+
+	
+	
+	require([ "dojo/dom", "dojo/request/xhr", "dojo/json", "dojo/parser",
+			"dojo/query" ], function(dom, xhr, JSON, parser, query) {
+		
+		projectid = dom.byId("prj_id").value;
+		
+		if(!confirm(projectid+ " will be deteled. Are you sure?"))
+			return;
+		
+		dataset = {
+				projectId : projectid
+		};
+		console.log("requestdataset", dataset);
+		
+		xhr("secure/deleteProject", {
+			handleAs : "json",
+			data : JSON.stringify(dataset),
+			method : "post",
+			preventCache : true,
+			headers : {
+				'Content-Type' : 'application/json'
+			}
+		}).then(function(datas) {
+
+			console.log("datas", datas);
+
+			if (datas.type == "success") {
+				alert("Project has been deleted.");
+				backtosearch();
+				doSearch();
+
+			} else {
+				alert(datas.message);
+			}
+
+		}, function(err) {
+			// Handle the error condition
+			console.log(err);
+			alert("Project created fail ." + err);
+		}, function(evt) {
+			// Handle a progress event from the request if the
+			// browser supports XHR2
+			console.log(evt);
+			alert("Project created fail ." + evt);
+		});
+	});
+}

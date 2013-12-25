@@ -266,7 +266,7 @@
 					</property>
 					<property name="fieldDesc" value="Type of confirmation">
 					</property>
-					<property name="maxlength" value="100">
+					<property name="maxlength" value="80">
 					</property>
 					<property name="additional" value="true">
 					</property>

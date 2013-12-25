@@ -134,7 +134,7 @@
 <script type="text/javascript" src="lib/scripts/login.js"></script>
 <!-- End of Libraries -->
 </head>
-<body class="claro" onload="doSearch()">
+<body class="claro">
 
 	<%@ include file="header.jsp"%>
 
@@ -228,11 +228,13 @@
 					<legend>
 
 						<a id="SearchButton2" onClick="backtosearch();"
-							class="insideFont bRed notext_wrap " title="" href="#">Back</a>
+							class="insideFont bGold notext_wrap " title="" href="#">Back</a>
 						<div class="blank_interval notext_wrap">&nbsp;</div>
 						<a id="SearchButton3" class="insideFont bLightBlue notext_wrap"
 							title="" href="#" onClick="refreshProjectBroad(getProjectId())">Refresh</a>
-
+						<div class="blank_interval notext_wrap">&nbsp;</div>
+						<a id="SearchButton10" onClick="deleteProject();"
+							class="insideFont bRed notext_wrap " title="" href="#">Delete</a>
 
 					</legend>
 					<div style="float: left; padding: 30px">
@@ -413,7 +415,7 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 		
 			
-			<div data-dojo-type="dijit/Dialog"
+			<div data-dojo-type="dijit/Dialog" style="overflow-y:visible;background-color:white"
 				data-dojo-id="uploadFileFormDialog" title="Upload documents"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
@@ -426,15 +428,15 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 							name="uploadfile" type="file" id="uploader" style="display:none"/><input class="uploadfileqryonly" id="uploadedCopyForm" readOnly name="uploadedCopyForm" value="" size="30" style="display:none"/><input id="isRev" name="isRev" type="hidden"> </span>
 
 						<div id="insert_content"></div>
-
-					</div>
-
-					<div class="dijitDialogPaneActionBar">
-						<input label="Upload" data-dojo-type="dijit/form/Button"
+						<div class="dijitDialogPaneActionBar">
+							<input label="Upload" data-dojo-type="dijit/form/Button"
 							onClick="validateUploadForm();" type="button" />
-						<button data-dojo-type="dijit/form/Button" type="button"
+							<button data-dojo-type="dijit/form/Button" type="button"
 							onClick="uploadFileFormDialog.hide()">Cancel</button>
+						</div>
 					</div>
+
+					
 				</form>
 			</div>
 

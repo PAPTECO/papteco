@@ -322,6 +322,19 @@ function placeAtDate(tagid) {
 	});
 }
 
+function placeSubmit(tagid) {
+
+	console.log("begin placeSubmit");
+
+	require([ "dojo/dom", "dijit/registry", "dojo/parser",
+			"dijit/form/DateTextBox" ], function(dom, registry, parser,
+			DateTextBox) {
+
+		dom.byId(tagid).innerHTML="<div class='dijitDialogPaneActionBar'><input label='Upload' data-dojo-type='dijit/form/Button' onClick='validateUploadForm();' type='button' /><button data-dojo-type='dijit/form/Button' type='button' onClick='uploadFileFormDialog.hide()'>Cancel</button></div>";
+
+	});
+}
+
 function validateUploadForm() {
 
 	require(

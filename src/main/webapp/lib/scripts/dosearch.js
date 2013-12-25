@@ -80,6 +80,7 @@ require([ 'dojox/grid/EnhancedGrid', 'dojox/grid/enhanced/plugins/Pagination',
 	});
 
 	loadingClients("searchclient",false);
+	doSearch();
 });
 
 
