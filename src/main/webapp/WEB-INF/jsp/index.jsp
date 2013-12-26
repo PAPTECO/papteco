@@ -535,7 +535,7 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 									</tr>
 									<tr>
 										<td><label for="name">Unique No: </label></td>
-										<td><input id="prjno" style="width: 130px;" /><span id="prjPreserve"></span></td>
+										<td><input id="prjno" style="width: 130px;" maxLength="3"/><span id="prjPreserve"></span></td>
 									</tr>
 									<tr>
 										<td><label for="name">Short Desc: </label></td>

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import com.papteco.web.beans.FileBean;
 import com.papteco.web.beans.FolderBean;
-import com.papteco.web.beans.PreserveNosBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.utils.FoldersUtils;
 import com.papteco.web.utils.SystemConfiguration;
@@ -30,7 +28,7 @@ import com.sleepycat.persist.PrimaryIndex;
 import com.sleepycat.persist.StoreConfig;
 
 @Component
-public class ProjectCacheDAO {
+public class ProjectBackupDAO {
 	@Autowired
 	SystemConfiguration sysConfig;
 	@Autowired
@@ -46,30 +44,10 @@ public class ProjectCacheDAO {
 		if(!f.exists()){
 			f.mkdirs();
 		}
-		new ProjectCacheDAO(datapath);
-		ProjectBean templatePrj = getProjectTree("0");
-		if(templatePrj == null){
-			templatePrj = templateCreateSample();
-			foldersUtils.createProjectFolders(foldersUtils.prepareProjectPath(templatePrj.getProjectCde()), templatePrj.getFolderTree());
-			saveProjectTree(templatePrj);
-		}
+		new ProjectBackupDAO(datapath);
 	}  
-	public ProjectBean templateCreateSample(){
-		ProjectBean tmpProject = new ProjectBean();
-		tmpProject.setProjectId("0");
-		tmpProject.setProjectCde("Templates");
-		tmpProject.setClientNo("0");
-		tmpProject.setCreateDate("2010-02-09");
-		tmpProject.setUniqueNo("0");
-		tmpProject.setCreatedAt(new Date());
-		tmpProject.setCreatedBy("admin");
-		tmpProject.setShortDesc("");
-		tmpProject.setLongDesc("");
-		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
-		return tmpProject;
-	}
 	
-	public ProjectCacheDAO(String databasePath) {
+	public ProjectBackupDAO(String databasePath) {
 
 		// Open a transactional Berkeley DB engine environment.
 		//
@@ -100,33 +78,6 @@ public class ProjectCacheDAO {
 
 	public static void deleteProjectTree(String id){
 		projectIdIndex.delete(id);
-	}
-	
-	public static String getMaxProjectId(){
-		if(projectIdIndex != null && projectIdIndex.count() == 0){
-			return "001";
-		}else{
-			return getIncreaseNumberBylatestKey(projectIdIndex.sortedMap().lastKey());
-		}
-	}
-	
-	public static String getIncreaseNumberBylatestKey(String key){
-		Integer intKey = Integer.valueOf(key)+1;
-		
-		PreserveNosBean presNo = PreserveNosDAO.getPresNosBean(PreserveNosDAO.PRES_NO_CDE);
-		while(intKey >= presNo.getPresNoFrom() && intKey <= presNo.getPresNoTo()){
-			intKey = intKey+1;
-		}
-		return formatIncreaseNumber(String.valueOf(intKey), 3);
-	}
-	
-	public static String formatIncreaseNumber(String num, int digs){
-		StringBuffer result = new StringBuffer();
-		for(int i = 0; i < digs-num.length(); i++){
-			result.append("0");
-		}
-		result.append(num);
-		return result.toString();
 	}
 	
 	public static List<ProjectBean> getAllProjectBeans(){
@@ -228,7 +179,7 @@ public class ProjectCacheDAO {
 	}
 	
 	/* mandatory constructor method */
-	public ProjectCacheDAO() {
+	public ProjectBackupDAO() {
 		
 	}
 

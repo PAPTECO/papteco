@@ -9,6 +9,7 @@ import com.papteco.web.beans.FolderBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.beans.ProjectShortcutBean;
 import com.papteco.web.beans.SearchShortcutBean;
+import com.papteco.web.dbs.ProjectBackupDAO;
 import com.papteco.web.dbs.ProjectCacheDAO;
 import com.papteco.web.dbs.ProjectShortcutDAO;
 import com.papteco.web.dbs.SearchShortcutDAO;
@@ -48,6 +49,17 @@ public class ProjectServiceImpl extends BaseService {
 		ProjectCacheDAO.saveProjectTree(project);
 	}
 
+	public String deleteProject(String prjId) throws Exception {
+		ProjectBean delPrj = ProjectCacheDAO.getProjectTree(prjId);
+		if(delPrj == null){
+			return "NO_PROJECT";
+		}
+		ProjectBackupDAO.saveProjectTree(delPrj);
+		ProjectCacheDAO.deleteProjectTree(prjId);
+		foldersUtils.deletePrjAndRenameFolder(foldersUtils.prepareProjectPath(delPrj.getProjectCde()));
+		return "SUCCESS";
+	}
+	
 	public void saveProjectShortcut(String usracct, String prjSavName, String prjId) throws Exception {
 		ProjectShortcutBean prjshortcut = ProjectShortcutDAO.getProjectShortcut(usracct);
 		if(prjshortcut == null){

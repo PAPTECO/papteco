@@ -1,6 +1,7 @@
 package com.papteco.web.utils;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -36,6 +37,14 @@ public class FoldersUtils extends BaseUtils{
 			}
 		}
 		System.out.println("Folders creation finish.");
+	}
+	
+	public void deletePrjAndRenameFolder(String projectPath){
+		File f = new File(projectPath);
+		if(f.exists()){
+			f.renameTo(new File(f.getPath()+"("+ new java.text.SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) +")"));
+		}
+		
 	}
 	
 	public String prepareProjectPath(String projectCode){

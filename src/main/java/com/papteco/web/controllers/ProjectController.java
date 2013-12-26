@@ -42,6 +42,7 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Map createProject(@RequestBody CreateProjectFormBean bean)
 			throws Exception {
+		//Notice: The max project ID should be 999, cannot support the larger ID.
 		ProjectBean tmpProject = new ProjectBean();
 		tmpProject.setProjectId(bean.getUniqueno());
 		tmpProject.setProjectCde(bean.getClientno() + "-"
@@ -56,7 +57,9 @@ public class ProjectController extends BaseController {
 		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
 
 		try {
-			if(projectService.isPrjIdExisting(bean.getUniqueno())){
+			if(Integer.valueOf(bean.getUniqueno())>999){
+				return this.failMessage("The Unique No. cannot large than 999 !");
+			}else if(projectService.isPrjIdExisting(bean.getUniqueno())){
 				return this.failMessage("The Unique No. was existing : "+bean.getUniqueno());
 			}else{
 				projectService.createProject(tmpProject,
@@ -236,10 +239,14 @@ public class ProjectController extends BaseController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "secure/deleteProject")
 	@ResponseBody
-	public Map deleteProject(@RequestBody String projectId)
+	public Map deleteProject(@RequestBody ProjectBean projectBean)
 			throws Exception {
 		//DELETE PROJECT
-		System.out.println("going to deleteProject:"+projectId);
+		System.out.println("going to deleteProject:"+projectBean.getProjectId());
+		String reply = projectService.deleteProject(projectBean.getProjectId());
+		if(reply.equals("NO_PROJECT")){
+			return this.failMessage("Project not existing!");
+		}
 		return this.successMessage();
 	}
 	
