@@ -35,6 +35,7 @@
 	checkifLogin();
 </script>
 
+	
 <!-- Container -->
 <div id="container">
 
@@ -76,15 +77,16 @@
 		<!-- The navigation bar -->
 		<div id="navbar">
 			<ul class="nav">
-				<li><a href="index">Dashboard</a></li>
-				<li><a href="members">Members</a></li>
-				<li><a href="users">PIMS Users</a></li>
-				<!-- <li><a href="clients">Clients</a></li> -->
-				<li><a href="templates">Templates</a></li>
-				<li><a href="#">Others</a>
+				<li><a href="index"><spring:message code="menu.dashboard" /></a></li>
+				<li><a href="members"><spring:message code="menu.members" /></a></li>
+				<li><a href="users"><spring:message code="menu.users" /></a></li>
+				<!-- <li><a href="clients"><spring:message code="menu.clients" /></a></li> -->
+				<li><a href="templates"><spring:message code="menu.templates" /></a></li>
+				<li><a href="#"><spring:message code="menu.others" /></a>
 					<ul>
-						<li><a href="#" onclick="aboutSysDialog.show()">About
-								System</a></li>
+						<li><a href="?language=en_US"><spring:message code="menu.others.english"/></a></li>
+						<li><a href="?language=cn_ZH"><spring:message code="menu.others.chinese"/></a></li>
+						<li><a href="#" onclick="aboutSysDialog.show()"><spring:message code="menu.others.about"/></a></li>
 					</ul></li>
 			</ul>
 		</div>
@@ -95,6 +97,10 @@
 </div>
 <!-- End of Container -->
 
+	<div id="occupydiv" class="occupydiv">
+		<div id="occupydivloading" class="occupydivloading"></div>
+	</div>
+	
 <div data-dojo-type="dijit/Dialog" data-dojo-id="aboutSysDialog"
 	title="About System">
 	<div id="aboutDialogtext">Version 1.0.0</div>
@@ -102,9 +108,8 @@
 	<div id="aboutDialogtext">@Copyright 2013</div>
 </div>
 
-<div data-dojo-type="dijit/Dialog" data-dojo-id="myuserDialog"
-	title="Account Information"
-	execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
+<div data-dojo-type="dijit/Dialog" data-dojo-id="myuserDialog" id="myuserDialog" 
+	title="Account Information">
 
 	<div data-dojo-type="dijit/form/Form" id="myuserform"
 		data-dojo-id="myuserform" encType="multipart/form-data" action=""

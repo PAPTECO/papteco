@@ -85,12 +85,11 @@ require([ "dijit/Tree", "dojo/data/ItemFileReadStore",
 				alert('Please select file.');
 			}
 
-		}
+		};
 
 		// dojo.byId("doc_init_upload_at").innerHTML=docTree.getLabel(item);
 		// dojo.byId("doc_init_upload_by").innerHTML=docTree.getLabel(item);
 	});
-
 });
 
 function beforeExpandAll(treeId) {

@@ -42,6 +42,22 @@ function fadeItShow(tabname) {
 
 }
 
+function fadeIt3s(tabname) {
+	require([ "dojo/_base/fx", "dojo/dom-style" ], function(fx, style) {
+		// Function linked to the button to trigger the fade.
+		style.set(tabname, "opacity", "1");
+		var fadeArgs = {
+			node : tabname,
+			duration: 3000,
+			onEnd: function(){
+				style.set(tabname, "display", "none");
+		    }
+		};
+		fx.fadeOut(fadeArgs).play();
+		
+	});
+}
+
 function currentYearMonth() {
 
 	var dateobj = new Date();
@@ -100,3 +116,4 @@ function gotoPage(address) {
 				window.location = address;
 			});
 }
+

@@ -22,16 +22,9 @@
 	<!-- environment properties -->
 	<util:properties id="settings" location="classpath:environment.properties" />
 
-<!-- 
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix">
-			<value>/WEB-INF/jsp/</value>
-		</property>
-		<property name="suffix">
-			<value>.jsp</value>
-		</property>
-	</bean> -->
+	<!-- <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+		<property name="prefix"> <value>/WEB-INF/jsp/</value> </property> <property 
+		name="suffix"> <value>.jsp</value> </property> </bean> -->
 
 	<bean id="jacksonMessageConverter"
 		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
@@ -69,18 +62,38 @@
 		</property>
 	</bean>
 
-<!-- 
-	<mvc:interceptors>
-		<bean class="com.papteco.web.filters.SecurityFilter" />
-	</mvc:interceptors> -->
+	<!-- <mvc:interceptors> <bean class="com.papteco.web.filters.SecurityFilter" 
+		/> </mvc:interceptors> -->
 
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/secure/*" /> <!-- /user/* -->
 			<bean class="com.papteco.web.filters.SecurityFilter"></bean>
 		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/*" /> <!-- /user/* -->
+			<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">  
+		        <property name="paramName" value="language" />  
+		    </bean>  
+		</mvc:interceptor>
 	</mvc:interceptors>
+
+	<bean id="sessionLocaleResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">  
+	    <property name="defaultLocale" value="cn_ZH" />  
+	</bean> 
 	
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">  
+	    <property name="cookieName" value="language" />  
+	    <property name="cookieMaxAge" value="3600" />  
+	    <property name="defaultLocale" value="en_US" />  
+	</bean> 
+	
+	<bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename">
+            <value>messages</value>
+        </property>
+    </bean>
 	<!-- <bean id="urlMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"> 
 		<property name="interceptors"> <list> <bean class="com.papteco.web.filters.SecurityFilter" 
 		/> </list> </property> </bean> -->

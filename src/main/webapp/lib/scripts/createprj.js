@@ -58,7 +58,6 @@ function loadingClients(tagid,flag) {
 				required : flag,
 				autoComplete : false
 			}, tagid);
-
 			
 		}, function(err) {
 			// Handle the error condition

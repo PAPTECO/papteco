@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@page contentType="text/html"%>
+<%@page pageEncoding="UTF-8"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
 <!-- Meta -->
@@ -131,6 +134,7 @@
 <script type="text/javascript" src="lib/scripts/docopr.js"></script>
 <script type="text/javascript" src="lib/scripts/uploadfile.js"></script>
 <script type="text/javascript" src="lib/scripts/login.js"></script>
+<script type="text/javascript" src="lib/scripts/loadcompleted.js"></script>
 
 <!-- End of Libraries -->
 </head>
@@ -291,8 +295,8 @@
 
 			<div>PAPTECO Engineering & Sales (GZ) Co., Ltd.</div>
 			<div>China: Room 706, Building #6, HighSun Xing Yue, N0. 383
-				Panyu avenue north, Panyu, Guangzhou, Guangdong province, People¡¯s
-				republic of China P.O£º511400</div>
+				Panyu avenue north, Panyu, Guangzhou, Guangdong province, PeopleÂ¡Â¯s
+				republic of China P.OÂ£Âº511400</div>
 			<div>TEL.: 86-20-3104 0418, FAX.: 86-20-3104 0298, E-mail:
 				garylai@papteco.com, fabian@papteco.com</div>
 			<div>Copyright 2013-2014 by Papteco. All Rights Reserved.</div>

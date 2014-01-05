@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<%@page contentType="text/html"%>
+<%@page pageEncoding="UTF-8"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
 <!-- Meta -->
@@ -8,7 +11,7 @@
 <!-- Page title -->
 <title>Wide Admin</title>
 <!-- End of Page title -->
-    
+
 <!-- Libraries -->
 <link type="text/css" href="css/layout.css" rel="stylesheet" />
 <link type="text/css" rel="stylesheet"
@@ -132,13 +135,13 @@
 <script type="text/javascript" src="lib/scripts/uploadfile.js"></script>
 <script type="text/javascript" src="lib/scripts/shortcut.js"></script>
 <script type="text/javascript" src="lib/scripts/login.js"></script>
+<script type="text/javascript" src="lib/scripts/loadcompleted.js"></script>
 <!-- End of Libraries -->
 </head>
-<body class="claro">
+<body class="claro" >
 
 	<%@ include file="header.jsp"%>
-
-	<div data-dojo-id="mainbc"
+	<div id="index_mainbc" data-dojo-id="mainbc"
 		data-dojo-type="dijit/layout/BorderContainer"
 		style="width: 100%; height: 100%; margin: 0px; padding: 0px;">
 
@@ -152,18 +155,20 @@
 					<div data-dojo-id="maincp_tc_cp1"
 						data-dojo-type="dijit/layout/ContentPane" title="Tools"
 						data-dojo-props="selected:true">
-						<div style="cursor: pointer" onclick="createProjectShowUp()" id="SearchButton3"
-							class="bWhite notext_wrap" title="">
+						<div style="cursor: pointer" onclick="createProjectShowUp()"
+							id="SearchButton3" class="bWhite notext_wrap" title="">
 							<div>
-								<img src="assets/icons/my_projects_folder.png" style="width: 48px" />
+								<img src="assets/icons/my_projects_folder.png"
+									style="width: 48px" />
 							</div>
 							<div>Create Project</div>
 						</div>
-						<br> 
-						<div style="cursor: pointer" onclick="preserveNos()" id="PresrvButton"
-							class="bWhite notext_wrap" title="">
+						<br>
+						<div style="cursor: pointer" onclick="preserveNos()"
+							id="PresrvButton" class="bWhite notext_wrap" title="">
 							<div>
-								<img src="assets/icons/1387310090_Numbers-128.png" style="width: 48px" />
+								<img src="assets/icons/1387310090_Numbers-128.png"
+									style="width: 48px" />
 							</div>
 							<div>Preserve Number</div>
 						</div>
@@ -174,7 +179,7 @@
 						<ul class="filesDown" id="shortcut_ul">
 							<li><span class="fileSuccess"></span> 202-039-4056
 								SampleProject1 <span class="remove"></span></li>
-							
+
 						</ul>
 					</div>
 
@@ -183,7 +188,7 @@
 						<ul class="filesDown" id="prjshortcut_ul">
 							<li><span class="fileSearch"></span> Client is 203 <span
 								class="remove"></span></li>
-							
+
 						</ul>
 					</div>
 				</div>
@@ -201,7 +206,7 @@
 						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
 						<div class="notext_wrap blank_interval">Client No</div>
 						<input id="searchclient" />
-						
+
 						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
 						<div class="notext_wrap blank_interval">Any Key</div>
 						<input type="text" name="search_anykey" id="search_anykey"
@@ -212,10 +217,10 @@
 							title="" href="#" onClick="doSearch()">Search</a>
 						<div class="blank_interval notext_wrap">&nbsp;</div>
 						<a id="SearchButton1" class="insideFont bGreen notext_wrap"
-							title="" href="#" onclick="initSearchShortcutName();searchSaveDialog.show()">+Add to
-							Custom Filters</a>
-						<div id="result1">
-						</div>
+							title="" href="#"
+							onclick="initSearchShortcutName();searchSaveDialog.show()">+Add
+							to Custom Filters</a>
+						<div id="result1"></div>
 					</div>
 				</fieldset>
 				<div id="gridDiv"></div>
@@ -238,11 +243,12 @@
 
 					</legend>
 					<div style="float: left; padding: 30px">
-						<input type="hidden" id="prj_id"></input>
-						<input type="hidden" id="prj_cde"></input>
+						<input type="hidden" id="prj_id"></input> <input type="hidden"
+							id="prj_cde"></input>
 						<h1 id="prj_name">Project Name</h1>
 						<div class="blank_interrupt"></div>
-						<a id="SearchButton2" onClick="initProjectShortcutName();projectstSaveDialog.show()"
+						<a id="SearchButton2"
+							onClick="initProjectShortcutName();projectstSaveDialog.show()"
 							class="insideFont bGreen notext_wrap " title="" href="#">+
 							Add To ShortCut</a>
 					</div>
@@ -349,7 +355,7 @@ if (r==false)
 							
 
                     </script>Delete</li>
-                    <li data-dojo-type="dijit/MenuItem"><script
+					<li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
                             // get a hold of the dijit.TreeNode that was the source of this open event
                             var tn = dijit.byNode(this.getParent().currentTarget);
@@ -367,7 +373,7 @@ if (r==false)
 uploadFileFormShow(tn.item.docType,tn.item.id,true);
 
                     </script>Add Revision</li>
-                    <li data-dojo-type="dijit/MenuItem"><script
+					<li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
                             // get a hold of the dijit.TreeNode that was the source of this open event
                             var tn = dijit.byNode(this.getParent().currentTarget);
@@ -385,7 +391,7 @@ if (r==false)
 editFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId); 
 
                     </script>Edit</li>
-                    <li data-dojo-type="dijit/MenuItem"><script
+					<li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
                             // get a hold of the dijit.TreeNode that was the source of this open event
                             var tn = dijit.byNode(this.getParent().currentTarget);
@@ -408,14 +414,17 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 			</div>
 
-			
-			
-		<div data-dojo-type="dijit/Dialog" data-dojo-id="waitingDialog"
-			title="Release object ..."><div id="waitingDialogtext"></div></div>
 
-		
-			
-			<div data-dojo-type="dijit/Dialog" style="overflow-y:visible;background-color:white"
+
+			<div data-dojo-type="dijit/Dialog" data-dojo-id="waitingDialog"
+				title="Release object ..." id="waitingDialog">
+				<div id="waitingDialogtext"></div>
+			</div>
+
+
+
+			<div data-dojo-type="dijit/Dialog"
+				style="overflow-y: visible; background-color: white"
 				data-dojo-id="uploadFileFormDialog" title="Upload documents"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
@@ -425,18 +434,21 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 						<span><label for="date" id="upload_doctype_id_header">Document
 								Type: </label><input id="upload_doctype"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span><label
 							for="date" id="uploader_header">From File: </label><input
-							name="uploadfile" type="file" id="uploader" style="display:none"/><input class="uploadfileqryonly" id="uploadedCopyForm" readOnly name="uploadedCopyForm" value="" size="30" style="display:none"/><input id="isRev" name="isRev" type="hidden"> </span>
+							name="uploadfile" type="file" id="uploader" style="display: none" /><input
+							class="uploadfileqryonly" id="uploadedCopyForm" readOnly
+							name="uploadedCopyForm" value="" size="30" style="display: none" /><input
+							id="isRev" name="isRev" type="hidden"> </span>
 
 						<div id="insert_content"></div>
 						<div class="dijitDialogPaneActionBar">
 							<input label="Upload" data-dojo-type="dijit/form/Button"
-							onClick="validateUploadForm();" type="button" />
+								onClick="validateUploadForm();" type="button" />
 							<button data-dojo-type="dijit/form/Button" type="button"
-							onClick="uploadFileFormDialog.hide()">Cancel</button>
+								onClick="uploadFileFormDialog.hide()">Cancel</button>
 						</div>
 					</div>
 
-					
+
 				</form>
 			</div>
 
@@ -448,18 +460,19 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 					<table class="dijitdialog_index">
 						<tr>
 							<td><label for="name">From: </label></td>
-							<td><input type="text"
-								id="presrv_from" value="" class="dialogText"></td>
+							<td><input type="text" id="presrv_from" value=""
+								class="dialogText"></td>
 							<td><label for="name">To: </label></td>
-							<td><input type="text"
-								id="presrv_to" value="" class="dialogText"></td>
+							<td><input type="text" id="presrv_to" value=""
+								class="dialogText"></td>
 						</tr>
 					</table>
 				</div>
 
 				<div class="dijitDialogPaneActionBar">
-					<button id="submitPresrvnos" data-dojo-type="dijit/form/Button" type="button"
-						onClick="submitPresrvNos()" data-dojo-id="submitPresrvnos">Save</button>
+					<button id="submitPresrvnos" data-dojo-type="dijit/form/Button"
+						type="button" onClick="submitPresrvNos()"
+						data-dojo-id="submitPresrvnos">Save</button>
 					<button data-dojo-type="dijit/form/Button" type="button"
 						onClick="presrvDialog.hide()" data-dojo-id="canncelPresrvnos">Cancel</button>
 				</div>
@@ -535,7 +548,8 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 									</tr>
 									<tr>
 										<td><label for="name">Unique No: </label></td>
-										<td><input id="prjno" style="width: 130px;" maxLength="3"/><span id="prjPreserve"></span></td>
+										<td><input id="prjno" style="width: 130px;" maxLength="3" /><span
+											id="prjPreserve"></span></td>
 									</tr>
 									<tr>
 										<td><label for="name">Short Desc: </label></td>
@@ -577,8 +591,8 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 			<div>PAPTECO Engineering & Sales (GZ) Co., Ltd.</div>
 			<div>China: Room 706, Building #6, HighSun Xing Yue, N0. 383
-				Panyu avenue north, Panyu, Guangzhou, Guangdong province, People¡¯s
-				republic of China P.O£º511400</div>
+				Panyu avenue north, Panyu, Guangzhou, Guangdong province, PeopleÂ¡Â¯s
+				republic of China P.OÂ£Âº511400</div>
 			<div>TEL.: 86-20-3104 0418, FAX.: 86-20-3104 0298, E-mail:
 				garylai@papteco.com, fabian@papteco.com</div>
 			<div>Copyright 2013-2014 by Papteco. All Rights Reserved.</div>
