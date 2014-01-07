@@ -605,6 +605,25 @@ public class WebUtils {
 		return datalist;
 	}
 	
+	//clients
+	
+	public static List toSearchClientGrid(String searchClientNo, String searchClientName) {
+
+		List<ClientBean> searchResult = Lists.asList(new ClientBean("100","dummy"),new ClientBean[0]);
+		
+		List datalist = Lists.newArrayList();
+
+		for (int i = 0; i < searchResult.size(); i++) {
+			
+			Map data = ImmutableMap.of("col1", searchResult.get(i).getClientNo(), "col2",searchResult.get(i).getClientName());
+			Map testdata = Maps.newHashMap();
+			testdata.put("id", searchResult.get(i).getClientNo());
+			testdata.putAll(data);
+			datalist.add(testdata);
+		}
+		return datalist;
+	}
+	
 	public static Map toRolesJson(Set<Object> roles) {
 		List dataList = Lists.newArrayList();
 		for(Object key : roles){

@@ -15,6 +15,18 @@ public class ClientBean implements Comparable<ClientBean>, Serializable {
 	private String additional3;
 	private String additional4;
 	private String additional5;
+	
+	public ClientBean(){
+		
+	}
+	
+	public ClientBean(String clientNo, String clientName) {
+		super();
+		this.clientNo = clientNo;
+		this.clientName = clientName;
+	}
+
+
 	public String getClientNo() {
 		return clientNo;
 	}

@@ -9,7 +9,7 @@
 <!-- End of Meta -->
 
 <!-- Page title -->
-<title>Wide Admin</title>
+<title>Client Information</title>
 <!-- End of Page title -->
 
 <!-- Libraries -->
@@ -102,38 +102,14 @@
 		}, "SearchButton");
 	});
 
-	function backtosearch() {
-		require([ "dojo/_base/fx", "dojo/dom-style" ], function(fx, style) {
-			// Function linked to the button to trigger the fade.
-			function fadeIt(tabname) {
-				style.set(tabname, "opacity", "1");
-				var fadeArgs = {
-					node : tabname
-				};
-				fx.fadeOut(fadeArgs).play();
-				style.set(tabname, "display", "none");
-			}
-			function fadeItShow(tabname) {
-				style.set(tabname, "opacity", "0");
-				style.set(tabname, "display", "block");
-				var fadeArgs = {
-					node : tabname
-				};
-				fx.fadeIn(fadeArgs).play();
-
-			}
-			fadeItShow("MainSearchTab");
-			fadeIt("DirectoryTab");
-
-		});
-	}
 </script>
 <script type="text/javascript" src="lib/scripts/core.js"></script>
 <script type="text/javascript" src="lib/scripts/createprj.js"></script>
-<script type="text/javascript" src="lib/scripts/users.js"></script>
+<script type="text/javascript" src="lib/scripts/clients.js"></script>
 <script type="text/javascript" src="lib/scripts/docopr.js"></script>
 <script type="text/javascript" src="lib/scripts/uploadfile.js"></script>
 <script type="text/javascript" src="lib/scripts/login.js"></script>
+<script type="text/javascript" src="lib/scripts/loadcompleted.js"></script>
 
 <!-- End of Libraries -->
 </head>
@@ -155,18 +131,12 @@
 					<div data-dojo-id="maincp_tc_cp1"
 						data-dojo-type="dijit/layout/ContentPane" title="Tools"
 						data-dojo-props="selected:true">
-						<a onclick="createRolesSelection()" id="SearchButton3"
+						<a onclick="createClientSelection()" id="SearchButton3"
 							class="bWhite notext_wrap" title="" href="#">
 							<div>
 								<img src="assets/icons/create_documents.png" style="width: 48px" />
 							</div>
-							<div>Create Users</div>
-						</a> <a onclick="roleDisplay()" id="roleDisplayButton"
-							class="bWhite notext_wrap" title="" href="#">
-							<div>
-								<img src="assets/icons/create_documents.png" style="width: 48px" />
-							</div>
-							<div>Roles</div>
+							<div>Create Client</div>
 						</a>
 					</div>
 
@@ -183,18 +153,16 @@
 					<legend>Search</legend>
 					<div class="content_search_area notext_wrap">
 						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
-						<div class="notext_wrap blank_interval">User Name</div>
-						<input type="text" name="search_user_name" id="search_user_name"
-							value="" data-dojo-type="dijit/form/ValidationTextBox"
-							data-dojo-props="regExp:'[\\w]+', invalidMessage:'Invalid Non-Space Text.'" />
-
+						<div class="notext_wrap blank_interval">Client No</div>
+						<input id="search_client_no" />
+						
 						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
-						<div class="notext_wrap blank_interval">Roles</div>
-						<input id="search_roles" />
+						<div class="notext_wrap blank_interval">Client Name</div>
+						<input id="search_client_name" name="search_client_name"  data-dojo-type="dijit/form/ValidationTextBox"/>
 						<div class="notext_wrap" style="padding-left: 20px">&nbsp;</div>
 
 						<a id="SearchButton1" class="insideFont bLightBlue notext_wrap"
-							title="" href="#" onClick="doUserSearch() ">Search</a>
+							title="" href="#" onClick="doClientSearch() ">Search</a>
 
 						<div id="result1"></div>
 					</div>
@@ -202,78 +170,36 @@
 				<div id="gridDiv"></div>
 			</div>
 
-			<div data-dojo-type="dijit/Dialog" data-dojo-id="createUserDialog"
-				title="User Information"
-				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
+			<div data-dojo-type="dijit/Dialog" data-dojo-id="createClientDialog"
+				title="Client Information" >
 
-				<div data-dojo-type="dijit/form/Form" id="userform"
-					data-dojo-id="userform" encType="multipart/form-data" action=""
+				<div data-dojo-type="dijit/form/Form" id="clientform"
+					data-dojo-id="clientform" encType="multipart/form-data" action=""
 					method="">
 
-					<div class="dijitDialogPaneContentArea">
+					<div style="width:360px;height:200px">
 
 						<div>
-							<fieldset style="float: left; height: 430px;">
+							<fieldset style="float: left; height: 200px;">
 								<legend>Require Information </legend>
 								<table class="dijitdialog_index">
 									<tr>
-										<td><label for="name">User Name: </label></td>
-										<td><input id="createUserName" required="true"
-											data-dojo-type="dijit/form/ValidationTextBox" /> &nbsp;&nbsp;<div id="deletetag" style="float:right"></div></td>
+										<td><label for="name">Client No: </label></td>
+										<td><input id="createClientNo" required="true"
+											data-dojo-type="dijit/form/ValidationTextBox" /> &nbsp;&nbsp;<div id="deleteClientTag" style="float:right"></div></td>
 									</tr>
 									<tr>
-										<td><label for="name">Password: </label></td>
-										<td><input id="createPassword" type="password" /></td>
-									</tr>
-									<tr>
-										<td><label for="name">Email: </label></td>
-										<td><input id="createEmail" required="true"
+										<td><label for="name">Client Name: </label></td>
+										<td><input id="createClientName" required="true" 
 											data-dojo-type="dijit/form/ValidationTextBox" /></td>
 									</tr>
-
 								</table>
 								<div class="dijitDialogPaneActionBar">
-									<button data-dojo-id="createprjsubmit"
+									<button data-dojo-id="createClientsubmit"
 										data-dojo-type="dijit/form/Button" type="button"
-										onClick="submitEditUser()">Submit</button>
+										onClick="submitClient()">Submit</button>
 									<button data-dojo-type="dijit/form/Button" type="button"
-										onClick="hideUserDialog()">Cancel</button>
-								</div>
-							</fieldset>
-							<fieldset>
-								<legend>Roles (<a href="#" onclick="roleDisplay()">Definition?</a>)</legend>
-
-								<div style="height: 410px; overflow-y: auto;"
-									id="createSelection"></div>
-
-							</fieldset>
-						</div>
-
-
-					</div>
-				</div>
-
-			</div>
-
-			<div data-dojo-type="dijit/Dialog" data-dojo-id="roleDisplayDialog"
-				title="Role Information"
-				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
-
-				<div data-dojo-type="dijit/form/Form" id="roleform"
-					data-dojo-id="roleform" encType="multipart/form-data" action=""
-					method="">
-
-					<div style="margin:20px;" class="roleDijitDialogPaneContentArea">
-
-						<div >
-							<fieldset>
-								<legend>Roles</legend>
-
-								<div style="height: 410px; overflow-y: auto;"
-									id="roleDisplay"></div>
-								<div class="dijitDialogPaneActionBar">
-									<button data-dojo-type="dijit/form/Button" type="button"
-										onClick="roleDisplayDialog.hide()">OK</button>
+										onClick="hideClientDialog()">Cancel</button>
 								</div>
 							</fieldset>
 						</div>

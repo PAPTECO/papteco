@@ -80,7 +80,7 @@
 				<li><a href="index"><spring:message code="menu.dashboard" /></a></li>
 				<li><a href="members"><spring:message code="menu.members" /></a></li>
 				<li><a href="users"><spring:message code="menu.users" /></a></li>
-				<!-- <li><a href="clients"><spring:message code="menu.clients" /></a></li> -->
+				<li><a href="clients"><spring:message code="menu.clients" /></a></li>
 				<li><a href="templates"><spring:message code="menu.templates" /></a></li>
 				<li><a href="#"><spring:message code="menu.others" /></a>
 					<ul>
