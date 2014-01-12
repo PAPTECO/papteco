@@ -1,14 +1,7 @@
 package com.papteco.web.controllers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +12,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.collect.ImmutableMap;
 import com.papteco.web.beans.ClientBean;
-import com.papteco.web.beans.UsersBean;
-import com.papteco.web.beans.UsersFormBean;
-import com.papteco.web.services.UserServiceImpl;
-import com.papteco.web.utils.Roles2RightsConfiguration;
+import com.papteco.web.services.ClientServiceImpl;
 import com.papteco.web.utils.WebUtils;
 
 @Controller
 public class ClientsController extends BaseController {
 	@Autowired
-	private UserServiceImpl userService;
+	private ClientServiceImpl clientService;
 
 	@RequestMapping(method = RequestMethod.GET, value = "secure/doSearchClient")
 	@ResponseBody
@@ -45,46 +34,36 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map createClientRequest(@RequestBody ClientBean bean)
 			throws Exception {
-
 		System.out.println("createClientRequest ClientBean:" + bean);
-//		UsersBean user = preUserBean(bean);
-
+		
 		try {
-//			if (userService.getUser(bean.getCreateUserName()) != null) {
-//				return this.failMessage("User already exists");
-//			
-//			} else {
-////				userService.saveUser(user);
-//				return this.successMessage();
-//			}
-			return this.successMessage();
+			String feedback = clientService.saveClient(bean);
+			if(feedback.equals("CLIENT_EXIST")){
+				return this.failMessage("ClientNo [" + bean.getClientNo() + "] was exist already!");
+			}else{
+				return this.successMessage();
+			}
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return this.failMessage(e.getMessage());
 		}
-
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "secure/updateClientRequest")
 	@ResponseBody
 	public Map updateClientRequest(@RequestBody ClientBean bean)
 			throws Exception {
-
 		System.out.println("updateClientRequest ClientBean:" + bean);
 
 		try {
-//			UsersBean user = preUserBean(bean);
-//			UsersBean dbuser = userService.getUser(user.getUserName());
-//
-//			if (dbuser == null) {
-//				throw new Exception("User not exits.");
-//			} else {
-//				if (StringUtils.isBlank(user.getPassword())) {
-//					user.setPassword(dbuser.getPassword());
-//				}
-//			}
-//			userService.saveUser(user);
+			if(StringUtils.isBlank(bean.getClientNo()))
+				return this.failMessage("ClientNo cannot be blank!");
+			if(StringUtils.isBlank(bean.getClientName()))
+				return this.failMessage("ClientName cannot be blank!");
+			clientService.updateClient(bean);
 			return this.successMessage();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.failMessage(e.getMessage());
@@ -96,17 +75,10 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map deleteClientRequest(@RequestBody ClientBean bean)
 			throws Exception {
-
 		System.out.println("deleteClientRequest ClientBean:" + bean);
 
 		try {
-//			UsersBean dbuser = userService.getUser(bean.getCreateUserName());
-//
-//			if (dbuser == null) {
-//				throw new Exception("User not exits.");
-//			}
-//
-//			userService.deleteUser(dbuser);
+			clientService.deleteClient(bean);
 			return this.successMessage();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,20 +91,19 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map getClientMaintList(@RequestBody ClientBean clientBean)
 			throws Exception {
-
 		System.out.println("getClientMaintList() clientId:"
 				+ clientBean.getClientNo());
 
-		if (StringUtils.isBlank(clientBean.getClientNo())) {
-
-			return this.successMessage(of("clientno", "", "clientname", ""));
-		} else {
-			if(true)
-				return this.successMessage(of("clientno", "200", "clientname", "200.22"));
-			else
+		if(StringUtils.isNotBlank(clientBean.getClientNo())){
+			ClientBean client = clientService.getClient(clientBean.getClientNo());
+			if(client != null){
+				return this.successMessage(of("clientno", client.getClientNo(), "clientname", client.getClientName()));
+			}else{
 				return this
 						.failMessage("Client does not exists or has been deleted.Please refresh!");
-			
+			}
+		}else{
+			return this.successMessage(of("clientno", "", "clientname", ""));
 		}
 	}
 }

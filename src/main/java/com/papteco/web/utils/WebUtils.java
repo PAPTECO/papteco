@@ -28,6 +28,7 @@ import com.papteco.web.beans.PreserveNosBean;
 import com.papteco.web.beans.ProjectBean;
 import com.papteco.web.beans.UsersBean;
 import com.papteco.web.controllers.BaseController;
+import com.papteco.web.dbs.ClientDAO;
 import com.papteco.web.dbs.FileLockDAO;
 import com.papteco.web.dbs.PreserveNosDAO;
 import com.papteco.web.dbs.ProjectCacheDAO;
@@ -95,9 +96,9 @@ public class WebUtils {
 		return result;
 	}
 
-	public static Map toClientJson(List<ClientBean> prepareClientsInfo) {
+	public static Map toClientJson() {
+		List<ClientBean> prepareClientsInfo = ClientDAO.getClientsByFilter("", "");
 		Map result = Maps.newHashMap();
-
 		List dataList = Lists.newArrayList();
 
 		// sort first
@@ -609,7 +610,7 @@ public class WebUtils {
 	
 	public static List toSearchClientGrid(String searchClientNo, String searchClientName) {
 
-		List<ClientBean> searchResult = Lists.asList(new ClientBean("100","dummy"),new ClientBean[0]);
+		List<ClientBean> searchResult = ClientDAO.getClientsByFilter(searchClientNo, searchClientName);
 		
 		List datalist = Lists.newArrayList();
 

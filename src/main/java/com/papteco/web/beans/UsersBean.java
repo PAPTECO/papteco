@@ -17,6 +17,9 @@ public class UsersBean implements Serializable {
 	private String userName;
 	private String password;
 	private String email;
+	private String localMailFilePath;
+	private String localProjectPath;
+	private String mailFileTimeStamp;
 	private List<String> roles;
 	
 	private String additional1;
@@ -55,6 +58,12 @@ public class UsersBean implements Serializable {
 		this.roles = roles;
 	}
 	
+	public String getMailFileTimeStamp() {
+		return mailFileTimeStamp;
+	}
+	public void setMailFileTimeStamp(String mailFileTimeStamp) {
+		this.mailFileTimeStamp = mailFileTimeStamp;
+	}
 	public String getAdditional1() {
 		return additional1;
 	}
@@ -115,10 +124,26 @@ public class UsersBean implements Serializable {
 	public void setAdditional10(Object additional10) {
 		this.additional10 = additional10;
 	}
+	
+	public String getLocalMailFilePath() {
+		return localMailFilePath;
+	}
+	public void setLocalMailFilePath(String localMailFilePath) {
+		this.localMailFilePath = localMailFilePath;
+	}
+	public String getLocalProjectPath() {
+		return localProjectPath;
+	}
+	public void setLocalProjectPath(String localProjectPath) {
+		this.localProjectPath = localProjectPath;
+	}
 	@Override
 	public String toString() {
 		return "UsersBean [userName=" + userName + ", password=" + password
-				+ ", email=" + email + ", roles=" + roles + "]";
+				+ ", email=" + email + ", localMailFilePath="
+				+ localMailFilePath + ", localProjectPath=" + localProjectPath
+				+ ", roles=" + roles + "]";
 	}
+	
 
 }

@@ -2,12 +2,17 @@ package com.papteco.web.beans;
 
 import java.io.Serializable;
 
+import com.sleepycat.persist.model.Entity;
+import com.sleepycat.persist.model.PrimaryKey;
+
+@Entity
 public class ClientBean implements Comparable<ClientBean>, Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4148753755140742448L;
+	@PrimaryKey
 	private String clientNo;
 	private String clientName;
 	private String additional1;

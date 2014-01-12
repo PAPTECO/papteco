@@ -34,7 +34,7 @@ public class PropertiesController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getClientInfo")
 	@ResponseBody
 	public Map getClientInfo() {
-		return WebUtils.toClientJson(this.sysConfig.prepareClientsInfo());
+		return WebUtils.toClientJson();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "getUniqueNo")
