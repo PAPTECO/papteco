@@ -6,7 +6,7 @@
 <!-- End of Meta -->
 
 <!-- Page title -->
-<title>Wide Admin - Login</title>
+<title>Papteco Information Management System</title>
 <!-- End of Page title -->
 
 <!-- Libraries -->

@@ -9,7 +9,7 @@
 <!-- End of Meta -->
 
 <!-- Page title -->
-<title>Wide Admin</title>
+<title><spring:message code="system.name" /></title>
 <!-- End of Page title -->
 
 <!-- Libraries -->
@@ -186,19 +186,19 @@
 					<legend>
 
 						<a id="SearchButton3" class="insideFont bLightBlue notext_wrap"
-							title="" href="#" onClick="refreshProjectBroad(getProjectId())">Refresh</a>
+							title="" href="#" onClick="refreshProjectBroad(getProjectId())"><spring:message code="dashboard.content.project.refresh" /></a>
 
 
 					</legend>
 					<div style="float: left; padding: 30px">
 						<input type="hidden" id="prj_id"></input>
 						<input type="hidden" id="prj_cde"></input>
-						<h1 id="prj_name">Project Name</h1>
+						<h1 id="prj_name"><spring:message code="dashboard.content.project.name" /></h1>
 					</div>
 					<div style="padding: 30, 0, 30, 0">
-						<label for="sf" class="labelstyle">Creator: </label><label
+						<label for="sf" class="labelstyle"><spring:message code="dashboard.content.project.creator" /> </label><label
 							for="sf" class="labelContentstyle" id="prj_creator">John</label>
-						<label for="sf">Last Modification At: </label> <label for="sf"
+						<label for="sf"><spring:message code="dashboard.content.project.lastmo" /> </label> <label for="sf"
 							class="notext_wrap labelContentstyle" id="prj_modify"><b>07
 								May 2013 12:59:80</b></label>
 						<div class="blank_interrupt"></div>
@@ -218,16 +218,14 @@
 						style="float: left">
 						<div class="fileInfo">
 							<fieldset>
-								<legend>Document Details</legend>
+								<legend><spring:message code="dashboard.content.project.documentdetails" /></legend>
 
 
 								<p style="float: right">
 									<a id="ViewDoc" onClick="alert('Please select file.')"
-										class="insideFont bGold notext_wrap " title="" href="#">View
-										Only</a>&nbsp;&nbsp;&nbsp; <a id="UploadDoc"
+										class="insideFont bGold notext_wrap " title="" href="#"><spring:message code="dashboard.content.project.viewOnly" /></a>&nbsp;&nbsp;&nbsp; <a id="UploadDoc"
 										onClick="uploadFileFormShow();"
-										class="insideFont bGreen notext_wrap " title="" href="#">Upload
-										Doc</a>
+										class="insideFont bGreen notext_wrap " title="" href="#"><spring:message code="dashboard.content.project.uploaddoc" /></a>
 								</p>
 
 								<hr />
@@ -243,7 +241,7 @@
 					</div>
 					<div data-dojo-id="sectioncp2"
 						data-dojo-type="dijit/layout/ContentPane" title="Projects"
-						style="width: 400px">
+						style="width: 400px;height: 400px">
 						<div id="doctree"></div>
 					</div>
 				</div>
@@ -293,7 +291,7 @@ if (r==false)
 
 							
 
-                    </script>Delete</li>
+                    </script><spring:message code="dashboard.content.project.opr.delete" /></li>
                     <li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
                             // get a hold of the dijit.TreeNode that was the source of this open event
@@ -311,7 +309,7 @@ if (r==false)
 
 uploadFileFormShow(tn.item.docType,tn.item.id,true);
 
-                    </script>Add Revision</li>
+                    </script><spring:message code="dashboard.content.project.opr.addRev" /></li>
                     <li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
                             // get a hold of the dijit.TreeNode that was the source of this open event
@@ -329,7 +327,7 @@ if (r==false)
 
 editFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId); 
 refreshProjectBroad(getProjectId());
-                    </script>Edit</li>
+                    </script><spring:message code="dashboard.content.project.opr.edit" /></li>
                     <li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
                             // get a hold of the dijit.TreeNode that was the source of this open event
@@ -347,7 +345,7 @@ if (r==false)
 releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 
-                    </script>Release Object</li>
+                    </script><spring:message code="dashboard.content.project.opr.relObj" /></li>
 				</ul>
 
 
@@ -357,7 +355,7 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 			title="Release object ..."><div id="waitingDialogtext"></div></div>
 
 			<div data-dojo-type="dijit/Dialog" style="overflow-y:visible;background-color:white" 
-				data-dojo-id="uploadFileFormDialog" title="Upload documents"
+				data-dojo-id="uploadFileFormDialog" title="<spring:message code="dashboard.content.project.uploaddoc" />"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
 				<form method="post" action="submitUploadFile" id="uploadFileForm"
@@ -370,10 +368,10 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 						<div id="insert_content"></div>
 						<div class="dijitDialogPaneActionBar">
-							<input label="Upload" data-dojo-type="dijit/form/Button"
+							<input label="<spring:message code="dashboard.content.project.create" />" data-dojo-type="dijit/form/Button"
 								onClick="validateUploadForm();" type="button" />
 							<button data-dojo-type="dijit/form/Button" type="button"
-								onClick="uploadFileFormDialog.hide()">Cancel</button>
+								onClick="uploadFileFormDialog.hide()"><spring:message code="dashboard.content.project.cancel" /></button>
 						</div>
 					</div>
 					

@@ -9,7 +9,7 @@
 <!-- End of Meta -->
 
 <!-- Page title -->
-<title>Wide Admin</title>
+<title><spring:message code="system.name" /></title>
 <!-- End of Page title -->
 
 <!-- Libraries -->
@@ -153,7 +153,7 @@
 					data-dojo-type="dijit/layout/TabContainer" class="leadingtabcus">
 
 					<div data-dojo-id="maincp_tc_cp1"
-						data-dojo-type="dijit/layout/ContentPane" title="Tools"
+						data-dojo-type="dijit/layout/ContentPane" title="<spring:message code="dashboard.left.menu.tools" />"
 						data-dojo-props="selected:true">
 						<div style="cursor: pointer" onclick="createProjectShowUp()"
 							id="SearchButton3" class="bWhite notext_wrap" title="">
@@ -161,7 +161,7 @@
 								<img src="assets/icons/my_projects_folder.png"
 									style="width: 48px" />
 							</div>
-							<div>Create Project</div>
+							<div><spring:message code="dashboard.left.menu.create" /></div>
 						</div>
 						<br>
 						<div style="cursor: pointer" onclick="preserveNos()"
@@ -170,11 +170,11 @@
 								<img src="assets/icons/1387310090_Numbers-128.png"
 									style="width: 48px" />
 							</div>
-							<div>Preserve Number</div>
+							<div><spring:message code="dashboard.left.menu.preserve" /></div>
 						</div>
 					</div>
 					<div data-dojo-id="maincp_tc_cp2"
-						data-dojo-type="dijit/layout/ContentPane" title="Search">
+						data-dojo-type="dijit/layout/ContentPane" title="<spring:message code="dashboard.left.menu.search" />">
 
 						<ul class="filesDown" id="shortcut_ul">
 							<li><span class="fileSuccess"></span> 202-039-4056
@@ -184,7 +184,7 @@
 					</div>
 
 					<div data-dojo-id="maincp_tc_cp3"
-						data-dojo-type="dijit/layout/ContentPane" title="Projects">
+						data-dojo-type="dijit/layout/ContentPane" title="<spring:message code="dashboard.left.menu.projects" />">
 						<ul class="filesDown" id="prjshortcut_ul">
 							<li><span class="fileSearch"></span> Client is 203 <span
 								class="remove"></span></li>
@@ -201,25 +201,24 @@
 			<div id="MainSearchTab" class="gridsize">
 				<div class="blank_interrupt"></div>
 				<fieldset>
-					<legend>Search</legend>
+					<legend><spring:message code="dashboard.left.menu.search" /></legend>
 					<div class="content_search_area notext_wrap">
 						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
-						<div class="notext_wrap blank_interval">Client No</div>
+						<div class="notext_wrap blank_interval"><spring:message code="dashboard.content.input.clientNo" /></div>
 						<input id="searchclient" />
 
 						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
-						<div class="notext_wrap blank_interval">Any Key</div>
+						<div class="notext_wrap blank_interval"><spring:message code="dashboard.content.input.anyKey" /></div>
 						<input type="text" name="search_anykey" id="search_anykey"
 							value="" data-dojo-type="dijit/form/ValidationTextBox"
 							data-dojo-props="regExp:'[\\w]+', invalidMessage:'Invalid Non-Space Text.'" />
 						<div class="notext_wrap" style="padding-left: 20px">&nbsp;</div>
 						<a id="SearchButton1" class="insideFont bLightBlue notext_wrap"
-							title="" href="#" onClick="doSearch()">Search</a>
+							title="" href="#" onClick="doSearch()"><spring:message code="dashboard.left.menu.search" /></a>
 						<div class="blank_interval notext_wrap">&nbsp;</div>
 						<a id="SearchButton1" class="insideFont bGreen notext_wrap"
 							title="" href="#"
-							onclick="initSearchShortcutName();searchSaveDialog.show()">+Add
-							to Custom Filters</a>
+							onclick="initSearchShortcutName();searchSaveDialog.show()"><spring:message code="dashboard.content.input.addtoCustomFilter" /></a>
 						<div id="result1"></div>
 					</div>
 				</fieldset>
@@ -233,29 +232,28 @@
 					<legend>
 
 						<a id="SearchButton2" onClick="backtosearch();"
-							class="insideFont bGold notext_wrap " title="" href="#">Back</a>
+							class="insideFont bGold notext_wrap " title="" href="#"><spring:message code="dashboard.content.project.back" /></a>
 						<div class="blank_interval notext_wrap">&nbsp;</div>
 						<a id="SearchButton3" class="insideFont bLightBlue notext_wrap"
-							title="" href="#" onClick="refreshProjectBroad(getProjectId())">Refresh</a>
+							title="" href="#" onClick="refreshProjectBroad(getProjectId())"><spring:message code="dashboard.content.project.refresh" /></a>
 						<div class="blank_interval notext_wrap">&nbsp;</div>
 						<a id="SearchButton10" onClick="deleteProject();"
-							class="insideFont bRed notext_wrap " title="" href="#">Delete</a>
+							class="insideFont bRed notext_wrap " title="" href="#"><spring:message code="dashboard.content.project.delete" /></a>
 
 					</legend>
 					<div style="float: left; padding: 30px">
 						<input type="hidden" id="prj_id"></input> <input type="hidden"
 							id="prj_cde"></input>
-						<h1 id="prj_name">Project Name</h1>
+						<h1 id="prj_name"><spring:message code="dashboard.content.project.name" /></h1>
 						<div class="blank_interrupt"></div>
 						<a id="SearchButton2"
 							onClick="initProjectShortcutName();projectstSaveDialog.show()"
-							class="insideFont bGreen notext_wrap " title="" href="#">+
-							Add To ShortCut</a>
+							class="insideFont bGreen notext_wrap " title="" href="#"><spring:message code="dashboard.content.project.addToShortCut" /></a>
 					</div>
 					<div style="padding: 30, 0, 30, 0">
-						<label for="sf" class="labelstyle">Creator: </label><label
+						<label for="sf" class="labelstyle"><spring:message code="dashboard.content.project.creator" /> </label><label
 							for="sf" class="labelContentstyle" id="prj_creator">John</label>
-						<label for="sf">Last Modification At: </label> <label for="sf"
+						<label for="sf"><spring:message code="dashboard.content.project.lastmo" /> </label> <label for="sf"
 							class="notext_wrap labelContentstyle" id="prj_modify"><b>07
 								May 2013 12:59:80</b></label>
 						<div class="blank_interrupt"></div>
@@ -275,16 +273,14 @@
 						style="float: left">
 						<div class="fileInfo">
 							<fieldset>
-								<legend>Document Details</legend>
+								<legend><spring:message code="dashboard.content.project.documentdetails" /></legend>
 
 
 								<p style="float: right">
 									<a id="ViewDoc" onClick="alert('Please select file.')"
-										class="insideFont bGold notext_wrap " title="" href="#">View
-										Only</a>&nbsp;&nbsp;&nbsp; <a id="UploadDoc"
+										class="insideFont bGold notext_wrap " title="" href="#"><spring:message code="dashboard.content.project.viewOnly" /></a>&nbsp;&nbsp;&nbsp; <a id="UploadDoc"
 										onClick="uploadFileFormShow();"
-										class="insideFont bGreen notext_wrap " title="" href="#">Upload
-										Doc</a>
+										class="insideFont bGreen notext_wrap " title="" href="#"><spring:message code="dashboard.content.project.uploaddoc" /></a>
 								</p>
 
 								<hr />
@@ -354,7 +350,7 @@ if (r==false)
 
 							
 
-                    </script>Delete</li>
+                    </script><spring:message code="dashboard.content.project.opr.delete" /></li>
 					<li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
                             // get a hold of the dijit.TreeNode that was the source of this open event
@@ -372,7 +368,7 @@ if (r==false)
 
 uploadFileFormShow(tn.item.docType,tn.item.id,true);
 
-                    </script>Add Revision</li>
+                    </script><spring:message code="dashboard.content.project.opr.addRev" /></li>
 					<li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
                             // get a hold of the dijit.TreeNode that was the source of this open event
@@ -390,7 +386,7 @@ if (r==false)
 
 editFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId); 
 
-                    </script>Edit</li>
+                    </script><spring:message code="dashboard.content.project.opr.edit" /></li>
 					<li data-dojo-type="dijit/MenuItem"><script
 							type="dojo/connect" data-dojo-event="onClick">
                             // get a hold of the dijit.TreeNode that was the source of this open event
@@ -408,7 +404,7 @@ if (r==false)
 releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 
-                    </script>Release Object</li>
+                    </script><spring:message code="dashboard.content.project.opr.relObj" /></li>
 				</ul>
 
 
@@ -425,7 +421,7 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 			<div data-dojo-type="dijit/Dialog"
 				style="overflow-y: visible; background-color: white"
-				data-dojo-id="uploadFileFormDialog" title="Upload documents"
+				data-dojo-id="uploadFileFormDialog" title="<spring:message code="dashboard.content.project.uploaddoc" />"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
 				<form method="post" action="submitUploadFile" id="uploadFileForm"
@@ -453,16 +449,16 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 			</div>
 
 			<div data-dojo-type="dijit/Dialog" data-dojo-id="presrvDialog"
-				title="Preserve numbers"
+				title="<spring:message code="dashboard.left.menu.preserve" />"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
 				<div>
 					<table class="dijitdialog_index">
 						<tr>
-							<td><label for="name">From: </label></td>
+							<td><label for="name"><spring:message code="dashboard.left.menu.from" /> </label></td>
 							<td><input type="text" id="presrv_from" value=""
 								class="dialogText"></td>
-							<td><label for="name">To: </label></td>
+							<td><label for="name"><spring:message code="dashboard.left.menu.to" /> </label></td>
 							<td><input type="text" id="presrv_to" value=""
 								class="dialogText"></td>
 						</tr>
@@ -472,21 +468,21 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 				<div class="dijitDialogPaneActionBar">
 					<button id="submitPresrvnos" data-dojo-type="dijit/form/Button"
 						type="button" onClick="submitPresrvNos()"
-						data-dojo-id="submitPresrvnos">Save</button>
+						data-dojo-id="submitPresrvnos"><spring:message code="dashboard.left.menu.save" /></button>
 					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="presrvDialog.hide()" data-dojo-id="canncelPresrvnos">Cancel</button>
+						onClick="presrvDialog.hide()" data-dojo-id="canncelPresrvnos"><spring:message code="dashboard.left.menu.cancel" /></button>
 				</div>
 			</div>
 
 
 			<div data-dojo-type="dijit/Dialog" data-dojo-id="searchSaveDialog"
-				title="Search save"
+				title="<spring:message code="dashboard.left.menu.search" />"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
 				<div>
 					<table class="dijitdialog_index">
 						<tr>
-							<td><label for="name">Search Name: </label></td>
+							<td><label for="name"><spring:message code="dashboard.left.menu.searchname" /> </label></td>
 							<td><input data-dojo-type="dijit/form/TextBox" type="text"
 								id="search_sav_name" value="New searcher" class="dialogText"></td>
 						</tr>
@@ -495,20 +491,20 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 				<div class="dijitDialogPaneActionBar">
 					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="submitSaveSearch()">Save</button>
+						onClick="submitSaveSearch()"><spring:message code="dashboard.left.menu.save" /></button>
 					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="searchSaveDialog.hide()">Cancel</button>
+						onClick="searchSaveDialog.hide()"><spring:message code="dashboard.left.menu.cancel" /></button>
 				</div>
 			</div>
 
 			<div data-dojo-type="dijit/Dialog" data-dojo-id="projectstSaveDialog"
-				title="Project shortcut save"
+				title="<spring:message code="dashboard.left.menu.projects" />"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
 				<div>
 					<table class="dijitdialog_index">
 						<tr>
-							<td><label for="name">ShortCut Name: </label></td>
+							<td><label for="name"><spring:message code="dashboard.left.menu.projects" /></label></td>
 							<td><input data-dojo-type="dijit/form/TextBox" type="text"
 								id="prj_sav_name" value="New shortcutname" class="dialogText"></td>
 						</tr>
@@ -517,15 +513,15 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 				<div class="dijitDialogPaneActionBar">
 					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="submitPrjSaveSearch()">Save</button>
+						onClick="submitPrjSaveSearch()"><spring:message code="dashboard.left.menu.save" /></button>
 					<button data-dojo-type="dijit/form/Button" type="button"
-						onClick="projectstSaveDialog.hide()">Cancel</button>
+						onClick="projectstSaveDialog.hide()"><spring:message code="dashboard.left.menu.cancel" /></button>
 				</div>
 			</div>
 
 
 			<div data-dojo-type="dijit/Dialog" data-dojo-id="createProjectDialog"
-				title="Create New Project"
+				title="<spring:message code="dashboard.content.project.crtnewprj" />"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
 				<div data-dojo-type="dijit/form/Form" id="prjcreateform"
@@ -536,11 +532,11 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 
 						<div style="float: left">
 							<fieldset style="float: left">
-								<legend>Require Information</legend>
+								<legend><spring:message code="dashboard.content.project.reqinfo" /></legend>
 								<table class="dijitdialog_index">
 									<tr>
 										<td><label for="name">Client No: </label></td>
-										<td><input id="clientSelect" /></td>
+										<td><input class="blackbox" id="clientSelect" /></td>
 									</tr>
 									<tr>
 										<td><label for="name">Create Date: </label></td>
@@ -568,15 +564,15 @@ releaseFile(tn.item.projectId,tn.item.docType,tn.item.id,tn.item.fileId);
 								<div class="dijitDialogPaneActionBar">
 									<button data-dojo-id="createprjsubmit"
 										data-dojo-type="dijit/form/Button" type="button"
-										onClick="submitCreateProject()">Create</button>
+										onClick="submitCreateProject()"><spring:message code="dashboard.content.project.create" /></button>
 									<button data-dojo-type="dijit/form/Button" type="button"
-										onClick="createProjectDialog.hide()">Cancel</button>
+										onClick="createProjectDialog.hide()"><spring:message code="dashboard.content.project.cancel" /></button>
 								</div>
 							</fieldset>
 						</div>
 
 						<fieldset>
-							<legend>Folders</legend>
+							<legend><spring:message code="dashboard.content.project.folders" /></legend>
 							<div id="createProjectFolders"></div>
 						</fieldset>
 					</div>

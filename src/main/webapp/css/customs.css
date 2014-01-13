@@ -313,3 +313,7 @@ input,textarea {
 	height:300px;
 	background: url("../assets/index_loading.gif") no-repeat #333333;
 }
+
+.blackbox{
+	border: #333333;
+}

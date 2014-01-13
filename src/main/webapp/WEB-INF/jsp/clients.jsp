@@ -9,7 +9,7 @@
 <!-- End of Meta -->
 
 <!-- Page title -->
-<title>Client Information</title>
+<title><spring:message code="system.name" /></title>
 <!-- End of Page title -->
 
 <!-- Libraries -->
@@ -129,14 +129,14 @@
 					data-dojo-type="dijit/layout/TabContainer" class="leadingtabcus">
 
 					<div data-dojo-id="maincp_tc_cp1"
-						data-dojo-type="dijit/layout/ContentPane" title="Tools"
+						data-dojo-type="dijit/layout/ContentPane" title="<spring:message code="custom.left.menu.tools" />"
 						data-dojo-props="selected:true">
 						<a onclick="createClientSelection()" id="SearchButton3"
 							class="bWhite notext_wrap" title="" href="#">
 							<div>
 								<img src="assets/icons/create_documents.png" style="width: 48px" />
 							</div>
-							<div>Create Client</div>
+							<div><spring:message code="custom.left.menu.createclient" /></div>
 						</a>
 					</div>
 
@@ -150,19 +150,19 @@
 			<div id="MainSearchTab" class="gridsize">
 				<div class="blank_interrupt"></div>
 				<fieldset>
-					<legend>Search</legend>
+					<legend><spring:message code="custom.content.search" /></legend>
 					<div class="content_search_area notext_wrap">
 						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
-						<div class="notext_wrap blank_interval">Client No</div>
+						<div class="notext_wrap blank_interval"><spring:message code="custom.content.clenitno" /></div>
 						<input id="search_client_no" />
 						
 						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
-						<div class="notext_wrap blank_interval">Client Name</div>
+						<div class="notext_wrap blank_interval"><spring:message code="custom.content.clientname" /></div>
 						<input id="search_client_name" name="search_client_name"  data-dojo-type="dijit/form/ValidationTextBox"/>
 						<div class="notext_wrap" style="padding-left: 20px">&nbsp;</div>
 
 						<a id="SearchButton1" class="insideFont bLightBlue notext_wrap"
-							title="" href="#" onClick="doClientSearch() ">Search</a>
+							title="" href="#" onClick="doClientSearch() "><spring:message code="custom.content.search" /></a>
 
 						<div id="result1"></div>
 					</div>
@@ -171,7 +171,7 @@
 			</div>
 
 			<div data-dojo-type="dijit/Dialog" data-dojo-id="createClientDialog"
-				title="Client Information" >
+				title="<spring:message code="custom.left.menu.clientinfo" />" >
 
 				<div data-dojo-type="dijit/form/Form" id="clientform"
 					data-dojo-id="clientform" encType="multipart/form-data" action=""
@@ -181,15 +181,15 @@
 
 						<div>
 							<fieldset style="float: left; height: 200px;">
-								<legend>Require Information </legend>
+								<legend><spring:message code="custom.left.menu.requireinfo" /> </legend>
 								<table class="dijitdialog_index">
 									<tr>
-										<td><label for="name">Client No: </label></td>
+										<td><label for="name"><spring:message code="custom.left.menu.clientno" />: </label></td>
 										<td><input id="createClientNo" required="true"
 											data-dojo-type="dijit/form/ValidationTextBox" /> &nbsp;&nbsp;<div id="deleteClientTag" style="float:right"></div></td>
 									</tr>
 									<tr>
-										<td><label for="name">Client Name: </label></td>
+										<td><label for="name"><spring:message code="custom.left.menu.clientname" />: </label></td>
 										<td><input id="createClientName" required="true" 
 											data-dojo-type="dijit/form/ValidationTextBox" /></td>
 									</tr>
@@ -197,9 +197,9 @@
 								<div class="dijitDialogPaneActionBar">
 									<button data-dojo-id="createClientsubmit"
 										data-dojo-type="dijit/form/Button" type="button"
-										onClick="submitClient()">Submit</button>
+										onClick="submitClient()"><spring:message code="custom.left.menu.submit" /></button>
 									<button data-dojo-type="dijit/form/Button" type="button"
-										onClick="hideClientDialog()">Cancel</button>
+										onClick="hideClientDialog()"><spring:message code="custom.left.menu.cancel" /></button>
 								</div>
 							</fieldset>
 						</div>

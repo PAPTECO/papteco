@@ -54,20 +54,18 @@
 			<!-- Meta information -->
 			<div class="meta">
 				<p>
-					Welcome,
+					<spring:message code="menu.toolstips.welcome" />,
 					<%=request.getSession().getAttribute("LOGIN_USER")%>!
 				</p>
 				<ul>
 					<li><a href="#" onclick="doLogout()"
 						title="End administrator session" class="tooltip"><span
-							class="ui-icon ui-icon-power"></span>Logout</a></li>
+							class="ui-icon ui-icon-power"></span><spring:message code="menu.toolstips.logout" /></a></li>
 					<li><a href="#" title="Change current settings"
-						class="tooltip"><span class="ui-icon ui-icon-wrench"></span>Download
-							Client</a></li>
+						class="tooltip"><span class="ui-icon ui-icon-wrench"></span><spring:message code="menu.toolstips.downloadclient" /></a></li>
 					<li><a href="#" title="Go to your account"
 						onclick="fillMyAccountBox('<%=request.getSession().getAttribute("LOGIN_USER")%>')"
-						class="tooltip"><span class="ui-icon ui-icon-person"></span>My
-							account</a></li>
+						class="tooltip"><span class="ui-icon ui-icon-person"></span><spring:message code="menu.toolstips.myacc" /></a></li>
 				</ul>
 			</div>
 			<!-- End of Meta information -->
@@ -109,7 +107,7 @@
 </div>
 
 <div data-dojo-type="dijit/Dialog" data-dojo-id="myuserDialog" id="myuserDialog" 
-	title="Account Information">
+	title="<spring:message code="account.info" />">
 
 	<div data-dojo-type="dijit/form/Form" id="myuserform"
 		data-dojo-id="myuserform" encType="multipart/form-data" action=""
@@ -119,20 +117,20 @@
 
 			<div>
 				<fieldset style="float: left; height: 200px;">
-					<legend>Require Information </legend>
+					<legend><spring:message code="custom.left.menu.requireinfo" /> </legend>
 					<table class="dijitdialog_index">
 						<tr>
-							<td><label for="name">User Name: </label></td>
+							<td><label for="name"><spring:message code="users.left.menu.username" />: </label></td>
 							<td><input id="createMyUserName" required="true" readOnly
 								data-dojo-type="dijit/form/ValidationTextBox" />
 							</div></td>
 						</tr>
 						<tr>
-							<td><label for="name">Password: </label></td>
+							<td><label for="name"><spring:message code="users.left.menu.password" />: </label></td>
 							<td><input id="createMyPassword" type="password" /></td>
 						</tr>
 						<tr>
-							<td><label for="name">Email: </label></td>
+							<td><label for="name"><spring:message code="users.left.menu.email" />: </label></td>
 							<td><input id="createMyEmail" required="true"
 								data-dojo-type="dijit/form/ValidationTextBox" /></td>
 						</tr>
@@ -141,9 +139,9 @@
 					<div class="dijitDialogPaneActionBar">
 						<button data-dojo-id="createprjsubmit"
 							data-dojo-type="dijit/form/Button" type="button"
-							onClick="submitMyUser()">Submit</button>
+							onClick="submitMyUser()"><spring:message code="users.left.menu.submit" /></button>
 						<button data-dojo-type="dijit/form/Button" type="button"
-							onClick="hideMyUserDialog()">Cancel</button>
+							onClick="hideMyUserDialog()"><spring:message code="users.left.menu.cancel" /></button>
 					</div>
 				</fieldset>
 			</div>

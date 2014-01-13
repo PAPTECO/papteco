@@ -9,7 +9,7 @@
 <!-- End of Meta -->
 
 <!-- Page title -->
-<title>Wide Admin</title>
+<title><spring:message code="system.name" /></title>
 <!-- End of Page title -->
 
 <!-- Libraries -->
@@ -154,14 +154,14 @@
 					data-dojo-type="dijit/layout/TabContainer" class="leadingtabcus">
 
 					<div data-dojo-id="maincp_tc_cp1"
-						data-dojo-type="dijit/layout/ContentPane" title="Tools"
+						data-dojo-type="dijit/layout/ContentPane" title="<spring:message code="users.left.menu.tools" />"
 						data-dojo-props="selected:true">
 						<div style="cursor:pointer" onclick="createRolesSelection()" id="SearchButton3"
 							class="bWhite notext_wrap" title="" href="#">
 							<div>
 								<img src="assets/icons/1387312350_human-folder-public.png" style="width: 48px" />
 							</div>
-							<div>Create Users</div>
+							<div><spring:message code="users.left.menu.createusers" /></div>
 						</div>
 						<br>
 						<div style="cursor:pointer" onclick="roleDisplay()" id="roleDisplayButton"
@@ -169,7 +169,7 @@
 							<div>
 								<img src="assets/icons/1387312500_readme.png" style="width: 48px" />
 							</div>
-							<div>Roles</div>
+							<div><spring:message code="users.left.menu.roles" /></div>
 						</div>
 					</div>
 
@@ -183,21 +183,21 @@
 			<div id="MainSearchTab" class="gridsize">
 				<div class="blank_interrupt"></div>
 				<fieldset>
-					<legend>Search</legend>
+					<legend><spring:message code="dashboard.left.menu.search" /></legend>
 					<div class="content_search_area notext_wrap">
 						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
-						<div class="notext_wrap blank_interval">User Name</div>
+						<div class="notext_wrap blank_interval"><spring:message code="users.left.menu.username" /></div>
 						<input type="text" name="search_user_name" id="search_user_name"
 							value="" data-dojo-type="dijit/form/ValidationTextBox"
 							data-dojo-props="regExp:'[\\w]+', invalidMessage:'Invalid Non-Space Text.'" />
 
 						<div class="notext_wrap" style="padding-left: 40px">&nbsp;</div>
-						<div class="notext_wrap blank_interval">Roles</div>
+						<div class="notext_wrap blank_interval"><spring:message code="users.left.menu.roles" /></div>
 						<input id="search_roles" />
 						<div class="notext_wrap" style="padding-left: 20px">&nbsp;</div>
 
 						<a id="SearchButton1" class="insideFont bLightBlue notext_wrap"
-							title="" href="#" onClick="doUserSearch() ">Search</a>
+							title="" href="#" onClick="doUserSearch() "><spring:message code="dashboard.left.menu.search" /></a>
 
 						<div id="result1"></div>
 					</div>
@@ -206,7 +206,7 @@
 			</div>
 
 			<div data-dojo-type="dijit/Dialog" data-dojo-id="createUserDialog"
-				title="User Information"
+				title="<spring:message code="users.left.menu.userinfo" />"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
 				<div data-dojo-type="dijit/form/Form" id="userform"
@@ -217,20 +217,20 @@
 
 						<div>
 							<fieldset style="float: left; height: 430px;">
-								<legend>Require Information </legend>
+								<legend><spring:message code="dashboard.content.project.reqinfo" /> </legend>
 								<table class="dijitdialog_index">
 									<tr>
-										<td><label for="name">User Name: </label></td>
+										<td><label for="name"><spring:message code="users.left.menu.username" />: </label></td>
 										<td><input id="createUserName" required="true"
 											data-dojo-type="dijit/form/ValidationTextBox" /> &nbsp;&nbsp;<div id="deletetag" style="float:right"></div></td>
 									</tr>
 									<tr>
-										<td><label for="name">Password: </label></td>
+										<td><label for="name"><spring:message code="users.left.menu.password" />: </label></td>
 										<td><input id="createPassword" type="password" required="false"
 											data-dojo-type="dijit/form/ValidationTextBox"/></td>
 									</tr>
 									<tr>
-										<td><label for="name">Email: </label></td>
+										<td><label for="name"><spring:message code="users.left.menu.email" />: </label></td>
 										<td><input id="createEmail" required="true"
 											data-dojo-type="dijit/form/ValidationTextBox" /></td>
 									</tr>
@@ -239,13 +239,13 @@
 								<div class="dijitDialogPaneActionBar">
 									<button data-dojo-id="createprjsubmit"
 										data-dojo-type="dijit/form/Button" type="button"
-										onClick="submitEditUser()">Submit</button>
+										onClick="submitEditUser()"><spring:message code="users.left.menu.submit" /></button>
 									<button data-dojo-type="dijit/form/Button" type="button"
-										onClick="hideUserDialog()">Cancel</button>
+										onClick="hideUserDialog()"><spring:message code="users.left.menu.cancel" /></button>
 								</div>
 							</fieldset>
 							<fieldset>
-								<legend>Roles (<a href="#" onclick="roleDisplay()">Definition?</a>)</legend>
+								<legend><spring:message code="users.left.menu.roles" /> (<a href="#" onclick="roleDisplay()"><spring:message code="users.left.menu.def" />?</a>)</legend>
 
 								<div style="height: 410px; overflow-y: auto;"
 									id="createSelection"></div>
@@ -260,7 +260,7 @@
 			</div>
 
 			<div data-dojo-type="dijit/Dialog" data-dojo-id="roleDisplayDialog"
-				title="Role Information"
+				title="<spring:message code="users.left.menu.roles" />"
 				execute="alert('submitted w/args:\n' + dojo.toJson(arguments[0], true));">
 
 				<div data-dojo-type="dijit/form/Form" id="roleform"
@@ -271,7 +271,7 @@
 
 						<div >
 							<fieldset>
-								<legend>Roles</legend>
+								<legend><spring:message code="users.left.menu.roles" /></legend>
 
 								<div style="height: 410px; overflow-y: auto;"
 									id="roleDisplay"></div>

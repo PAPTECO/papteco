@@ -215,10 +215,11 @@ function deleteClient(clientno) {
 
 			if (datas.type == "success") {
 				alert("Client has been deleted.");
-				hideClientDialog();
-
-				dom.byId("createClientNo").value = "";
-				dom.byId("createClientName").value = "";
+				window.location = "clients";
+//				hideClientDialog();
+//
+//				dom.byId("createClientNo").value = "";
+//				dom.byId("createClientName").value = "";
 			} else {
 				alert(datas.message);
 			}
@@ -267,10 +268,11 @@ function submitClient() {
 
 			if (datas.type == "success") {
 				alert("Client information has been updated.");
-				hideClientDialog();
+				window.location = "clients";
+//				hideClientDialog();
 
-				dom.byId("createClientNo").value = "";
-				dom.byId("createClientName").value = "";
+//				dom.byId("createClientNo").value = "";
+//				dom.byId("createClientName").value = "";
 			} else {
 				alert(datas.message);
 			}
