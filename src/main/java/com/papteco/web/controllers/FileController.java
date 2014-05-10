@@ -114,7 +114,7 @@ public class FileController extends BaseController {
 	public Map getPformRef(@RequestParam String prjId, @RequestParam String date)
 			throws Exception {
 		int ref_i = 0;
-		System.out.println("getDocs:" + prjId + " date:" + date);
+		log.info("getDocs:" + prjId + " date:" + date);
 
 		ProjectBean project = projectService.getProject(prjId);
 		if (project != null) {
@@ -147,12 +147,15 @@ public class FileController extends BaseController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "secure/submitUploadFile")
 	@ResponseBody
-	public Map submitUploadFile(DocTypeFieldSet bean, Model model,
+	public String submitUploadFile(DocTypeFieldSet bean, Model model,
 			HttpSession session) throws Exception {
 
 		String username = session.getAttribute("LOGIN_USER") != null ? session
 				.getAttribute("LOGIN_USER").toString() : "";
 
+		if(StringUtils.isBlank(bean.getUpload_doctype())){
+			bean.setUpload_doctype(bean.getUpload_doctype_tmp());
+		}
 		if (StringUtils.isNotBlank(bean.getUploadedCopyForm())
 				&& !"undefined".equals(bean.getUploadedCopyForm())) {
 
@@ -191,7 +194,7 @@ public class FileController extends BaseController {
 
 			if (fileService.isFileNameExisting(bean.getProjectId(),
 					fileBean.getFileName())) {
-				return this.failMessage("File already exits!");
+				return this.formatJSONToHTML(this.failFormatMessage("File already exits!"));
 			} else {
 				if (!fromfile.exists()) {
 					fromfile.createNewFile();
@@ -222,7 +225,7 @@ public class FileController extends BaseController {
 				IPItem item = UserIPDAO.getUserIPBean(username);
 
 				if (item == null) {
-					return this.successMessage(of("message","File is created successfully. Program attempts to open file but detected client had not open."));
+					return this.formatJSONToHTML(this.successFormatMessage(ofFormat("message","File is created successfully. Program attempts to open file but detected client had not open.")));
 				} else {
 					OpenFileClientBuilder callback = new OpenFileClientBuilder(
 							item.getPCIP(), openfile, serverFilePath, fileStructPath);
@@ -230,12 +233,12 @@ public class FileController extends BaseController {
 					new Thread(t).start();
 					try {
 						t.get();
-						return this.successMessage(of("filename", EncoderDecoderUtil
-								.encodeURIComponent(fileBean.getFileName())));
+						return this.formatJSONToHTML(this.successFormatMessage(ofFormat("filename", EncoderDecoderUtil
+								.encodeURIComponent(fileBean.getFileName()))));
 					} catch (ExecutionException e){
-						return this.successMessage(of("message","File is created successfully. Program attempts to open file but detected client had not open."));
+						return this.formatJSONToHTML(this.successFormatMessage(ofFormat("message","File is created successfully. Program attempts to open file but detected client had not open.")));
 					} catch (Exception e) {
-						return this.failMessage(e.getMessage());
+						return this.formatJSONToHTML(this.failFormatMessage(e.getMessage()));
 					}
 
 				}
@@ -260,7 +263,7 @@ public class FileController extends BaseController {
 
 			if (fileService.isFileNameExisting(bean.getProjectId(),
 					fileBean.getFileName())) {
-				return this.failMessage("File already exits!");
+				return this.formatJSONToHTML(this.failFormatMessage("File already exits!"));
 			} else {
 				if (!file.exists()) {
 					file.createNewFile();
@@ -268,8 +271,8 @@ public class FileController extends BaseController {
 				bean.getUploadfile().transferTo(file);
 				fileService.saveUploadFile(bean.getProjectId(),
 						bean.getUpload_doctype(), fileBean);
-				return this.successMessage(of("filename", EncoderDecoderUtil
-						.encodeURIComponent(fileBean.getFileName())));
+				return this.formatJSONToHTML(this.successFormatMessage(ofFormat("filename", EncoderDecoderUtil
+						.encodeURIComponent(fileBean.getFileName()))));
 
 			}
 		}
@@ -290,7 +293,7 @@ public class FileController extends BaseController {
 	@RequestMapping(method = RequestMethod.POST, value = "uploadfile.do")
 	public String handleUploadProcess(MultipartHttpServletRequest request,
 			Model model) throws Exception {
-		System.out.println("Upload success");
+		log.info("Upload success");
 		MultipartFile file = request.getFile("uploadedfile");
 		model.addAttribute("success", "true");
 		return "uploadView";
@@ -300,8 +303,8 @@ public class FileController extends BaseController {
 	public String handleUploadProcess2(
 			@RequestParam("file") MultipartFile file, Model model)
 			throws Exception {
-		System.out.println("Upload success");
-		System.out.println(file);
+		log.info("Upload success");
+		log.info(file);
 		model.addAttribute("success", "true");
 		return "uploadView";
 	}
@@ -309,7 +312,7 @@ public class FileController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getDocs")
 	@ResponseBody
 	public Map getDocs(@RequestParam String projectId) throws Exception {
-		System.out.println("getDocs:" + projectId);
+		log.info("getDocs:" + projectId);
 
 		return WebUtils.toDocsSummaries(projectId, this.sysConfig);
 
@@ -357,11 +360,11 @@ public class FileController extends BaseController {
 					response.getOutputStream());
 			response.flushBuffer();
 		} else {
-			System.out.println("no such file.");
+			log.info("no such file.");
 		}
-		System.out.println("viewDocs: " + filename);
+		log.info("viewDocs: " + filename);
 
-		return WebUtils.responseWithStatusCode();
+		return null;
 
 	}
 
@@ -374,7 +377,7 @@ public class FileController extends BaseController {
 		String username = session.getAttribute("LOGIN_USER") != null ? session
 				.getAttribute("LOGIN_USER").toString() : "";
 
-		System.out.println("projectId:" + projectId + " fileid:" + fileid
+		log.info("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
 		FileLockBean filelock = fileService.getFileLock(fileid);
@@ -441,7 +444,7 @@ public class FileController extends BaseController {
 		filename = EncoderDecoderUtil.decodeURIComponent(filename);
 		String username = session.getAttribute("LOGIN_USER") != null ? session
 				.getAttribute("LOGIN_USER").toString() : "";
-		System.out.println("projectId:" + projectId + " fileid:" + fileid
+		log.info("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
 		FileLockBean filelock = fileService.getFileLock(fileid);

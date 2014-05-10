@@ -99,7 +99,7 @@ public class EncoderDecoderUtil {
 	}
 	public static void main(String[] arges){
 //		System.out.println(decodeURIComponent("%E4%BD%A0%E5%A5%BD%20%E7%9C%9F%E7%9A%84"));
-		System.out.println(encodeURIComponent("¶áÈÓ Õñ"));
+//		System.out.println(encodeURIComponent("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½"));
 //		System.out.println("%E4%BD%A0%E5%A5%BD%20%E7%9C%9F%E7%9A%84");
 	}
 }

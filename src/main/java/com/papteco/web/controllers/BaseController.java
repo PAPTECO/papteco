@@ -22,15 +22,18 @@ import com.papteco.web.utils.SystemConfiguration;
  */
 @Controller
 public class BaseController {
+	protected static final Logger log = Logger.getLogger(BaseController.class); 
 	@Autowired
 	SystemConfiguration sysConfig;
 
 	@Value("#{settings['rootpath']}")
 	protected String rootpath;
 
-	protected Properties rolessetting = Roles2RightsConfiguration.getRolesSetting();
-	protected Properties rightssetting = Roles2RightsConfiguration.getRightsSetting();
-	
+	protected Properties rolessetting = Roles2RightsConfiguration
+			.getRolesSetting();
+	protected Properties rightssetting = Roles2RightsConfiguration
+			.getRightsSetting();
+
 	public static Logger logger = Logger.getLogger("Logger");
 
 	protected String combineFolderPath(String path1, String path2) {
@@ -43,41 +46,41 @@ public class BaseController {
 		}
 		return f.getPath();
 	}
-	
-	protected String formatedNumber(String num, int digs){
+
+	protected String formatedNumber(String num, int digs) {
 		StringBuffer result = new StringBuffer();
-		for(int i = 0; i < digs-num.length(); i++){
+		for (int i = 0; i < digs - num.length(); i++) {
 			result.append("0");
 		}
 		result.append(num);
 		return result.toString();
 	}
-	
-	protected Map successMessage(Map messageMap){
-		
-		if(messageMap == null)
+
+	protected Map successMessage(Map messageMap) {
+
+		if (messageMap == null)
 			messageMap = new HashMap();
-		
+
 		messageMap.put("type", "success");
-		
+
 		return messageMap;
 	}
-	
-	protected Map successMessage(){
-		
+
+	protected Map successMessage() {
+
 		return this.successMessage(null);
 	}
-	
-	protected Map failMessage(String message){
-		
+
+	protected Map failMessage(String message) {
+
 		Map messageMap = new HashMap();
-		
+
 		messageMap.put("type", "fail");
 		messageMap.put("message", message);
-		
+
 		return messageMap;
 	}
-	
+
 	public static Map of(Object... keyval) {
 		Map map = new HashMap();
 
@@ -88,4 +91,43 @@ public class BaseController {
 
 	}
 
+	protected Map successFormatMessage(Map messageMap) {
+
+		if (messageMap == null)
+			messageMap = new HashMap();
+
+		messageMap.put("\"type\"", "\"success\"");
+
+		return messageMap;
+	}
+
+	protected Map successFormatMessage() {
+
+		return this.successMessage(null);
+	}
+
+	protected Map failFormatMessage(String message) {
+
+		Map messageMap = new HashMap();
+
+		messageMap.put("\"type\"", "\"fail\"");
+		messageMap.put("\"message\"", "\"" + message + "\"");
+
+		return messageMap;
+	}
+
+	public static Map ofFormat(Object... keyval) {
+		Map map = new HashMap();
+
+		for (int i = 0; i < keyval.length; i = i + 2) {
+			map.put("\"" + keyval[i] + "\"", "\"" + keyval[i + 1] + "\"");
+		}
+		return map;
+
+	}
+
+	protected String formatJSONToHTML(Map message) {
+		return "<textarea>" + message.toString().replaceAll("=", ":")
+				+ "</textarea>";
+	}
 }

@@ -40,6 +40,7 @@ import com.papteco.web.beans.UsersBean;
 import com.papteco.web.dbs.ProjectCacheDAO;
 import com.papteco.web.dbs.UserDAO;
 import com.papteco.web.dbs.UserIPDAO;
+import com.papteco.web.utils.FilesUtils;
 import com.papteco.web.utils.Roles2RightsConfiguration;
 
 /**
@@ -66,7 +67,7 @@ public class NettyAppServerHandler extends ChannelInboundHandlerAdapter {
     	case 'I':
     		IPItem ipItem = request.getIpItem();
     		UserIPDAO.saveUserIPBean(ipItem);
-    		System.out.println(ipItem.getPCID()+":"+ipItem.getPCIP()+":"+ipItem.getPCNAME());
+    		logger.info(ipItem.getPCID()+":"+ipItem.getPCIP()+":"+ipItem.getPCNAME());
     		ctx.write(request);
     		break;
     	case 'P':
@@ -116,6 +117,8 @@ public class NettyAppServerHandler extends ChannelInboundHandlerAdapter {
     	case 'F':
     		QueueItem qItem = (QueueItem) request.getqItem();
     		File file = new File(combineFolderPath(this.rootpath,qItem.getPrjCde()), qItem.getParam());
+    		logger.log(
+                    Level.INFO,">>Downloading File:" + file.getName() + "on Server side!.");
     		if(file.exists()){
     			InputStream fis = new BufferedInputStream(new FileInputStream(file));
     			byte[] buffer = new byte[fis.available()];
@@ -123,10 +126,34 @@ public class NettyAppServerHandler extends ChannelInboundHandlerAdapter {
     	        fis.close();
     	        request.setPrjObj(buffer);
     	        ctx.write(request);
+    		}else{
+    			logger.log(
+                        Level.WARNING,">>File not existing:" + file.getName() + "on Server side!.");
     		}
     		break;
+    	case 'G':
+    		String username = request.getReqUser();
+    		
+    		List<String> mails = FilesUtils.scanFilesFromFolder(combineFolderPath(rootpath,combineFolderPath("MAILS_BACKUP",username)));
+    		
+    		request.setAdditional6(mails);
+    		ctx.write(request);
+    		break;
+    	case 'D':
+    		String usrname = request.getReqUser();
+    		String mailfile = request.getAdditional1();
+    		File f = new File(combineFolderPath(rootpath,combineFolderPath("MAILS_BACKUP",combineFolderPath(usrname,mailfile))));
+    		if(f.exists()){
+    			InputStream fis = new BufferedInputStream(new FileInputStream(f));
+    			byte[] buffer = new byte[fis.available()];
+    	        fis.read(buffer);
+    	        fis.close();
+    	        request.setPrjObj(buffer);
+    		}
+    		ctx.write(request);
+    		break;
     	}
-    	
+//    	ctx.close();
     }
 
     @Override

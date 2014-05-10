@@ -40,8 +40,10 @@ public class ProjectController extends BaseController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "createProject")
 	@ResponseBody
-	public Map createProject(@RequestBody CreateProjectFormBean bean)
+	public Map createProject(@RequestBody CreateProjectFormBean bean, HttpSession session)
 			throws Exception {
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 		//Notice: The max project ID should be 999, cannot support the larger ID.
 		ProjectBean tmpProject = new ProjectBean();
 		tmpProject.setProjectId(bean.getUniqueno());
@@ -51,7 +53,7 @@ public class ProjectController extends BaseController {
 		tmpProject.setCreateDate(genProjectCreateDate(bean));
 		tmpProject.setUniqueNo(bean.getUniqueno());
 		tmpProject.setCreatedAt(new Date());
-		tmpProject.setCreatedBy("admin");
+		tmpProject.setCreatedBy(username);
 		tmpProject.setShortDesc(bean.getShortdesc());
 		tmpProject.setLongDesc(bean.getLongdesc());
 		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
@@ -79,8 +81,8 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public List doSearch(@RequestParam String searchClinetno,
 			@RequestParam String searchAnykey) throws Exception {
-		System.out.println(searchClinetno);
-		System.out.println(searchAnykey);
+		log.info(searchClinetno);
+		log.info(searchAnykey);
 		return WebUtils.toSearchGrid(searchClinetno, searchAnykey);
 	}
 
@@ -92,9 +94,9 @@ public class ProjectController extends BaseController {
 			HttpSession session) throws Exception {
 		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 
-		System.out.println(searchClinetno);
-		System.out.println(searchAnykey);
-		System.out.println(searchSavName);
+		log.info(searchClinetno);
+		log.info(searchAnykey);
+		log.info(searchSavName);
 		projectService.saveSearchShortcut(username, searchSavName,
 				searchClinetno, searchAnykey);
 		return this.successMessage();
@@ -106,7 +108,7 @@ public class ProjectController extends BaseController {
 	public Map getSearchShortcut(HttpSession session) throws Exception {
 		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 
-		System.out.println("getSearchShortcut");
+		log.info("getSearchShortcut");
 		StringBuilder sb = new StringBuilder();
 		
 		SearchShortcutBean schShortcut = projectService.getSearchShortcut(username);
@@ -129,7 +131,7 @@ public class ProjectController extends BaseController {
 	public Map getPrjShortcut(HttpSession session) throws Exception {
 		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 
-		System.out.println("getPrjShortcut");
+		log.info("getPrjShortcut");
 		StringBuilder sb = new StringBuilder();
 		ProjectShortcutBean prjShortcut = projectService.getPrjShortcut(username);
 		if(prjShortcut != null){
@@ -150,7 +152,7 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Map getPreserveNos() throws Exception {
 		
-		System.out.println("getPreserveNos");
+		log.info("getPreserveNos");
 		PreserveNosBean presNoBean = presNoService.getPresNos();
 		return ImmutableMap.of("from", presNoBean.getPresNoFrom(),"to",presNoBean.getPresNoTo());
 
@@ -161,7 +163,7 @@ public class ProjectController extends BaseController {
 	public Map submitPresrvNos(@RequestParam String datafrom,
 			@RequestParam String datato) throws Exception {
 		
-		System.out.println("submitPresrvNos - "+datafrom + " to " + datato);
+		log.info("submitPresrvNos - "+datafrom + " to " + datato);
 		int presNoFrom = Integer.valueOf(datafrom);
 		int presNoTo = Integer.valueOf(datato);
 		if(presNoFrom > presNoTo){
@@ -191,7 +193,7 @@ public class ProjectController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "deleteprjshortcut")
 	@ResponseBody
 	public Map deleteprjshortcut(@RequestParam String delId, HttpSession session) throws Exception {
-		System.out.println("delId:"+delId);
+		log.info("delId:"+delId);
 		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 
 		projectService.deletePrjShortcut(username, delId);
@@ -202,7 +204,7 @@ public class ProjectController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "deleteSearchshortcut")
 	@ResponseBody
 	public Map deleteSearchshortcut(@RequestParam String delId, HttpSession session) throws Exception {
-		System.out.println("delId:"+delId);
+		log.info("delId:"+delId);
 		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 
 		projectService.deleteSearchShortcut(username, delId);
@@ -213,7 +215,7 @@ public class ProjectController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getProject")
 	@ResponseBody
 	public Map getProject(@RequestParam String projectId) throws Exception {
-		System.out.println("getProject : "+projectId);
+		log.info("getProject : "+projectId);
 		return WebUtils.toProjectSummaries(projectId);
 
 	}
@@ -225,7 +227,7 @@ public class ProjectController extends BaseController {
 			HttpSession session) throws Exception {
 		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
 
-		System.out.println("doctype:"+docType+" prjId:"+prjId + " revFileName:"+URLDecoder.decode(revFileName));
+		log.info("doctype:"+docType+" prjId:"+prjId + " revFileName:"+URLDecoder.decode(revFileName));
 		String shortCode = docType + "("
 				+ this.sysConfig.getFolderNameByFolderCde(docType) + ")";
 		FormatItem formating = this.sysConfig.getFormatSetting().get(docType);
@@ -242,7 +244,7 @@ public class ProjectController extends BaseController {
 	public Map deleteProject(@RequestBody ProjectBean projectBean)
 			throws Exception {
 		//DELETE PROJECT
-		System.out.println("going to deleteProject:"+projectBean.getProjectId());
+		log.info("going to deleteProject:"+projectBean.getProjectId());
 		String reply = projectService.deleteProject(projectBean.getProjectId());
 		if(reply.equals("NO_PROJECT")){
 			return this.failMessage("Project not existing!");

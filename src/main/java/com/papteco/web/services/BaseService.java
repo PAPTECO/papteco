@@ -1,5 +1,6 @@
 package com.papteco.web.services;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +9,8 @@ import com.papteco.web.utils.FoldersUtils;
 
 @Service
 public class BaseService {
+
+	protected static final Logger log = Logger.getLogger(BaseService.class); 
 	@Autowired
 	protected FoldersUtils foldersUtils;
 	

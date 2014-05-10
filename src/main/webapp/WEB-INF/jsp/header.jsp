@@ -61,8 +61,8 @@
 					<li><a href="#" onclick="doLogout()"
 						title="End administrator session" class="tooltip"><span
 							class="ui-icon ui-icon-power"></span><spring:message code="menu.toolstips.logout" /></a></li>
-					<li><a href="#" title="Change current settings"
-						class="tooltip"><span class="ui-icon ui-icon-wrench"></span><spring:message code="menu.toolstips.downloadclient" /></a></li>
+					<!-- <li><a href="#" title="Change current settings"
+						class="tooltip"><span class="ui-icon ui-icon-wrench"></span><spring:message code="menu.toolstips.downloadclient" /></a></li> -->
 					<li><a href="#" title="Go to your account"
 						onclick="fillMyAccountBox('<%=request.getSession().getAttribute("LOGIN_USER")%>')"
 						class="tooltip"><span class="ui-icon ui-icon-person"></span><spring:message code="menu.toolstips.myacc" /></a></li>
@@ -76,7 +76,7 @@
 		<div id="navbar">
 			<ul class="nav">
 				<li><a href="index"><spring:message code="menu.dashboard" /></a></li>
-				<li><a href="members"><spring:message code="menu.members" /></a></li>
+				<!-- <li><a href="members"><spring:message code="menu.members" /></a></li> -->
 				<li><a href="users"><spring:message code="menu.users" /></a></li>
 				<li><a href="clients"><spring:message code="menu.clients" /></a></li>
 				<li><a href="templates"><spring:message code="menu.templates" /></a></li>

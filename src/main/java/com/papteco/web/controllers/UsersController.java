@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +36,7 @@ public class UsersController extends BaseController {
 	@ResponseBody
 	public List doSearchUser(@RequestParam String searchRoles,
 			@RequestParam String searchUserName) throws Exception {
-		System.out.println("searchRoles:" + searchRoles + " searchUserName:"
+		log.info("searchRoles:" + searchRoles + " searchUserName:"
 				+ searchUserName);
 		return WebUtils.toSearchUserGrid(searchRoles, searchUserName);
 	}
@@ -51,7 +52,7 @@ public class UsersController extends BaseController {
 	public Map createUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
 
-		System.out.println("createUserRequest UsersFormBean:" + bean);
+		log.info("createUserRequest UsersFormBean:" + bean);
 		UsersBean user = preUserBean(bean);
 
 		try {
@@ -74,7 +75,7 @@ public class UsersController extends BaseController {
 	public Map updateUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
 
-		System.out.println("updateUserRequest UsersFormBean:" + bean);
+		log.info("updateUserRequest UsersFormBean:" + bean);
 
 		try {
 			UsersBean user = preUserBean(bean);
@@ -101,7 +102,7 @@ public class UsersController extends BaseController {
 	public Map updateMyUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
 
-		System.out.println("updateMyUserRequest UsersFormBean:" + bean);
+		log.info("updateMyUserRequest UsersFormBean:" + bean);
 
 		try {
 
@@ -129,8 +130,8 @@ public class UsersController extends BaseController {
 	public Map deleteUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
 
-		System.out.println("deleteUserRequest UsersFormBean:" + bean);
-
+		log.info("deleteUserRequest UsersFormBean:" + bean);
+		if(bean.getCreateUserName().equals("sysadmin")) return this.failMessage("Cannot delete this user!");
 		try {
 			UsersBean dbuser = userService.getUser(bean.getCreateUserName());
 
@@ -167,7 +168,7 @@ public class UsersController extends BaseController {
 	@ResponseBody
 	public Map getRoleDisplay() throws Exception {
 
-		System.out.println("getRoleDisplay()");
+		log.info("getRoleDisplay()");
 
 		StringBuffer sb = new StringBuffer();
 
@@ -199,7 +200,7 @@ public class UsersController extends BaseController {
 	public Map getUsersRoleList(@RequestBody UsersFormBean userid)
 			throws Exception {
 
-		System.out.println("getUsersRoleList() userid:"
+		log.info("getUsersRoleList() userid:"
 				+ userid.getCreateUserName());
 
 		if (StringUtils.isBlank(userid.getCreateUserName())) {
@@ -227,7 +228,7 @@ public class UsersController extends BaseController {
 	public Map getMyUsersRoleList(@RequestBody UsersFormBean userid)
 			throws Exception {
 
-		System.out.println("getMyUsersRoleList() userid:"
+		log.info("getMyUsersRoleList() userid:"
 				+ userid.getCreateUserName());
 
 		UsersBean user = userService.getUser(userid.getCreateUserName());
@@ -285,7 +286,7 @@ public class UsersController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "userlogout")
 	@ResponseBody
 	public Map userlogout(HttpSession session) throws Exception {
-		System.out.println("userlogout:");
+		log.info("userlogout:");
 
 		session.removeAttribute("LOGIN_USER");
 		session.removeAttribute("allowFunctions");
@@ -296,8 +297,8 @@ public class UsersController extends BaseController {
 	@ResponseBody
 	public Map userlogin(@RequestBody UsersFormBean bean, HttpSession session)
 			throws Exception {
-
-		System.out.println("createUserRequest UsersFormBean:" + bean);
+		log.info("UserLogin : " + bean.getCreateUserName()); 
+		log.info("createUserRequest UsersFormBean:" + bean);
 
 		try {
 			UsersBean user = userService.validateUser(bean.getCreateUserName());

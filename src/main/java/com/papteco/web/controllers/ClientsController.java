@@ -25,7 +25,7 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public List doSearchClient(@RequestParam String searchClientNo,
 			@RequestParam String searchClientName) throws Exception {
-		System.out.println("doSearchClient:" + searchClientNo + " searchUserName:"
+		log.info("doSearchClient:" + searchClientNo + " searchUserName:"
 				+ searchClientName);
 		return WebUtils.toSearchClientGrid(searchClientNo, searchClientName);
 	}
@@ -34,7 +34,7 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map createClientRequest(@RequestBody ClientBean bean)
 			throws Exception {
-		System.out.println("createClientRequest ClientBean:" + bean);
+		log.info("createClientRequest ClientBean:" + bean);
 		
 		try {
 			String feedback = clientService.saveClient(bean);
@@ -54,7 +54,7 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map updateClientRequest(@RequestBody ClientBean bean)
 			throws Exception {
-		System.out.println("updateClientRequest ClientBean:" + bean);
+		log.info("updateClientRequest ClientBean:" + bean);
 
 		try {
 			if(StringUtils.isBlank(bean.getClientNo()))
@@ -75,7 +75,7 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map deleteClientRequest(@RequestBody ClientBean bean)
 			throws Exception {
-		System.out.println("deleteClientRequest ClientBean:" + bean);
+		log.info("deleteClientRequest ClientBean:" + bean);
 
 		try {
 			clientService.deleteClient(bean);
@@ -91,7 +91,7 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map getClientMaintList(@RequestBody ClientBean clientBean)
 			throws Exception {
-		System.out.println("getClientMaintList() clientId:"
+		log.info("getClientMaintList() clientId:"
 				+ clientBean.getClientNo());
 
 		if(StringUtils.isNotBlank(clientBean.getClientNo())){

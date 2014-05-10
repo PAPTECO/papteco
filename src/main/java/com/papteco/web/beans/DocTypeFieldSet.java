@@ -7,6 +7,7 @@ public class DocTypeFieldSet {
 	private String projectId;
 	private String projectCde;
 	private String upload_doctype;
+	private String upload_doctype_tmp;
 	private String clientNo;
 	private String drawintType;
 	private String dateWith4digs;
@@ -75,6 +76,14 @@ public class DocTypeFieldSet {
 
 	public void setUpload_doctype(String upload_doctype) {
 		this.upload_doctype = upload_doctype;
+	}
+
+	public String getUpload_doctype_tmp() {
+		return upload_doctype_tmp;
+	}
+
+	public void setUpload_doctype_tmp(String upload_doctype_tmp) {
+		this.upload_doctype_tmp = upload_doctype_tmp;
 	}
 
 	public String getClientNo() {

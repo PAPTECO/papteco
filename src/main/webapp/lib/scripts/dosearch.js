@@ -18,7 +18,7 @@ require([ 'dojox/grid/EnhancedGrid', 'dojox/grid/enhanced/plugins/Pagination',
 		field : 'col1',
 		width : "150px"
 	}, {
-		name : 'Last Modification At',
+		name : 'Created At',
 		field : 'col2',
 		width : "150px"
 	}, {

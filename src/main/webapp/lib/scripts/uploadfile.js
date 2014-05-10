@@ -382,20 +382,19 @@ function validateUploadForm() {
 					sethiddenValue(query, dom, "paymentDueDate");
 					sethiddenValue(query, dom, "orderedDate");
 					sethiddenValue(query, dom, "completedDate");
-
+					sethiddenValue(query, dom, "upload_doctype_tmp");
+					
 					iframe("secure/submitUploadFile", {
 						form : "uploadFileForm",
 						handleAs : "html"
 					})
 							.then(
-									function(xmldoc) { 
+									function(xmldoc) {
 										console.log("json",xmldoc);
-//										alert(xmldoc);
 										data = xmldoc.body.textContent;
 										console.log(data);
-										r= json.parse(data);
+										r= JSON.parse(data);
 										console.log(r);
-										
 										console.log("edit debug...",r);
 										if(r.type=="fail"){
 											alert(r.message);

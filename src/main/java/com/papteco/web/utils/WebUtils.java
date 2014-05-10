@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -36,6 +37,7 @@ import com.papteco.web.dbs.UserDAO;
 
 public class WebUtils {
 
+	protected static final Logger log = Logger.getLogger(WebUtils.class); 
 	private static Properties actionsetting = Roles2RightsConfiguration.getActionSetting();
 	private static Map<String, String> drawingType = new LinkedHashMap<String, String>();
 	private static String drawingtypeSelect = "";
@@ -114,7 +116,7 @@ public class WebUtils {
 	}
 
 	public static Map toUniqueJson() {
-		System.out.println(ProjectCacheDAO.getMaxProjectId());
+		log.info(ProjectCacheDAO.getMaxProjectId());
 		PreserveNosBean presNo = PreserveNosDAO
 				.getPresNosBean(PreserveNosDAO.PRES_NO_CDE);
 		return ImmutableMap.of("max", ProjectCacheDAO.getMaxProjectId(),
@@ -645,6 +647,13 @@ public class WebUtils {
 
 	public static boolean isDocTypeInEditFunctionList(String doc_type,
 			List<String> functionList) {
+		return isDocTypeInEditFunctionList(doc_type, null, functionList);
+	}
+	
+	public static boolean isDocTypeInEditFunctionList(String doc_type, String doc_type_tmp,
+			List<String> functionList) {
+		if(StringUtils.isBlank(doc_type) && StringUtils.isNotBlank(doc_type_tmp))
+			doc_type = doc_type_tmp;
 		
 		for(String right : functionList){
 			if(right.startsWith("D") && right.endsWith("E")){
