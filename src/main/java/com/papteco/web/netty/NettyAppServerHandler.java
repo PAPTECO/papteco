@@ -61,7 +61,9 @@ public class NettyAppServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(
             ChannelHandlerContext ctx, Object msg) throws Exception {
         // Echo back the received object to the client.
+    	logger.info(">>>>>>Here is for NettyAppServerHandler.channelRead");
     	ClientRequestBean request = (ClientRequestBean) msg;
+    	logger.info(">>>>>>ActionType: "+request.getActionType());
     	switch (request.getActionType())
     	{
     	case 'I':
@@ -118,7 +120,7 @@ public class NettyAppServerHandler extends ChannelInboundHandlerAdapter {
     		QueueItem qItem = (QueueItem) request.getqItem();
     		File file = new File(combineFolderPath(this.rootpath,qItem.getPrjCde()), qItem.getParam());
     		logger.log(
-                    Level.INFO,">>Downloading File:" + file.getName() + "on Server side!.");
+                    Level.INFO,">>Downloading File:" + file.getPath() + "on Server side!.");
     		if(file.exists()){
     			InputStream fis = new BufferedInputStream(new FileInputStream(file));
     			byte[] buffer = new byte[fis.available()];
@@ -128,7 +130,7 @@ public class NettyAppServerHandler extends ChannelInboundHandlerAdapter {
     	        ctx.write(request);
     		}else{
     			logger.log(
-                        Level.WARNING,">>File not existing:" + file.getName() + "on Server side!.");
+                        Level.WARNING,">>File not existing:" + file.getPath() + "on Server side!.");
     		}
     		break;
     	case 'G':
