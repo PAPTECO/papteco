@@ -12,6 +12,7 @@ import com.papteco.web.beans.ClientBean;
 import com.papteco.web.beans.FolderBean;
 import com.papteco.web.utils.WebUtils;
 
+@SuppressWarnings({ "rawtypes" })
 @Controller
 public class PropertiesController extends BaseController {
 

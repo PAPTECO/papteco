@@ -16,40 +16,41 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FilesUtils extends BaseUtils{
-	
-	public static String genFileId(){
+public class FilesUtils extends BaseUtils {
+
+	public static String genFileId() {
 		return java.util.UUID.randomUUID().toString().replaceAll("-", "");
 	}
-	
-	public static void copyFile(String fromFile, String toFile) throws IOException {
+
+	public static void copyFile(String fromFile, String toFile)
+			throws IOException {
 		InputStream fis = new BufferedInputStream(new FileInputStream(fromFile));
 		byte[] buffer = new byte[fis.available()];
-        fis.read(buffer);
-        fis.close();
+		fis.read(buffer);
+		fis.close();
 
-        BufferedOutputStream buff = null;
+		BufferedOutputStream buff = null;
 		buff = new BufferedOutputStream(new FileOutputStream(new File(toFile)));
 		buff.write(buffer);
 		buff.flush();
 		buff.close();
 	}
-	
+
 	public void downloadFile(String fromFile, String toFile) throws IOException {
 		InputStream fis = new BufferedInputStream(new FileInputStream(fromFile));
 		byte[] buffer = new byte[fis.available()];
-        fis.read(buffer);
-        fis.close();
+		fis.read(buffer);
+		fis.close();
 
-        BufferedOutputStream buff = null;
+		BufferedOutputStream buff = null;
 		buff = new BufferedOutputStream(new FileOutputStream(new File(toFile)));
 		buff.write(buffer);
 		buff.flush();
 		buff.close();
-		
+
 	}
-	
-	public static List<String> scanFilesFromFolder(String folder){
+
+	public static List<String> scanFilesFromFolder(String folder) {
 		File fld = new File(folder);
 		List<String> result = new ArrayList<String>();
 		if (fld.isDirectory()) {
@@ -76,57 +77,59 @@ public class FilesUtils extends BaseUtils{
 		}
 		return result;
 	}
-	
+
 	public InputStream getFileInputStream(String fromFile) throws IOException {
 		return new BufferedInputStream(new FileInputStream(fromFile));
 	}
-	
-	public void localOpenFile(String file) throws IOException{
-		Runtime.getRuntime().exec("cmd /C Start " + file); 
+
+	public void localOpenFile(String file) throws IOException {
+		Runtime.getRuntime().exec("cmd /C Start " + file);
 	}
-	
-//	public static String combine (String[] paths)
-//	{
-//		
-//		File f = null;
-//		for(String path:paths){
-//			if(f == null)
-//				f = new File(path);
-//			else
-//				f = new File(f,path);
-//		}
-//		return f==null?"":f.toString();
-//	}
-	
-	public static String combine(String...paths)
-	{
-		
+
+	// public static String combine (String[] paths)
+	// {
+	//
+	// File f = null;
+	// for(String path:paths){
+	// if(f == null)
+	// f = new File(path);
+	// else
+	// f = new File(f,path);
+	// }
+	// return f==null?"":f.toString();
+	// }
+
+	public static String combine(String... paths) {
+
 		File f = null;
-		for(String path:paths){
-			if(f == null)
+		for (String path : paths) {
+			if (f == null)
 				f = new File(path);
 			else
-				f = new File(f,path);
+				f = new File(f, path);
 		}
-		return f==null?"":f.toString();
+		return f == null ? "" : f.toString();
 	}
-	
-	public static void main(String[] args){
-//		FilesUtils fu = new FilesUtils();
-//		try {
-////			fu.downloadFile("C:/cony/tmp/1000-1309-1/Memo/E1000-130913-1-first memo - Rev 0.1.ppt", "C:/cony/tmpfile/abc.ppt");
-////			fu.localOpenFile("C:/cony/tmpfile/abc.ppt");
-//			Runtime.getRuntime().exec("cmd /C Start C:/cony/tmpfile/abc.ppt"); 
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		List<String> list = FilesUtils.scanFilesFromFolder("C:\\Papteco\\server\\MAILS_BACKUP\\sysadmin");
-		for(String str : list){
+
+	public static void main(String[] args) {
+		// FilesUtils fu = new FilesUtils();
+		// try {
+		// //
+		// fu.downloadFile("C:/cony/tmp/1000-1309-1/Memo/E1000-130913-1-first memo - Rev 0.1.ppt",
+		// "C:/cony/tmpfile/abc.ppt");
+		// // fu.localOpenFile("C:/cony/tmpfile/abc.ppt");
+		// Runtime.getRuntime().exec("cmd /C Start C:/cony/tmpfile/abc.ppt");
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+
+		List<String> list = FilesUtils
+				.scanFilesFromFolder("C:\\Papteco\\server\\MAILS_BACKUP\\sysadmin");
+		for (String str : list) {
 			System.out.println(str);
 		}
-		
+
 	}
-	
+
 }

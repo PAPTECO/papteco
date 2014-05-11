@@ -19,17 +19,17 @@ public class ProjectShortcutDAO {
 
 	@Value("#{settings[datapath]}")
 	protected String datapath;
-	
+
 	private static PrimaryIndex<String, ProjectShortcutBean> projectShortcutIndex;
 
 	@PostConstruct
 	public void init() {
 		File f = new File(datapath);
-		if(!f.exists()){
+		if (!f.exists()) {
 			f.mkdirs();
 		}
 		new ProjectShortcutDAO(datapath);
-	}  
+	}
 
 	public ProjectShortcutDAO(String databasePath) {
 
@@ -55,13 +55,13 @@ public class ProjectShortcutDAO {
 	public static void saveProjectShortcut(ProjectShortcutBean prjShortcut) {
 		projectShortcutIndex.put(prjShortcut);
 	}
-	
+
 	public static ProjectShortcutBean getProjectShortcut(String usracct) {
 		return projectShortcutIndex.get(usracct);
 	}
 
 	/* mandatory constructor method */
 	public ProjectShortcutDAO() {
-		
+
 	}
 }

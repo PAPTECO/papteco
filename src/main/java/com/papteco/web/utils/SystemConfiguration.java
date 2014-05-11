@@ -52,21 +52,21 @@ public class SystemConfiguration extends BaseUtils {
 	public List<ClientBean> prepareClientsInfo() {
 		return preDefineClientsInfo;
 	}
-	
-	public String getRootpath(){
+
+	public String getRootpath() {
 		return rootpath;
 	}
-	
-	public String getDatapath(){
+
+	public String getDatapath() {
 		return datapath;
 	}
-	
-	public String getFolderNameByFolderCde(String folderCde){
-		for(FolderBean bean : preDefineFolderStructure){
-			if(folderCde.equals(bean.getDocType()))
+
+	public String getFolderNameByFolderCde(String folderCde) {
+		for (FolderBean bean : preDefineFolderStructure) {
+			if (folderCde.equals(bean.getDocType()))
 				return bean.getFolderName();
 		}
 		return "";
 	}
-	
+
 }

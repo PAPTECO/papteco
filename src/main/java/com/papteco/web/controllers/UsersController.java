@@ -11,7 +11,6 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +26,7 @@ import com.papteco.web.services.UserServiceImpl;
 import com.papteco.web.utils.Roles2RightsConfiguration;
 import com.papteco.web.utils.WebUtils;
 
+@SuppressWarnings({ "rawtypes" })
 @Controller
 public class UsersController extends BaseController {
 	@Autowired
@@ -36,7 +36,7 @@ public class UsersController extends BaseController {
 	@ResponseBody
 	public List doSearchUser(@RequestParam String searchRoles,
 			@RequestParam String searchUserName) throws Exception {
-		log.info("searchRoles:" + searchRoles + " searchUserName:"
+		logger.info("searchRoles:" + searchRoles + " searchUserName:"
 				+ searchUserName);
 		return WebUtils.toSearchUserGrid(searchRoles, searchUserName);
 	}
@@ -52,7 +52,7 @@ public class UsersController extends BaseController {
 	public Map createUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
 
-		log.info("createUserRequest UsersFormBean:" + bean);
+		logger.info("createUserRequest UsersFormBean:" + bean);
 		UsersBean user = preUserBean(bean);
 
 		try {
@@ -75,7 +75,7 @@ public class UsersController extends BaseController {
 	public Map updateUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
 
-		log.info("updateUserRequest UsersFormBean:" + bean);
+		logger.info("updateUserRequest UsersFormBean:" + bean);
 
 		try {
 			UsersBean user = preUserBean(bean);
@@ -102,7 +102,7 @@ public class UsersController extends BaseController {
 	public Map updateMyUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
 
-		log.info("updateMyUserRequest UsersFormBean:" + bean);
+		logger.info("updateMyUserRequest UsersFormBean:" + bean);
 
 		try {
 
@@ -130,8 +130,9 @@ public class UsersController extends BaseController {
 	public Map deleteUserRequest(@RequestBody UsersFormBean bean)
 			throws Exception {
 
-		log.info("deleteUserRequest UsersFormBean:" + bean);
-		if(bean.getCreateUserName().equals("sysadmin")) return this.failMessage("Cannot delete this user!");
+		logger.info("deleteUserRequest UsersFormBean:" + bean);
+		if (bean.getCreateUserName().equals("sysadmin"))
+			return this.failMessage("Cannot delete this user!");
 		try {
 			UsersBean dbuser = userService.getUser(bean.getCreateUserName());
 
@@ -168,7 +169,7 @@ public class UsersController extends BaseController {
 	@ResponseBody
 	public Map getRoleDisplay() throws Exception {
 
-		log.info("getRoleDisplay()");
+		logger.info("getRoleDisplay()");
 
 		StringBuffer sb = new StringBuffer();
 
@@ -200,8 +201,7 @@ public class UsersController extends BaseController {
 	public Map getUsersRoleList(@RequestBody UsersFormBean userid)
 			throws Exception {
 
-		log.info("getUsersRoleList() userid:"
-				+ userid.getCreateUserName());
+		logger.info("getUsersRoleList() userid:" + userid.getCreateUserName());
 
 		if (StringUtils.isBlank(userid.getCreateUserName())) {
 
@@ -228,14 +228,12 @@ public class UsersController extends BaseController {
 	public Map getMyUsersRoleList(@RequestBody UsersFormBean userid)
 			throws Exception {
 
-		log.info("getMyUsersRoleList() userid:"
-				+ userid.getCreateUserName());
+		logger.info("getMyUsersRoleList() userid:" + userid.getCreateUserName());
 
 		UsersBean user = userService.getUser(userid.getCreateUserName());
 		if (user != null) {
-			return this
-					.successMessage(of("username", user.getUserName(),
-							"password", "", "email", user.getEmail()));
+			return this.successMessage(of("username", user.getUserName(),
+					"password", "", "email", user.getEmail()));
 		} else {
 			return this
 					.failMessage("User does not exists or has been deleted.Please refresh!");
@@ -286,7 +284,7 @@ public class UsersController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "userlogout")
 	@ResponseBody
 	public Map userlogout(HttpSession session) throws Exception {
-		log.info("userlogout:");
+		logger.info("userlogout:");
 
 		session.removeAttribute("LOGIN_USER");
 		session.removeAttribute("allowFunctions");
@@ -297,8 +295,8 @@ public class UsersController extends BaseController {
 	@ResponseBody
 	public Map userlogin(@RequestBody UsersFormBean bean, HttpSession session)
 			throws Exception {
-		log.info("UserLogin : " + bean.getCreateUserName()); 
-		log.info("createUserRequest UsersFormBean:" + bean);
+		logger.info("UserLogin : " + bean.getCreateUserName());
+		logger.info("createUserRequest UsersFormBean:" + bean);
 
 		try {
 			UsersBean user = userService.validateUser(bean.getCreateUserName());

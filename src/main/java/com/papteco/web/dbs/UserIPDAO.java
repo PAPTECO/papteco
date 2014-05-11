@@ -18,20 +18,20 @@ import com.sleepycat.persist.StoreConfig;
 public class UserIPDAO {
 
 	public static final String USER_IP = "USERIP";
-	
+
 	@Value("#{settings[datapath]}")
 	protected String datapath;
-	
+
 	private static PrimaryIndex<String, IPItem> useripIndex;
 
 	@PostConstruct
 	public void init() {
 		File f = new File(datapath);
-		if(!f.exists()){
+		if (!f.exists()) {
 			f.mkdirs();
 		}
 		new UserIPDAO(datapath);
-	}  
+	}
 
 	public UserIPDAO(String databasePath) {
 
@@ -49,21 +49,20 @@ public class UserIPDAO {
 		storeConfig.setTransactional(true);
 		EntityStore store = new EntityStore(env, "ProjectStore", storeConfig);
 
-		useripIndex = store.getPrimaryIndex(String.class,
-				IPItem.class);
+		useripIndex = store.getPrimaryIndex(String.class, IPItem.class);
 	}
 
 	// this is retry function
 	public static void saveUserIPBean(IPItem ipItem) {
 		useripIndex.put(ipItem);
 	}
-	
+
 	public static IPItem getUserIPBean(String username) {
 		return useripIndex.get(username);
 	}
 
 	/* mandatory constructor method */
 	public UserIPDAO() {
-		
+
 	}
 }

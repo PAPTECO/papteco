@@ -16,6 +16,7 @@ import com.papteco.web.beans.ClientBean;
 import com.papteco.web.services.ClientServiceImpl;
 import com.papteco.web.utils.WebUtils;
 
+@SuppressWarnings("rawtypes")
 @Controller
 public class ClientsController extends BaseController {
 	@Autowired
@@ -25,7 +26,7 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public List doSearchClient(@RequestParam String searchClientNo,
 			@RequestParam String searchClientName) throws Exception {
-		log.info("doSearchClient:" + searchClientNo + " searchUserName:"
+		logger.info("doSearchClient:" + searchClientNo + " searchUserName:"
 				+ searchClientName);
 		return WebUtils.toSearchClientGrid(searchClientNo, searchClientName);
 	}
@@ -34,17 +35,17 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map createClientRequest(@RequestBody ClientBean bean)
 			throws Exception {
-		log.info("createClientRequest ClientBean:" + bean);
-		
+		logger.info("createClientRequest ClientBean:" + bean);
+
 		try {
 			String feedback = clientService.saveClient(bean);
-			if(feedback.equals("CLIENT_EXIST")){
-				return this.failMessage("ClientNo [" + bean.getClientNo() + "] was exist already!");
-			}else{
+			if (feedback.equals("CLIENT_EXIST")) {
+				return this.failMessage("ClientNo [" + bean.getClientNo()
+						+ "] was exist already!");
+			} else {
 				return this.successMessage();
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return this.failMessage(e.getMessage());
 		}
@@ -54,16 +55,16 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map updateClientRequest(@RequestBody ClientBean bean)
 			throws Exception {
-		log.info("updateClientRequest ClientBean:" + bean);
+		logger.info("updateClientRequest ClientBean:" + bean);
 
 		try {
-			if(StringUtils.isBlank(bean.getClientNo()))
+			if (StringUtils.isBlank(bean.getClientNo()))
 				return this.failMessage("ClientNo cannot be blank!");
-			if(StringUtils.isBlank(bean.getClientName()))
+			if (StringUtils.isBlank(bean.getClientName()))
 				return this.failMessage("ClientName cannot be blank!");
 			clientService.updateClient(bean);
 			return this.successMessage();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.failMessage(e.getMessage());
@@ -75,7 +76,7 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map deleteClientRequest(@RequestBody ClientBean bean)
 			throws Exception {
-		log.info("deleteClientRequest ClientBean:" + bean);
+		logger.info("deleteClientRequest ClientBean:" + bean);
 
 		try {
 			clientService.deleteClient(bean);
@@ -91,18 +92,19 @@ public class ClientsController extends BaseController {
 	@ResponseBody
 	public Map getClientMaintList(@RequestBody ClientBean clientBean)
 			throws Exception {
-		log.info("getClientMaintList() clientId:"
-				+ clientBean.getClientNo());
+		logger.info("getClientMaintList() clientId:" + clientBean.getClientNo());
 
-		if(StringUtils.isNotBlank(clientBean.getClientNo())){
-			ClientBean client = clientService.getClient(clientBean.getClientNo());
-			if(client != null){
-				return this.successMessage(of("clientno", client.getClientNo(), "clientname", client.getClientName()));
-			}else{
+		if (StringUtils.isNotBlank(clientBean.getClientNo())) {
+			ClientBean client = clientService.getClient(clientBean
+					.getClientNo());
+			if (client != null) {
+				return this.successMessage(of("clientno", client.getClientNo(),
+						"clientname", client.getClientName()));
+			} else {
 				return this
 						.failMessage("Client does not exists or has been deleted.Please refresh!");
 			}
-		}else{
+		} else {
 			return this.successMessage(of("clientno", "", "clientname", ""));
 		}
 	}

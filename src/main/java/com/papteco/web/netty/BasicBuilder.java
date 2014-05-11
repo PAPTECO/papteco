@@ -7,8 +7,8 @@ import com.papteco.web.utils.EnvConfiguration;
 public class BasicBuilder {
 
 	protected Properties envsetting = EnvConfiguration.getEnvSetting();
-	
-	protected Integer PortTranslater(String port){
+
+	protected Integer PortTranslater(String port) {
 		return Integer.valueOf(port);
 	}
 }

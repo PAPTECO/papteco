@@ -8,29 +8,29 @@ import com.papteco.web.utils.FSUtils;
 
 @Service
 public class UserServiceImpl extends BaseService {
-	
+
 	public UserServiceImpl(String projectPath) {
 		super();
 		FSUtils.glanceToCache(projectPath);
 	}
 
-	public void saveUser(UsersBean user){
+	public void saveUser(UsersBean user) {
 		UserDAO.saveUser(user);
 	}
-	
-	public void deleteUser(UsersBean user){
+
+	public void deleteUser(UsersBean user) {
 		UserDAO.deleteUser(user);
 	}
-	
-	public UsersBean getUser(String username){
+
+	public UsersBean getUser(String username) {
 		return UserDAO.getUser(username);
 	}
-	
-	public UsersBean validateUser(String username){
+
+	public UsersBean validateUser(String username) {
 		UsersBean user = UserDAO.getUser(username);
 		return user;
 	}
-	
+
 	/* mandatory constructor method */
 	public UserServiceImpl() {
 	}

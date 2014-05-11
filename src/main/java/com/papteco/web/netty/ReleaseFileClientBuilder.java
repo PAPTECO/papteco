@@ -29,73 +29,80 @@ import java.util.concurrent.Callable;
 /**
  * Modification of {@link EchoClient} which utilizes Java object serialization.
  */
-public class ReleaseFileClientBuilder extends BasicBuilder implements Callable{
+public class ReleaseFileClientBuilder extends BasicBuilder implements Callable {
 
-    private final String host;
-    private String filepath;
-    private String[] fileStructPath;
-    private String fileid;
-    private String taskid;
+	private final String host;
+	private String filepath;
+	private String[] fileStructPath;
+	private String fileid;
+	private String taskid;
 
-    public ReleaseFileClientBuilder(String ip) {
-    	this.host = ip;
-    }
-    public ReleaseFileClientBuilder(String ip, String filepath, String[] fileStructPath, String fileid, String taskid) {
-    	this.host = ip;
-    	this.filepath = filepath;
-    	this.fileStructPath = fileStructPath;
-    	this.fileid = fileid;
-    	this.taskid = taskid;
-    }
+	public ReleaseFileClientBuilder(String ip) {
+		this.host = ip;
+	}
 
-    public Object call() throws Exception {
-        EventLoopGroup group = new NioEventLoopGroup();
-        try {
-            Bootstrap b = new Bootstrap();
-            b.group(group)
-             .channel(NioSocketChannel.class)
-             .handler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(
-                            new ObjectEncoder(),
-                            new NewObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new ReleaseFileClientHandler(filepath, fileStructPath, fileid, taskid));
-                }
-             });
+	public ReleaseFileClientBuilder(String ip, String filepath,
+			String[] fileStructPath, String fileid, String taskid) {
+		this.host = ip;
+		this.filepath = filepath;
+		this.fileStructPath = fileStructPath;
+		this.fileid = fileid;
+		this.taskid = taskid;
+	}
 
-            // Start the connection attempt.
-            b.connect(host,PortTranslater(envsetting.getProperty("rlse_file_port"))).sync().channel().closeFuture().sync();
+	public Object call() throws Exception {
+		EventLoopGroup group = new NioEventLoopGroup();
+		try {
+			Bootstrap b = new Bootstrap();
+			b.group(group).channel(NioSocketChannel.class)
+					.handler(new ChannelInitializer<SocketChannel>() {
+						@Override
+						public void initChannel(SocketChannel ch)
+								throws Exception {
+							ch.pipeline().addLast(
+									new ObjectEncoder(),
+									new NewObjectDecoder(ClassResolvers
+											.cacheDisabled(null)),
+									new ReleaseFileClientHandler(filepath,
+											fileStructPath, fileid, taskid));
+						}
+					});
 
-        } catch (InterruptedException e) {
+			// Start the connection attempt.
+			b.connect(host,
+					PortTranslater(envsetting.getProperty("rlse_file_port")))
+					.sync().channel().closeFuture().sync();
+
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-            group.shutdownGracefully();
-        }
-        return "Success";
-    }
+			group.shutdownGracefully();
+		}
+		return "Success";
+	}
 
-    public static void main(String[] args) throws Exception {
-        // Print usage if no argument is specified.
-//        if (args.length < 2 || args.length > 3) {
-//            System.err.println(
-//                    "Usage: " + ObjectEchoClient.class.getSimpleName() +
-//                    " <host> <port> [<first message size>]");
-//            return;
-//        }
+	public static void main(String[] args) throws Exception {
+		// Print usage if no argument is specified.
+		// if (args.length < 2 || args.length > 3) {
+		// System.err.println(
+		// "Usage: " + ObjectEchoClient.class.getSimpleName() +
+		// " <host> <port> [<first message size>]");
+		// return;
+		// }
 
-        // Parse options.
-//        final String host = "localhost";
-//        final int port = 8080;
-//        final int firstMessageSize;
-//
-//        if (args.length == 3) {
-//            firstMessageSize = Integer.parseInt(args[2]);
-//        } else {
-//            firstMessageSize = 256;
-//        }
-//
-//        new SustainableAppConnClientBuilder(host, port, firstMessageSize).run();
-    }
+		// Parse options.
+		// final String host = "localhost";
+		// final int port = 8080;
+		// final int firstMessageSize;
+		//
+		// if (args.length == 3) {
+		// firstMessageSize = Integer.parseInt(args[2]);
+		// } else {
+		// firstMessageSize = 256;
+		// }
+		//
+		// new SustainableAppConnClientBuilder(host, port,
+		// firstMessageSize).run();
+	}
 }

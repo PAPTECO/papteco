@@ -29,44 +29,47 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
  */
 public class LoginServerBuilder extends BasicBuilder implements Runnable {
 
-    public LoginServerBuilder() {
-    }
+	public LoginServerBuilder() {
+	}
 
-    public void run() {
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class)
-             .childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(
-                            new ObjectEncoder(),
-                            new NewObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new LoginServerHandler());
-                }
-             });
+	public void run() {
+		EventLoopGroup bossGroup = new NioEventLoopGroup();
+		EventLoopGroup workerGroup = new NioEventLoopGroup();
+		try {
+			ServerBootstrap b = new ServerBootstrap();
+			b.group(bossGroup, workerGroup)
+					.channel(NioServerSocketChannel.class)
+					.childHandler(new ChannelInitializer<SocketChannel>() {
+						@Override
+						public void initChannel(SocketChannel ch)
+								throws Exception {
+							ch.pipeline().addLast(
+									new ObjectEncoder(),
+									new NewObjectDecoder(ClassResolvers
+											.cacheDisabled(null)),
+									new LoginServerHandler());
+						}
+					});
 
-            // Bind and start to accept incoming connections.
-            b.bind(PortTranslater(envsetting.getProperty("login_sym_port"))).sync().channel().closeFuture().sync();
-        } catch (InterruptedException e) {
+			// Bind and start to accept incoming connections.
+			b.bind(PortTranslater(envsetting.getProperty("login_sym_port")))
+					.sync().channel().closeFuture().sync();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
-        }
-    }
+			bossGroup.shutdownGracefully();
+			workerGroup.shutdownGracefully();
+		}
+	}
 
-//    public static void main(String[] args) throws Exception {
-//        int port;
-//        if (args.length > 0) {
-//            port = Integer.parseInt(args[0]);
-//        } else {
-//            port = 8080;
-//        }
-//        new ObjectEchoServer(port).run();
-//    }
+	// public static void main(String[] args) throws Exception {
+	// int port;
+	// if (args.length > 0) {
+	// port = Integer.parseInt(args[0]);
+	// } else {
+	// port = 8080;
+	// }
+	// new ObjectEchoServer(port).run();
+	// }
 }

@@ -31,71 +31,78 @@ import com.papteco.web.beans.QueueItem;
 /**
  * Modification of {@link EchoClient} which utilizes Java object serialization.
  */
-public class OpenFileClientBuilder extends BasicBuilder implements Callable{
+public class OpenFileClientBuilder extends BasicBuilder implements Callable {
 
-    private final String host;
-    private QueueItem openfile;
-    private String filepath;
-    private String[] fileStructPath;
+	private final String host;
+	private QueueItem openfile;
+	private String filepath;
+	private String[] fileStructPath;
 
-    public OpenFileClientBuilder(String ip) {
-    	this.host = ip;
-    }
-    public OpenFileClientBuilder(String ip, QueueItem openfile, String filepath, String[] fileStructPath) {
-    	this.host = ip;
-    	this.openfile = openfile;
-    	this.filepath = filepath;
-    	this.fileStructPath = fileStructPath;
-    }
+	public OpenFileClientBuilder(String ip) {
+		this.host = ip;
+	}
 
-    public static void main(String[] args) throws Exception {
-        // Print usage if no argument is specified.
-//        if (args.length < 2 || args.length > 3) {
-//            System.err.println(
-//                    "Usage: " + ObjectEchoClient.class.getSimpleName() +
-//                    " <host> <port> [<first message size>]");
-//            return;
-//        }
+	public OpenFileClientBuilder(String ip, QueueItem openfile,
+			String filepath, String[] fileStructPath) {
+		this.host = ip;
+		this.openfile = openfile;
+		this.filepath = filepath;
+		this.fileStructPath = fileStructPath;
+	}
 
-        // Parse options.
-//        final String host = "localhost";
-//        final int port = 8080;
-//        final int firstMessageSize;
-//
-//        if (args.length == 3) {
-//            firstMessageSize = Integer.parseInt(args[2]);
-//        } else {
-//            firstMessageSize = 256;
-//        }
-//
-//        new SustainableAppConnClientBuilder(host, port, firstMessageSize).run();
-    }
-    
+	public static void main(String[] args) throws Exception {
+		// Print usage if no argument is specified.
+		// if (args.length < 2 || args.length > 3) {
+		// System.err.println(
+		// "Usage: " + ObjectEchoClient.class.getSimpleName() +
+		// " <host> <port> [<first message size>]");
+		// return;
+		// }
+
+		// Parse options.
+		// final String host = "localhost";
+		// final int port = 8080;
+		// final int firstMessageSize;
+		//
+		// if (args.length == 3) {
+		// firstMessageSize = Integer.parseInt(args[2]);
+		// } else {
+		// firstMessageSize = 256;
+		// }
+		//
+		// new SustainableAppConnClientBuilder(host, port,
+		// firstMessageSize).run();
+	}
+
 	public Object call() throws Exception {
 		EventLoopGroup group = new NioEventLoopGroup();
-        try {
-            Bootstrap b = new Bootstrap();
-            b.group(group)
-             .channel(NioSocketChannel.class)
-             .handler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(
-                            new ObjectEncoder(),
-                            new NewObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new OpenFileClientHandler(openfile, filepath, fileStructPath));
-                }
-             });
+		try {
+			Bootstrap b = new Bootstrap();
+			b.group(group).channel(NioSocketChannel.class)
+					.handler(new ChannelInitializer<SocketChannel>() {
+						@Override
+						public void initChannel(SocketChannel ch)
+								throws Exception {
+							ch.pipeline().addLast(
+									new ObjectEncoder(),
+									new NewObjectDecoder(ClassResolvers
+											.cacheDisabled(null)),
+									new OpenFileClientHandler(openfile,
+											filepath, fileStructPath));
+						}
+					});
 
-            // Start the connection attempt.
-            b.connect(host, PortTranslater(envsetting.getProperty("open_file_port"))).sync().channel().closeFuture().sync();
-            
-        } catch (InterruptedException e) {
+			// Start the connection attempt.
+			b.connect(host,
+					PortTranslater(envsetting.getProperty("open_file_port")))
+					.sync().channel().closeFuture().sync();
+
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			throw e;
 		} finally {
-            group.shutdownGracefully();
-        }
-        return "Success";
+			group.shutdownGracefully();
+		}
+		return "Success";
 	}
 }

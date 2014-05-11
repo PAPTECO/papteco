@@ -19,8 +19,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import com.papteco.web.beans.UsersBean;
 import com.papteco.web.beans.UsersFormBean;
@@ -32,40 +32,39 @@ import com.papteco.web.dbs.UserDAO;
  */
 public class LoginServerHandler extends ChannelInboundHandlerAdapter {
 
-    private static final Logger logger = Logger.getLogger(
-            LoginServerHandler.class.getName());
+	private static final Logger logger = Logger
+			.getLogger(LoginServerHandler.class.getName());
 
-    public LoginServerHandler(){
-    }
-    @Override
-    public void channelRead(
-            ChannelHandlerContext ctx, Object msg) throws Exception {
-        // Echo back the received object to the client.
-    	UsersFormBean request = (UsersFormBean) msg;
-    	UsersBean user = UserDAO.getUser(request.getCreateUserName());
-		if(user == null)
+	public LoginServerHandler() {
+	}
+
+	@Override
+	public void channelRead(ChannelHandlerContext ctx, Object msg)
+			throws Exception {
+		// Echo back the received object to the client.
+		UsersFormBean request = (UsersFormBean) msg;
+		UsersBean user = UserDAO.getUser(request.getCreateUserName());
+		if (user == null)
 			ctx.write("NOUSER");
-		else if(user.getPassword().equals(request.getCreatePassword()))
+		else if (user.getPassword().equals(request.getCreatePassword()))
 			ctx.write("SUCC");
 		else
 			ctx.write("PWDINC");
-    }
+	}
 
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
-    }
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+		ctx.flush();
+	}
 
-    @Override
-    public void exceptionCaught(
-            ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.log(
-                Level.WARNING,
-                "Unexpected exception from downstream.", cause);
-        ctx.close();
-    }
-    
-    protected String combineFolderPath(String path1, String path2) {
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+			throws Exception {
+		logger.info("Unexpected exception from downstream.");
+		ctx.close();
+	}
+
+	protected String combineFolderPath(String path1, String path2) {
 		File f = new File(path1, path2);
 		if (!f.exists()) {
 			f.mkdirs();

@@ -27,37 +27,44 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 /**
  * Modification of {@link EchoServer} which utilizes Java object serialization.
  */
-public class QuartzMailBackupServerBuilder extends BasicBuilder implements Runnable {
+public class QuartzMailBackupServerBuilder extends BasicBuilder implements
+		Runnable {
 
-    public QuartzMailBackupServerBuilder() {
-    }
+	public QuartzMailBackupServerBuilder() {
+	}
 
-    public void run() {
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class)
-             .childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(
-                            new ObjectEncoder(),
-                            new NewObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new QuartzMailBackupServerHandler(envsetting.getProperty("rootpath")));
-                }
-             });
+	public void run() {
+		EventLoopGroup bossGroup = new NioEventLoopGroup();
+		EventLoopGroup workerGroup = new NioEventLoopGroup();
+		try {
+			ServerBootstrap b = new ServerBootstrap();
+			b.group(bossGroup, workerGroup)
+					.channel(NioServerSocketChannel.class)
+					.childHandler(new ChannelInitializer<SocketChannel>() {
+						@Override
+						public void initChannel(SocketChannel ch)
+								throws Exception {
+							ch.pipeline()
+									.addLast(
+											new ObjectEncoder(),
+											new NewObjectDecoder(ClassResolvers
+													.cacheDisabled(null)),
+											new QuartzMailBackupServerHandler(
+													envsetting
+															.getProperty("rootpath")));
+						}
+					});
 
-            // Bind and start to accept incoming connections.
-            b.bind(PortTranslater(envsetting.getProperty("email_bkp_port"))).sync().channel().closeFuture().sync();
-        } catch (InterruptedException e) {
+			// Bind and start to accept incoming connections.
+			b.bind(PortTranslater(envsetting.getProperty("email_bkp_port")))
+					.sync().channel().closeFuture().sync();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
-        }
-    }
+			bossGroup.shutdownGracefully();
+			workerGroup.shutdownGracefully();
+		}
+	}
 
 }

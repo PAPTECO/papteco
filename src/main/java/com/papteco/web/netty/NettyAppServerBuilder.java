@@ -29,47 +29,50 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
  */
 public class NettyAppServerBuilder extends BasicBuilder implements Runnable {
 
-    private String rootpath;
+	private String rootpath;
 
-    public NettyAppServerBuilder(String rootpath) {
-        this.rootpath = rootpath;
-    }
+	public NettyAppServerBuilder(String rootpath) {
+		this.rootpath = rootpath;
+	}
 
-    public void run() {
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class)
-             .childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(
-                            new ObjectEncoder(),
-                            new NewObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                            new NettyAppServerHandler(rootpath));
-                }
-             });
+	public void run() {
+		EventLoopGroup bossGroup = new NioEventLoopGroup();
+		EventLoopGroup workerGroup = new NioEventLoopGroup();
+		try {
+			ServerBootstrap b = new ServerBootstrap();
+			b.group(bossGroup, workerGroup)
+					.channel(NioServerSocketChannel.class)
+					.childHandler(new ChannelInitializer<SocketChannel>() {
+						@Override
+						public void initChannel(SocketChannel ch)
+								throws Exception {
+							ch.pipeline().addLast(
+									new ObjectEncoder(),
+									new NewObjectDecoder(ClassResolvers
+											.cacheDisabled(null)),
+									new NettyAppServerHandler(rootpath));
+						}
+					});
 
-            // Bind and start to accept incoming connections.
-            b.bind(PortTranslater(envsetting.getProperty("comm_nett_port"))).sync().channel().closeFuture().sync();
-        } catch (InterruptedException e) {
+			// Bind and start to accept incoming connections.
+			b.bind(PortTranslater(envsetting.getProperty("comm_nett_port")))
+					.sync().channel().closeFuture().sync();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
-        }
-    }
+			bossGroup.shutdownGracefully();
+			workerGroup.shutdownGracefully();
+		}
+	}
 
-//    public static void main(String[] args) throws Exception {
-//        int port;
-//        if (args.length > 0) {
-//            port = Integer.parseInt(args[0]);
-//        } else {
-//            port = 8080;
-//        }
-//        new ObjectEchoServer(port).run();
-//    }
+	// public static void main(String[] args) throws Exception {
+	// int port;
+	// if (args.length > 0) {
+	// port = Integer.parseInt(args[0]);
+	// } else {
+	// port = 8080;
+	// }
+	// new ObjectEchoServer(port).run();
+	// }
 }

@@ -19,17 +19,17 @@ public class SearchShortcutDAO {
 
 	@Value("#{settings[datapath]}")
 	protected String datapath;
-	
+
 	private static PrimaryIndex<String, SearchShortcutBean> searchShortcutIndex;
 
 	@PostConstruct
 	public void init() {
 		File f = new File(datapath);
-		if(!f.exists()){
+		if (!f.exists()) {
 			f.mkdirs();
 		}
 		new SearchShortcutDAO(datapath);
-	}  
+	}
 
 	public SearchShortcutDAO(String databasePath) {
 
@@ -55,13 +55,13 @@ public class SearchShortcutDAO {
 	public static void saveSearchShortcut(SearchShortcutBean searchShortcut) {
 		searchShortcutIndex.put(searchShortcut);
 	}
-	
+
 	public static SearchShortcutBean getSearchShortcut(String usracct) {
 		return searchShortcutIndex.get(usracct);
 	}
 
 	/* mandatory constructor method */
 	public SearchShortcutDAO() {
-		
+
 	}
 }

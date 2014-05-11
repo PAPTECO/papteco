@@ -4,12 +4,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.papteco.web.controllers.BaseController;
-
 @Component
 public class BaseUtils {
 
-	protected static final Logger log = Logger.getLogger(BaseUtils.class); 
+	protected static final Logger logger = Logger.getLogger(BaseUtils.class);
 	/* properties value; */
 	@Value("#{settings['rootpath']}")
 	protected String rootpath;

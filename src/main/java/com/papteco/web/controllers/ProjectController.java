@@ -30,21 +30,23 @@ import com.papteco.web.services.ProjectServiceImpl;
 import com.papteco.web.utils.EncoderDecoderUtil;
 import com.papteco.web.utils.WebUtils;
 
+@SuppressWarnings({ "rawtypes" })
 @Controller
 public class ProjectController extends BaseController {
 	@Autowired
 	private ProjectServiceImpl projectService;
-	
+
 	@Autowired
 	private PresNoServiceImpl presNoService;
 
 	@RequestMapping(method = RequestMethod.POST, value = "createProject")
 	@ResponseBody
-	public Map createProject(@RequestBody CreateProjectFormBean bean, HttpSession session)
-			throws Exception {
+	public Map createProject(@RequestBody CreateProjectFormBean bean,
+			HttpSession session) throws Exception {
 		String username = session.getAttribute("LOGIN_USER") != null ? session
 				.getAttribute("LOGIN_USER").toString() : "";
-		//Notice: The max project ID should be 999, cannot support the larger ID.
+		// Notice: The max project ID should be 999, cannot support the larger
+		// ID.
 		ProjectBean tmpProject = new ProjectBean();
 		tmpProject.setProjectId(bean.getUniqueno());
 		tmpProject.setProjectCde(bean.getClientno() + "-"
@@ -59,11 +61,13 @@ public class ProjectController extends BaseController {
 		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
 
 		try {
-			if(Integer.valueOf(bean.getUniqueno())>999){
-				return this.failMessage("The Unique No. cannot large than 999 !");
-			}else if(projectService.isPrjIdExisting(bean.getUniqueno())){
-				return this.failMessage("The Unique No. was existing : "+bean.getUniqueno());
-			}else{
+			if (Integer.valueOf(bean.getUniqueno()) > 999) {
+				return this
+						.failMessage("The Unique No. cannot large than 999 !");
+			} else if (projectService.isPrjIdExisting(bean.getUniqueno())) {
+				return this.failMessage("The Unique No. was existing : "
+						+ bean.getUniqueno());
+			} else {
 				projectService.createProject(tmpProject,
 						this.sysConfig.prepareFolderStructure());
 
@@ -76,13 +80,13 @@ public class ProjectController extends BaseController {
 			return this.failMessage(e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "secure/doSearch")
 	@ResponseBody
 	public List doSearch(@RequestParam String searchClinetno,
 			@RequestParam String searchAnykey) throws Exception {
-		log.info(searchClinetno);
-		log.info(searchAnykey);
+		logger.info(searchClinetno);
+		logger.info(searchAnykey);
 		return WebUtils.toSearchGrid(searchClinetno, searchAnykey);
 	}
 
@@ -90,122 +94,152 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Map saveSearch(@RequestParam String searchClinetno,
 			@RequestParam String searchAnykey,
-			@RequestParam String searchSavName,
-			HttpSession session) throws Exception {
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+			@RequestParam String searchSavName, HttpSession session)
+			throws Exception {
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 
-		log.info(searchClinetno);
-		log.info(searchAnykey);
-		log.info(searchSavName);
+		logger.info(searchClinetno);
+		logger.info(searchAnykey);
+		logger.info(searchSavName);
 		projectService.saveSearchShortcut(username, searchSavName,
 				searchClinetno, searchAnykey);
 		return this.successMessage();
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "getSearchShortcut")
 	@ResponseBody
 	public Map getSearchShortcut(HttpSession session) throws Exception {
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 
-		log.info("getSearchShortcut");
+		logger.info("getSearchShortcut");
 		StringBuilder sb = new StringBuilder();
-		
-		SearchShortcutBean schShortcut = projectService.getSearchShortcut(username);
-		if(schShortcut != null){
-			Iterator iter = schShortcut.getSearchShortcuts().entrySet().iterator();
-			while(iter.hasNext()){
-				Map.Entry sc = (Map.Entry)iter.next();
+
+		SearchShortcutBean schShortcut = projectService
+				.getSearchShortcut(username);
+		if (schShortcut != null) {
+			Iterator iter = schShortcut.getSearchShortcuts().entrySet()
+					.iterator();
+			while (iter.hasNext()) {
+				Map.Entry sc = (Map.Entry) iter.next();
 				String key = sc.getKey().toString();
-				String[] value = (String[])sc.getValue();
-				sb.append("<li><span class='fileSearch'></span> <a href=\"#\" onclick=\"changetosearch('"+value[0]+"','"+value[1]+"')\" >"+key+"</a> <span class='remove' onclick=\"deleteSearchshortcut('"+key+"');\"></span></li>");
+				String[] value = (String[]) sc.getValue();
+				sb.append("<li><span class='fileSearch'></span> <a href=\"#\" onclick=\"changetosearch('"
+						+ value[0]
+						+ "','"
+						+ value[1]
+						+ "')\" >"
+						+ key
+						+ "</a> <span class='remove' onclick=\"deleteSearchshortcut('"
+						+ key + "');\"></span></li>");
 
 			}
 		}
 		return this.successMessage(of("data", sb.toString()));
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "getPrjShortcut")
 	@ResponseBody
 	public Map getPrjShortcut(HttpSession session) throws Exception {
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 
-		log.info("getPrjShortcut");
+		logger.info("getPrjShortcut");
 		StringBuilder sb = new StringBuilder();
-		ProjectShortcutBean prjShortcut = projectService.getPrjShortcut(username);
-		if(prjShortcut != null){
+		ProjectShortcutBean prjShortcut = projectService
+				.getPrjShortcut(username);
+		if (prjShortcut != null) {
 			Iterator iter = prjShortcut.getPrjShortcuts().entrySet().iterator();
-			while(iter.hasNext()){
-				Map.Entry sc = (Map.Entry)iter.next();
+			while (iter.hasNext()) {
+				Map.Entry sc = (Map.Entry) iter.next();
 				String key = sc.getKey().toString();
 				String value = sc.getValue().toString();
-				sb.append("<li><span class='fileSuccess'></span> <a href='#' onclick=\"changetoprj('"+value+"')\" >"+key+"</a> <span class='remove' onclick=\"deleteprjshortcut(\'"+key+"');\"></span></li>");
-				
-			} 
+				sb.append("<li><span class='fileSuccess'></span> <a href='#' onclick=\"changetoprj('"
+						+ value
+						+ "')\" >"
+						+ key
+						+ "</a> <span class='remove' onclick=\"deleteprjshortcut(\'"
+						+ key + "');\"></span></li>");
+
+			}
 		}
 		return this.successMessage(of("data", sb.toString()));
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "getPreserveNos")
 	@ResponseBody
 	public Map getPreserveNos() throws Exception {
-		
-		log.info("getPreserveNos");
+
+		logger.info("getPreserveNos");
 		PreserveNosBean presNoBean = presNoService.getPresNos();
-		return ImmutableMap.of("from", presNoBean.getPresNoFrom(),"to",presNoBean.getPresNoTo());
+		return ImmutableMap.of("from", presNoBean.getPresNoFrom(), "to",
+				presNoBean.getPresNoTo());
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "submitPresrvNos")
 	@ResponseBody
 	public Map submitPresrvNos(@RequestParam String datafrom,
 			@RequestParam String datato) throws Exception {
-		
-		log.info("submitPresrvNos - "+datafrom + " to " + datato);
+
+		logger.info("submitPresrvNos - " + datafrom + " to " + datato);
 		int presNoFrom = Integer.valueOf(datafrom);
 		int presNoTo = Integer.valueOf(datato);
-		if(presNoFrom > presNoTo){
-			return this.failMessage("PresNoFrom should be little than PresNoTo.");
+		if (presNoFrom > presNoTo) {
+			return this
+					.failMessage("PresNoFrom should be little than PresNoTo.");
 		}
-		String issuecases = presNoService.isPresNoValidationPassed(presNoFrom, presNoTo);
-		if(StringUtils.isBlank(issuecases)){
-			presNoService.savePresNos(new PreserveNosBean(presNoFrom,presNoTo));
-		}else{
-			return this.failMessage("Cannot save the preserve numbers. ProjectId ["+issuecases+"] was existing.");
+		String issuecases = presNoService.isPresNoValidationPassed(presNoFrom,
+				presNoTo);
+		if (StringUtils.isBlank(issuecases)) {
+			presNoService
+					.savePresNos(new PreserveNosBean(presNoFrom, presNoTo));
+		} else {
+			return this
+					.failMessage("Cannot save the preserve numbers. ProjectId ["
+							+ issuecases + "] was existing.");
 		}
-		
+
 		return this.successMessage();
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "savePrjshortcut")
 	@ResponseBody
 	public Map saveSearch(@RequestParam String prjId,
-			@RequestParam String prjSavName, HttpSession session) throws Exception {
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+			@RequestParam String prjSavName, HttpSession session)
+			throws Exception {
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 
 		projectService.saveProjectShortcut(username, prjSavName, prjId);
 		return this.successMessage();
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "deleteprjshortcut")
 	@ResponseBody
-	public Map deleteprjshortcut(@RequestParam String delId, HttpSession session) throws Exception {
-		log.info("delId:"+delId);
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+	public Map deleteprjshortcut(@RequestParam String delId, HttpSession session)
+			throws Exception {
+		logger.info("delId:" + delId);
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 
 		projectService.deletePrjShortcut(username, delId);
 		return this.successMessage();
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "deleteSearchshortcut")
 	@ResponseBody
-	public Map deleteSearchshortcut(@RequestParam String delId, HttpSession session) throws Exception {
-		log.info("delId:"+delId);
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+	public Map deleteSearchshortcut(@RequestParam String delId,
+			HttpSession session) throws Exception {
+		logger.info("delId:" + delId);
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 
 		projectService.deleteSearchShortcut(username, delId);
 		return this.successMessage();
@@ -215,19 +249,22 @@ public class ProjectController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getProject")
 	@ResponseBody
 	public Map getProject(@RequestParam String projectId) throws Exception {
-		log.info("getProject : "+projectId);
+		logger.info("getProject : " + projectId);
 		return WebUtils.toProjectSummaries(projectId);
 
 	}
-	
+
+	@SuppressWarnings("deprecation")
 	@RequestMapping(method = RequestMethod.GET, value = "getNumberingFormat")
 	@ResponseBody
 	public Map getNumberingFormat(@RequestParam String docType,
-			@RequestParam String prjId,@RequestParam String revFileName,
+			@RequestParam String prjId, @RequestParam String revFileName,
 			HttpSession session) throws Exception {
-		String username = session.getAttribute("LOGIN_USER") != null?session.getAttribute("LOGIN_USER").toString():"";
+		String username = session.getAttribute("LOGIN_USER") != null ? session
+				.getAttribute("LOGIN_USER").toString() : "";
 
-		log.info("doctype:"+docType+" prjId:"+prjId + " revFileName:"+URLDecoder.decode(revFileName));
+		logger.info("doctype:" + docType + " prjId:" + prjId + " revFileName:"
+				+ URLDecoder.decode(revFileName));
 		String shortCode = docType + "("
 				+ this.sysConfig.getFolderNameByFolderCde(docType) + ")";
 		FormatItem formating = this.sysConfig.getFormatSetting().get(docType);
@@ -235,23 +272,24 @@ public class ProjectController extends BaseController {
 		String clientno = "(?)"; // please change it by prjId
 		String ref = "(?)"; // please change it by prjId
 		return WebUtils.toNumberingFormat(prjId, shortCode, formating,
-				fieldSetting, clientno, ref,EncoderDecoderUtil.decodeURIComponent(revFileName), username);
+				fieldSetting, clientno, ref,
+				EncoderDecoderUtil.decodeURIComponent(revFileName), username);
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "secure/deleteProject")
 	@ResponseBody
 	public Map deleteProject(@RequestBody ProjectBean projectBean)
 			throws Exception {
-		//DELETE PROJECT
-		log.info("going to deleteProject:"+projectBean.getProjectId());
+		// DELETE PROJECT
+		logger.info("going to deleteProject:" + projectBean.getProjectId());
 		String reply = projectService.deleteProject(projectBean.getProjectId());
-		if(reply.equals("NO_PROJECT")){
+		if (reply.equals("NO_PROJECT")) {
 			return this.failMessage("Project not existing!");
 		}
 		return this.successMessage();
 	}
-	
+
 	private String genProjectCreateDate(CreateProjectFormBean bean) {
 		return bean.getCreateDate().substring(2, 6);
 	}

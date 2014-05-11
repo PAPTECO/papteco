@@ -37,8 +37,9 @@ import com.papteco.web.dbs.UserDAO;
 
 public class WebUtils {
 
-	protected static final Logger log = Logger.getLogger(WebUtils.class); 
-	private static Properties actionsetting = Roles2RightsConfiguration.getActionSetting();
+	protected static final Logger logger = Logger.getLogger(WebUtils.class);
+	private static Properties actionsetting = Roles2RightsConfiguration
+			.getActionSetting();
 	private static Map<String, String> drawingType = new LinkedHashMap<String, String>();
 	private static String drawingtypeSelect = "";
 	static {
@@ -99,7 +100,8 @@ public class WebUtils {
 	}
 
 	public static Map toClientJson() {
-		List<ClientBean> prepareClientsInfo = ClientDAO.getClientsByFilter("", "");
+		List<ClientBean> prepareClientsInfo = ClientDAO.getClientsByFilter("",
+				"");
 		Map result = Maps.newHashMap();
 		List dataList = Lists.newArrayList();
 
@@ -116,7 +118,7 @@ public class WebUtils {
 	}
 
 	public static Map toUniqueJson() {
-		log.info(ProjectCacheDAO.getMaxProjectId());
+		logger.info(ProjectCacheDAO.getMaxProjectId());
 		PreserveNosBean presNo = PreserveNosDAO
 				.getPresNosBean(PreserveNosDAO.PRES_NO_CDE);
 		return ImmutableMap.of("max", ProjectCacheDAO.getMaxProjectId(),
@@ -132,7 +134,7 @@ public class WebUtils {
 
 		for (int i = 0; i < searchResult.size(); i++) {
 			ProjectBean bean = searchResult.get(i);
-			if(bean.getProjectId().equals("0"))
+			if (bean.getProjectId().equals("0"))
 				continue;
 			int countFiles = bean.getTotalFileList().size();
 			StringBuffer files = new StringBuffer();
@@ -178,34 +180,34 @@ public class WebUtils {
 	public static Map toProjectSummaries(String projectId) {
 		ProjectBean bean = ProjectCacheDAO.getProjectTree(projectId);
 
-		return BaseController.of("projectIndentify", bean.getProjectCde(), "createdBy",
-				bean.getCreatedBy(), "createdAt", bean.getCreatedAt()
-						.toString(), "description", bean.getLongDesc(),
-						"templates",getProjectTemplate());
+		return BaseController.of("projectIndentify", bean.getProjectCde(),
+				"createdBy", bean.getCreatedBy(), "createdAt", bean
+						.getCreatedAt().toString(), "description", bean
+						.getLongDesc(), "templates", getProjectTemplate());
 
 	}
-	
-	//TODO Cony
-	public static Map getProjectTemplate(){
-		
+
+	// TODO Cony
+	public static Map getProjectTemplate() {
+
 		ProjectBean templateBean = ProjectCacheDAO.getProjectTree("0");
-		
+
 		Map map = new HashMap();
-		
-		if (templateBean !=null){
+
+		if (templateBean != null) {
 
 			List<FolderBean> folders = templateBean.getFolderTree();
-			for(FolderBean f:folders){
-				
+			for (FolderBean f : folders) {
+
 				String docType = f.getDocType();
 				List lists = Lists.newArrayList();
-				for(FileBean file : f.getFileTree()){
+				for (FileBean file : f.getFileTree()) {
 					lists.add(file.getFileName());
 				}
 				map.put(docType, lists);
 			}
 		}
-		
+
 		return map;
 	}
 
@@ -260,36 +262,37 @@ public class WebUtils {
 		return null;
 	}
 
-	public static String[] interpreteProjectCode(String projectCode){
-		
+	public static String[] interpreteProjectCode(String projectCode) {
+
 		List<String> result = new ArrayList<String>();
-		
-		if(StringUtils.isNotBlank(projectCode)){
-			for(String str: projectCode.split("-")){
+
+		if (StringUtils.isNotBlank(projectCode)) {
+			for (String str : projectCode.split("-")) {
 				result.add(str);
 			}
-			result.add(0, result.get(0).substring(0,1));
+			result.add(0, result.get(0).substring(0, 1));
 			result.set(1, result.get(1).substring(1));
-			if(result.get(3).contains(" ")){
+			if (result.get(3).contains(" ")) {
 				int ind = 3;
-				for(String tmpstr : result.get(3).split(" ")){
+				for (String tmpstr : result.get(3).split(" ")) {
 					result.add(ind, tmpstr);
 					ind++;
 				}
 				result.remove(ind);
-				
-				result.add(2, result.get(2).substring(0,1));
+
+				result.add(2, result.get(2).substring(0, 1));
 				result.set(3, result.get(3).substring(1));
 			}
 		}
-		
-		return result.size()==0?null:result.toArray(new String[result.size()]);
-		
+
+		return result.size() == 0 ? null : result.toArray(new String[result
+				.size()]);
+
 	}
-	
+
 	public static Map toNumberingFormat(String prjId, String docType,
 			FormatItem item, List<FieldDef> seqAndDesc, String clientno,
-			String ref,String preFileName, String username) {
+			String ref, String preFileName, String username) {
 		ProjectBean bean = ProjectCacheDAO.getProjectTree(prjId);
 		StringBuilder sb = new StringBuilder();
 
@@ -303,21 +306,22 @@ public class WebUtils {
 		sb.append("</tr>");
 		// details
 		sb.append("<tr>");
-		
+
 		String[] values = null;
-		
-		if(StringUtils.isNotBlank(preFileName))
+
+		if (StringUtils.isNotBlank(preFileName))
 			values = interpreteProjectCode(preFileName);
 		int vCt = 0;
 		for (FieldDef col : seqAndDesc) {
 			if (!col.isAdditional()
-					&& getValueByFieldName(col.getFieldName(), item) != ActionEnum.notApplicable){
+					&& getValueByFieldName(col.getFieldName(), item) != ActionEnum.notApplicable) {
 				sb.append(detailtd(prjId, col, docType, bean.getClientNo(),
-						bean.getUniqueNo(),values==null?null:values[vCt],
-								values==null?null:preFileName));
+						bean.getUniqueNo(),
+						values == null ? null : values[vCt],
+						values == null ? null : preFileName));
 				vCt++;
 			}
-				
+
 		}
 		sb.append("</tr>");
 		sb.append("</table>");
@@ -334,11 +338,11 @@ public class WebUtils {
 		}
 
 		// copy from field
-		
-//		sb.append("<tr><td class='normalcolor'>Copy from</td>");
-//		sb.append("<td><input class='uploadfileqryonly' id='uploadedCopyForm' name='uploadedCopyForm' disabled='disabled' size='30' maxlength='30'/></td>");
-//		sb.append("</tr>");
-		
+
+		// sb.append("<tr><td class='normalcolor'>Copy from</td>");
+		// sb.append("<td><input class='uploadfileqryonly' id='uploadedCopyForm' name='uploadedCopyForm' disabled='disabled' size='30' maxlength='30'/></td>");
+		// sb.append("</tr>");
+
 		sb.append("</table>");
 		sb.append("<input type='hidden' value='" + prjId
 				+ "' name='projectId'/>");
@@ -353,9 +357,10 @@ public class WebUtils {
 	private static Object additionalfieldtd(FieldDef col) {
 		return additionalfieldtd(col, "");
 	}
-	
+
 	private static Object additionalfieldtd(FieldDef col, String username) {
-		return headertd(col, "td") + detailtd(null,col, null, null, null,null,null, username);
+		return headertd(col, "td")
+				+ detailtd(null, col, null, null, null, null, null, username);
 	}
 
 	public static String headertd(FieldDef col, String tag) {
@@ -380,13 +385,15 @@ public class WebUtils {
 	}
 
 	public static String detailtd(String prjId, FieldDef col, String docType,
-			String clientno, String ref, String overwriteValue,String copyfromFileName) {
-		return detailtd(prjId, col, docType,
-				clientno, ref, overwriteValue,copyfromFileName, "");
+			String clientno, String ref, String overwriteValue,
+			String copyfromFileName) {
+		return detailtd(prjId, col, docType, clientno, ref, overwriteValue,
+				copyfromFileName, "");
 	}
-	
+
 	public static String detailtd(String prjId, FieldDef col, String docType,
-			String clientno, String ref, String overwriteValue,String copyfromFileName, String username) {
+			String clientno, String ref, String overwriteValue,
+			String copyfromFileName, String username) {
 
 		String result = "";
 		String defaultValue = "";
@@ -398,7 +405,8 @@ public class WebUtils {
 			result = "<td><textarea class='uploadfileqryonly' id='note' name='note' cols ='10' rows = '2' onkeyup='chkvaldpty(this)'></textarea></td>";
 		} else if ("drawintType".equals(col.getFieldName())) {
 			result = drawingtypeSelect;
-			result = result.replace("<option value='"+overwriteValue+"'>", "<option value='"+overwriteValue+"' selected>");
+			result = result.replace("<option value='" + overwriteValue + "'>",
+					"<option value='" + overwriteValue + "' selected>");
 		} else {
 
 			if ("ref".equals(col.getFieldName())) {
@@ -407,7 +415,7 @@ public class WebUtils {
 				defaultValue = getDateYYMM();
 			} else if ("dateWith6digs".equals(col.getFieldName())) {
 				defaultValue = getDateYYMMDD();
-			}  else if ("l1".equals(col.getFieldName())) {
+			} else if ("l1".equals(col.getFieldName())) {
 				defaultValue = "00";
 			} else if ("l2".equals(col.getFieldName())) {
 				defaultValue = "00";
@@ -416,25 +424,29 @@ public class WebUtils {
 			} else if ("uploadedBy".equals(col.getFieldName())) {
 				defaultValue = username;
 			}
-			
-			if(StringUtils.isNotBlank(overwriteValue)){
-				defaultValue= overwriteValue;
+
+			if (StringUtils.isNotBlank(overwriteValue)) {
+				defaultValue = overwriteValue;
 			}
-			
+
 			if ("rev".equals(col.getFieldName())) {
-				//TODO Cony
+				// TODO Cony
 				List<String> revNum = new ArrayList<String>();
-				
-				if(StringUtils.isNotBlank(prjId) && StringUtils.isNotBlank(copyfromFileName)){
-					String copyFilename = copyfromFileName.substring(0, copyfromFileName.lastIndexOf("-"));
+
+				if (StringUtils.isNotBlank(prjId)
+						&& StringUtils.isNotBlank(copyfromFileName)) {
+					String copyFilename = copyfromFileName.substring(0,
+							copyfromFileName.lastIndexOf("-"));
 					ProjectBean project = ProjectCacheDAO.getProjectTree(prjId);
-					if(project != null){
+					if (project != null) {
 						List<FolderBean> folders = project.getFolderTree();
-						for(FolderBean folder : folders){
-							if(docType.substring(0, 1).equals(folder.getDocType())){
+						for (FolderBean folder : folders) {
+							if (docType.substring(0, 1).equals(
+									folder.getDocType())) {
 								List<FileBean> files = folder.getFileTree();
-								for(FileBean file : files){
-									if(file.getFileName().contains(copyFilename)){
+								for (FileBean file : files) {
+									if (file.getFileName().contains(
+											copyFilename)) {
 										revNum.add(file.getRev());
 									}
 								}
@@ -443,16 +455,16 @@ public class WebUtils {
 					}
 					Collections.sort(revNum);
 				}
-				
-				if(revNum.size() == 0){
+
+				if (revNum.size() == 0) {
 					defaultValue = "001";
-				}else{
-					String maxRevNum = revNum.get(revNum.size()-1);
+				} else {
+					String maxRevNum = revNum.get(revNum.size() - 1);
 					Integer revnum = Integer.valueOf(maxRevNum) + 1;
 					defaultValue = formatedNumber(revnum.toString(), 3);
 				}
 			}
-			
+
 			result = new StringBuilder()
 					.append("<td><input class='uploadfileqryonly' id='")
 					.append(col.getFieldName())
@@ -466,31 +478,32 @@ public class WebUtils {
 							+ col.getUivalidatescript() + "(this)' "
 							: " onkeyup='chkvaldpty(this)' ")
 					.append(" value='" + defaultValue + "' ")
-					.append(StringUtils.isNotBlank(overwriteValue)?" readOnly ":"")
-					.append(col.getFieldName()).append("></td>").toString();
+					.append(StringUtils.isNotBlank(overwriteValue) ? " readOnly "
+							: "").append(col.getFieldName()).append("></td>")
+					.toString();
 		}
 		return result;
 
 	}
 
-	protected static String formatedNumber(String num, int digs){
+	protected static String formatedNumber(String num, int digs) {
 		StringBuffer result = new StringBuffer();
-		for(int i = 0; i < digs-num.length(); i++){
+		for (int i = 0; i < digs - num.length(); i++) {
 			result.append("0");
 		}
 		result.append(num);
 		return result.toString();
 	}
-	
-//	public static Map of(Object... keyval) {
-//		Builder b = ImmutableMap.builder();
-//
-//		for (int i = 0; i < keyval.length; i = i + 2) {
-//			b.put(keyval[i], keyval[i + 1]);
-//		}
-//		return b.build();
-//
-//	}
+
+	// public static Map of(Object... keyval) {
+	// Builder b = ImmutableMap.builder();
+	//
+	// for (int i = 0; i < keyval.length; i = i + 2) {
+	// b.put(keyval[i], keyval[i + 1]);
+	// }
+	// return b.build();
+	//
+	// }
 
 	public static Map toDocsSummaries(String projectId,
 			SystemConfiguration sysConfig) {
@@ -503,47 +516,46 @@ public class WebUtils {
 		for (FolderBean folder : project.getFolderTree()) {
 			List<FileBean> files = folder.getFileTree();
 			if (files == null || files.size() == 0) {
-				resultList.add(BaseController.of("id", folder.getDocType(), "name",
-						folder.getFolderName(), "type", "continent",
-						"numformat", folder.getNuberformat(), 
-						"ftype","folder",
-						"docType",folder.getDocType(),
-						"children",
+				resultList.add(BaseController.of("id", folder.getDocType(),
+						"name", folder.getFolderName(), "type", "continent",
+						"numformat", folder.getNuberformat(), "ftype",
+						"folder", "docType", folder.getDocType(), "children",
 						Lists.newArrayList()));
 			} else {
-				//TODO Cony
-				// please replace function on (locked by ?) if this file is locked.
+				// TODO Cony
+				// please replace function on (locked by ?) if this file is
+				// locked.
 				List<Map> subList = Lists.newArrayList();
 				int amountFileLocks = 0;
 				for (FileBean file : files) {
 					StringBuffer sb = new StringBuffer();
-					FileLockBean filelock = FileLockDAO.getFileLockBean(file.getFileId());
-					if(filelock != null){
+					FileLockBean filelock = FileLockDAO.getFileLockBean(file
+							.getFileId());
+					if (filelock != null) {
 						sb.append(" (locked by ");
 						sb.append(filelock.getLockByUser());
 						sb.append(")");
-						
+
 						amountFileLocks++;
 					}
-					
-					
-					subList.add(BaseController.of("id", file.getFileName(), "name",
-							file.getFileName()+sb.toString(), "type", "continent",
-							"projectId", projectId, "field_details",
+
+					subList.add(BaseController.of("id", file.getFileName(),
+							"name", file.getFileName() + sb.toString(), "type",
+							"continent", "projectId", projectId,
+							"field_details",
 							displayUploadFileFields(file, sysConfig),
-							"docType",folder.getDocType(),
-							"ftype","file",
-							"fileId",file.getFileId()));
+							"docType", folder.getDocType(), "ftype", "file",
+							"fileId", file.getFileId()));
 
 				}
-				//TODO Cony
+				// TODO Cony
 				// please replace function on (contain X, N is locked)
-				resultList.add(BaseController.of("id", folder.getDocType(), "name",
-						folder.getFolderName() + "(contain " + subList.size() + ", " + amountFileLocks+" locked)",
-						"type", "continent", 
-						"ftype","folder",
-						"docType",folder.getDocType(),
-						"numformat",
+				resultList.add(BaseController.of("id", folder.getDocType(),
+						"name",
+						folder.getFolderName() + "(contain " + subList.size()
+								+ ", " + amountFileLocks + " locked)", "type",
+						"continent", "ftype", "folder", "docType",
+						folder.getDocType(), "numformat",
 						folder.getNuberformat(), "children", subList));
 			}
 
@@ -583,23 +595,27 @@ public class WebUtils {
 				StringUtils.isEmpty(errmsg) ? "None" : errmsg);
 
 	}
-	
-	//users
-	
-	public static List toSearchUserGrid(String searchRoles, String searchUserName) {
 
-		List<UsersBean> searchResult = UserDAO.getUsersByFilter(searchUserName, searchRoles);
-		
+	// users
+
+	public static List toSearchUserGrid(String searchRoles,
+			String searchUserName) {
+
+		List<UsersBean> searchResult = UserDAO.getUsersByFilter(searchUserName,
+				searchRoles);
+
 		List datalist = Lists.newArrayList();
 
 		for (int i = 0; i < searchResult.size(); i++) {
 
 			StringBuffer sb = new StringBuffer();
-			for(String role : searchResult.get(i).getRoles()){
+			for (String role : searchResult.get(i).getRoles()) {
 				sb.append(role + ";");
 			}
-			
-			Map data = ImmutableMap.of("col1", searchResult.get(i).getUserName(), "col2",searchResult.get(i).getEmail(), "col3",sb.toString());
+
+			Map data = ImmutableMap.of("col1", searchResult.get(i)
+					.getUserName(), "col2", searchResult.get(i).getEmail(),
+					"col3", sb.toString());
 			Map testdata = Maps.newHashMap();
 			testdata.put("id", searchResult.get(i).getUserName());
 			testdata.putAll(data);
@@ -607,18 +623,22 @@ public class WebUtils {
 		}
 		return datalist;
 	}
-	
-	//clients
-	
-	public static List toSearchClientGrid(String searchClientNo, String searchClientName) {
 
-		List<ClientBean> searchResult = ClientDAO.getClientsByFilter(searchClientNo, searchClientName);
-		
+	// clients
+
+	public static List toSearchClientGrid(String searchClientNo,
+			String searchClientName) {
+
+		List<ClientBean> searchResult = ClientDAO.getClientsByFilter(
+				searchClientNo, searchClientName);
+
 		List datalist = Lists.newArrayList();
 
 		for (int i = 0; i < searchResult.size(); i++) {
-			
-			Map data = ImmutableMap.of("col1", searchResult.get(i).getClientNo(), "col2",searchResult.get(i).getClientName());
+
+			Map data = ImmutableMap
+					.of("col1", searchResult.get(i).getClientNo(), "col2",
+							searchResult.get(i).getClientName());
 			Map testdata = Maps.newHashMap();
 			testdata.put("id", searchResult.get(i).getClientNo());
 			testdata.putAll(data);
@@ -626,22 +646,24 @@ public class WebUtils {
 		}
 		return datalist;
 	}
-	
+
 	public static Map toRolesJson(Set<Object> roles) {
 		List dataList = Lists.newArrayList();
-		for(Object key : roles){
-			dataList.add(ImmutableMap.of("id", key.toString(), "name", key.toString()));
+		for (Object key : roles) {
+			dataList.add(ImmutableMap.of("id", key.toString(), "name",
+					key.toString()));
 		}
 		return ImmutableMap.of("data", dataList);
 	}
-	
-	public static boolean isActionInFunctionList(String action,List functionList){
-		
-		String right = actionsetting.getProperty(action,"");
-		if(functionList.contains(right)){
+
+	public static boolean isActionInFunctionList(String action,
+			List functionList) {
+
+		String right = actionsetting.getProperty(action, "");
+		if (functionList.contains(right)) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -649,16 +671,17 @@ public class WebUtils {
 			List<String> functionList) {
 		return isDocTypeInEditFunctionList(doc_type, null, functionList);
 	}
-	
-	public static boolean isDocTypeInEditFunctionList(String doc_type, String doc_type_tmp,
-			List<String> functionList) {
-		if(StringUtils.isBlank(doc_type) && StringUtils.isNotBlank(doc_type_tmp))
+
+	public static boolean isDocTypeInEditFunctionList(String doc_type,
+			String doc_type_tmp, List<String> functionList) {
+		if (StringUtils.isBlank(doc_type)
+				&& StringUtils.isNotBlank(doc_type_tmp))
 			doc_type = doc_type_tmp;
-		
-		for(String right : functionList){
-			if(right.startsWith("D") && right.endsWith("E")){
-				String tmp = right.substring(1, right.length()-1);
-				if(tmp.contains(doc_type)){
+
+		for (String right : functionList) {
+			if (right.startsWith("D") && right.endsWith("E")) {
+				String tmp = right.substring(1, right.length() - 1);
+				if (tmp.contains(doc_type)) {
 					return true;
 				}
 			}
@@ -668,19 +691,19 @@ public class WebUtils {
 
 	public static boolean isFilenameInViewFunctionList(String filename,
 			List<String> functionList) {
-		
-		if(StringUtils.isNotBlank(filename)){
+
+		if (StringUtils.isNotBlank(filename)) {
 			String docType = filename.substring(0, 1);
-			for(String right : functionList){
-				if(right.startsWith("D") && right.endsWith("V")){
-					String tmp = right.substring(1, right.length()-1);
-					if(tmp.contains(docType)){
+			for (String right : functionList) {
+				if (right.startsWith("D") && right.endsWith("V")) {
+					String tmp = right.substring(1, right.length() - 1);
+					if (tmp.contains(docType)) {
 						return true;
 					}
 				}
 			}
 		}
-		
+
 		return false;
 	}
 }

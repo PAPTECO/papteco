@@ -10,10 +10,11 @@ import com.papteco.web.utils.FoldersUtils;
 @Service
 public class BaseService {
 
-	protected static final Logger log = Logger.getLogger(BaseService.class); 
+	protected static final Logger logger = Logger.getLogger(BaseService.class
+			.getName());
 	@Autowired
 	protected FoldersUtils foldersUtils;
-	
+
 	@Autowired
 	protected FilesUtils filesUtils;
 

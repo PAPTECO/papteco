@@ -22,20 +22,20 @@ import com.sleepycat.persist.StoreConfig;
 public class ClientDAO {
 
 	public static final String USER_IP = "USERIP";
-	
+
 	@Value("#{settings[datapath]}")
 	protected String datapath;
-	
+
 	private static PrimaryIndex<String, ClientBean> clientsIndex;
 
 	@PostConstruct
 	public void init() {
 		File f = new File(datapath);
-		if(!f.exists()){
+		if (!f.exists()) {
 			f.mkdirs();
 		}
 		new ClientDAO(datapath);
-	}  
+	}
 
 	public ClientDAO(String databasePath) {
 
@@ -53,15 +53,14 @@ public class ClientDAO {
 		storeConfig.setTransactional(true);
 		EntityStore store = new EntityStore(env, "ProjectStore", storeConfig);
 
-		clientsIndex = store.getPrimaryIndex(String.class,
-				ClientBean.class);
+		clientsIndex = store.getPrimaryIndex(String.class, ClientBean.class);
 	}
 
 	// this is retry function
 	public static void saveClientBean(ClientBean client) {
 		clientsIndex.put(client);
 	}
-	
+
 	public static ClientBean getClientBean(String clientNo) {
 		return clientsIndex.get(clientNo);
 	}
@@ -69,23 +68,28 @@ public class ClientDAO {
 	public static void deleteClient(ClientBean client) {
 		clientsIndex.delete(client.getClientNo());
 	}
-	
-	public static List<ClientBean> getClientsByFilter(String clientNo, String clientName){
+
+	public static List<ClientBean> getClientsByFilter(String clientNo,
+			String clientName) {
 		EntityCursor<ClientBean> allClients = clientsIndex.entities();
 		List<ClientBean> result = new LinkedList<ClientBean>();
-		for (ClientBean bean : allClients){
-			if(StringUtils.isBlank(clientNo) && StringUtils.isBlank(clientName)){
+		for (ClientBean bean : allClients) {
+			if (StringUtils.isBlank(clientNo)
+					&& StringUtils.isBlank(clientName)) {
 				result.add(bean);
-			}else if(StringUtils.isBlank(clientNo) && StringUtils.isNotBlank(clientName)){
-				if(bean.getClientName().contains(clientName)){
+			} else if (StringUtils.isBlank(clientNo)
+					&& StringUtils.isNotBlank(clientName)) {
+				if (bean.getClientName().contains(clientName)) {
 					result.add(bean);
 				}
-			}else if(StringUtils.isNotBlank(clientNo) && StringUtils.isBlank(clientName)){
-				if(bean.getClientNo().equals(clientNo)){
+			} else if (StringUtils.isNotBlank(clientNo)
+					&& StringUtils.isBlank(clientName)) {
+				if (bean.getClientNo().equals(clientNo)) {
 					result.add(bean);
 				}
-			}else{
-				if(bean.getClientNo().equals(clientNo) && bean.getClientName().contains(clientName)){
+			} else {
+				if (bean.getClientNo().equals(clientNo)
+						&& bean.getClientName().contains(clientName)) {
 					result.add(bean);
 				}
 			}
@@ -93,9 +97,9 @@ public class ClientDAO {
 		allClients.close();
 		return result;
 	}
-	
+
 	/* mandatory constructor method */
 	public ClientDAO() {
-		
+
 	}
 }

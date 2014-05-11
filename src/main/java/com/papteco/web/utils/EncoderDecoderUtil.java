@@ -4,12 +4,12 @@ import java.io.UnsupportedEncodingException;
 
 public class EncoderDecoderUtil {
 	public static final String ALLOWED_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.!~*'()";
- 
+
 	public static String encodeURIComponent(String input) {
 		if (input == null || "".equals(input)) {
 			return input;
 		}
- 
+
 		int l = input.length();
 		StringBuilder o = new StringBuilder(l * 3);
 		try {
@@ -28,7 +28,7 @@ public class EncoderDecoderUtil {
 		}
 		return input;
 	}
- 
+
 	private static String getHex(byte buf[]) {
 		StringBuilder o = new StringBuilder(buf.length * 3);
 		for (int i = 0; i < buf.length; i++) {
@@ -41,17 +41,17 @@ public class EncoderDecoderUtil {
 		}
 		return o.toString();
 	}
- 
+
 	public static String decodeURIComponent(String encodedURI) {
 		char actualChar;
- 
+
 		StringBuffer buffer = new StringBuffer();
- 
+
 		int bytePattern, sumb = 0;
- 
+
 		for (int i = 0, more = -1; i < encodedURI.length(); i++) {
 			actualChar = encodedURI.charAt(i);
- 
+
 			switch (actualChar) {
 			case '%': {
 				actualChar = encodedURI.charAt(++i);
@@ -71,7 +71,7 @@ public class EncoderDecoderUtil {
 				bytePattern = actualChar;
 			}
 			}
- 
+
 			if ((bytePattern & 0xc0) == 0x80) { // 10xxxxxx
 				sumb = (sumb << 6) | (bytePattern & 0x3f);
 				if (--more == 0)
@@ -97,9 +97,10 @@ public class EncoderDecoderUtil {
 		}
 		return buffer.toString();
 	}
-	public static void main(String[] arges){
-//		System.out.println(decodeURIComponent("%E4%BD%A0%E5%A5%BD%20%E7%9C%9F%E7%9A%84"));
-//		System.out.println(encodeURIComponent("���� ��"));
-//		System.out.println("%E4%BD%A0%E5%A5%BD%20%E7%9C%9F%E7%9A%84");
+
+	public static void main(String[] arges) {
+		// System.out.println(decodeURIComponent("%E4%BD%A0%E5%A5%BD%20%E7%9C%9F%E7%9A%84"));
+		// System.out.println(encodeURIComponent("���� ��"));
+		// System.out.println("%E4%BD%A0%E5%A5%BD%20%E7%9C%9F%E7%9A%84");
 	}
 }

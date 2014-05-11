@@ -41,6 +41,7 @@ import com.papteco.web.utils.FilesUtils;
 import com.papteco.web.utils.TaskUtils;
 import com.papteco.web.utils.WebUtils;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Controller
 public class FileController extends BaseController {
 	@Autowired
@@ -114,7 +115,7 @@ public class FileController extends BaseController {
 	public Map getPformRef(@RequestParam String prjId, @RequestParam String date)
 			throws Exception {
 		int ref_i = 0;
-		log.info("getDocs:" + prjId + " date:" + date);
+		logger.info("getDocs:" + prjId + " date:" + date);
 
 		ProjectBean project = projectService.getProject(prjId);
 		if (project != null) {
@@ -153,7 +154,7 @@ public class FileController extends BaseController {
 		String username = session.getAttribute("LOGIN_USER") != null ? session
 				.getAttribute("LOGIN_USER").toString() : "";
 
-		if(StringUtils.isBlank(bean.getUpload_doctype())){
+		if (StringUtils.isBlank(bean.getUpload_doctype())) {
 			bean.setUpload_doctype(bean.getUpload_doctype_tmp());
 		}
 		if (StringUtils.isNotBlank(bean.getUploadedCopyForm())
@@ -194,7 +195,8 @@ public class FileController extends BaseController {
 
 			if (fileService.isFileNameExisting(bean.getProjectId(),
 					fileBean.getFileName())) {
-				return this.formatJSONToHTML(this.failFormatMessage("File already exits!"));
+				return this.formatJSONToHTML(this
+						.failFormatMessage("File already exits!"));
 			} else {
 				if (!fromfile.exists()) {
 					fromfile.createNewFile();
@@ -207,38 +209,50 @@ public class FileController extends BaseController {
 				// Order client to open the file
 				// temp solution for upload
 				serverFilePath = tofile.getPath();
-				fileStructPath = new String[]{bean.getProjectCde(),
-						this.sysConfig
-						.getFolderNameByFolderCde(bean
-								.getUpload_doctype()),fileBean
-								.getFileName()};
+				fileStructPath = new String[] {
+						bean.getProjectCde(),
+						this.sysConfig.getFolderNameByFolderCde(bean
+								.getUpload_doctype()), fileBean.getFileName() };
 
 				// open add rev file on local
 				QueueItem openfile = new QueueItem();
 				openfile.setActionType("OPENFILE");
-//				openfile.setParam(fileStructPath); // simplechanges
+				// openfile.setParam(fileStructPath); // simplechanges
 				openfile.setParam(fileStructPath);
 				fileService.saveFileLock(new FileLockBean(fileBean.getFileId(),
 						username, new Date()));
-				
+
 				// get remote user ip
 				IPItem item = UserIPDAO.getUserIPBean(username);
 
 				if (item == null) {
-					return this.formatJSONToHTML(this.successFormatMessage(ofFormat("message","File is created successfully. Program attempts to open file but detected client had not open.")));
+					return this
+							.formatJSONToHTML(this
+									.successFormatMessage(ofFormat(
+											"message",
+											"File is created successfully. Program attempts to open file but detected client had not open.")));
 				} else {
 					OpenFileClientBuilder callback = new OpenFileClientBuilder(
-							item.getPCIP(), openfile, serverFilePath, fileStructPath);
+							item.getPCIP(), openfile, serverFilePath,
+							fileStructPath);
 					FutureTask t = new FutureTask(callback);
 					new Thread(t).start();
 					try {
 						t.get();
-						return this.formatJSONToHTML(this.successFormatMessage(ofFormat("filename", EncoderDecoderUtil
-								.encodeURIComponent(fileBean.getFileName()))));
-					} catch (ExecutionException e){
-						return this.formatJSONToHTML(this.successFormatMessage(ofFormat("message","File is created successfully. Program attempts to open file but detected client had not open.")));
+						return this.formatJSONToHTML(this
+								.successFormatMessage(ofFormat("filename",
+										EncoderDecoderUtil
+												.encodeURIComponent(fileBean
+														.getFileName()))));
+					} catch (ExecutionException e) {
+						return this
+								.formatJSONToHTML(this
+										.successFormatMessage(ofFormat(
+												"message",
+												"File is created successfully. Program attempts to open file but detected client had not open.")));
 					} catch (Exception e) {
-						return this.formatJSONToHTML(this.failFormatMessage(e.getMessage()));
+						return this.formatJSONToHTML(this.failFormatMessage(e
+								.getMessage()));
 					}
 
 				}
@@ -263,7 +277,8 @@ public class FileController extends BaseController {
 
 			if (fileService.isFileNameExisting(bean.getProjectId(),
 					fileBean.getFileName())) {
-				return this.formatJSONToHTML(this.failFormatMessage("File already exits!"));
+				return this.formatJSONToHTML(this
+						.failFormatMessage("File already exits!"));
 			} else {
 				if (!file.exists()) {
 					file.createNewFile();
@@ -271,29 +286,29 @@ public class FileController extends BaseController {
 				bean.getUploadfile().transferTo(file);
 				fileService.saveUploadFile(bean.getProjectId(),
 						bean.getUpload_doctype(), fileBean);
-				return this.formatJSONToHTML(this.successFormatMessage(ofFormat("filename", EncoderDecoderUtil
-						.encodeURIComponent(fileBean.getFileName()))));
+				return this.formatJSONToHTML(this
+						.successFormatMessage(ofFormat("filename",
+								EncoderDecoderUtil.encodeURIComponent(fileBean
+										.getFileName()))));
 
 			}
 		}
 
 	}
-	
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "secure/s2ubmitUploadFile")
 	@ResponseBody
 	public String submitUploadFile2(DocTypeFieldSet bean, Model model,
 			HttpSession session) throws Exception {
 
 		return "<textarea name='textarea' id='textarea'>datasss</textarea>";
-		
 
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "uploadfile.do")
 	public String handleUploadProcess(MultipartHttpServletRequest request,
 			Model model) throws Exception {
-		log.info("Upload success");
+		logger.info("Upload success");
 		MultipartFile file = request.getFile("uploadedfile");
 		model.addAttribute("success", "true");
 		return "uploadView";
@@ -303,8 +318,8 @@ public class FileController extends BaseController {
 	public String handleUploadProcess2(
 			@RequestParam("file") MultipartFile file, Model model)
 			throws Exception {
-		log.info("Upload success");
-		log.info(file);
+		logger.info("Upload success");
+		logger.info(file);
 		model.addAttribute("success", "true");
 		return "uploadView";
 	}
@@ -312,7 +327,7 @@ public class FileController extends BaseController {
 	@RequestMapping(method = RequestMethod.GET, value = "getDocs")
 	@ResponseBody
 	public Map getDocs(@RequestParam String projectId) throws Exception {
-		log.info("getDocs:" + projectId);
+		logger.info("getDocs:" + projectId);
 
 		return WebUtils.toDocsSummaries(projectId, this.sysConfig);
 
@@ -360,9 +375,9 @@ public class FileController extends BaseController {
 					response.getOutputStream());
 			response.flushBuffer();
 		} else {
-			log.info("no such file.");
+			logger.info("no such file.");
 		}
-		log.info("viewDocs: " + filename);
+		logger.info("viewDocs: " + filename);
 
 		return null;
 
@@ -377,7 +392,7 @@ public class FileController extends BaseController {
 		String username = session.getAttribute("LOGIN_USER") != null ? session
 				.getAttribute("LOGIN_USER").toString() : "";
 
-		log.info("projectId:" + projectId + " fileid:" + fileid
+		logger.info("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
 		FileLockBean filelock = fileService.getFileLock(fileid);
@@ -402,20 +417,21 @@ public class FileController extends BaseController {
 		File file = new File(fileFolder, filename);
 
 		serverFilePath = file.getPath();
-		fileStructPath = new String[]{project.getProjectCde(),this.sysConfig.getFolderNameByFolderCde(docType)
-				,filename};
+		fileStructPath = new String[] { project.getProjectCde(),
+				this.sysConfig.getFolderNameByFolderCde(docType), filename };
 
 		// open add rev file on local
 		QueueItem openfile = new QueueItem();
 		openfile.setActionType("OPENFILE");
-//		openfile.setParam(fileStructPath); //simple changes
+		// openfile.setParam(fileStructPath); //simple changes
 		openfile.setParam(fileStructPath);
 
 		// get remote user ip
 		IPItem item = UserIPDAO.getUserIPBean(username);
 
 		if (item == null) {
-			return this.successMessage(of("message","File is locked successfully. Please open client first."));
+			return this.successMessage(of("message",
+					"File is locked successfully. Please open client first."));
 		} else {
 			OpenFileClientBuilder callback = new OpenFileClientBuilder(
 					item.getPCIP(), openfile, serverFilePath, fileStructPath);
@@ -424,10 +440,13 @@ public class FileController extends BaseController {
 			try {
 				t.get();
 				return this.successMessage();
-			} catch (ExecutionException e){
-				return this.successMessage(of("message","File is locked successfully. Please open client first."));
+			} catch (ExecutionException e) {
+				return this
+						.successMessage(of("message",
+								"File is locked successfully. Please open client first."));
 			} catch (Exception e) {
-				return this.failMessage("File is locked successfully." +e.getMessage());
+				return this.failMessage("File is locked successfully."
+						+ e.getMessage());
 			}
 
 		}
@@ -442,7 +461,7 @@ public class FileController extends BaseController {
 		filename = EncoderDecoderUtil.decodeURIComponent(filename);
 		String username = session.getAttribute("LOGIN_USER") != null ? session
 				.getAttribute("LOGIN_USER").toString() : "";
-		log.info("projectId:" + projectId + " fileid:" + fileid
+		logger.info("projectId:" + projectId + " fileid:" + fileid
 				+ " doctype:" + docType + " filename:" + filename);
 
 		FileLockBean filelock = fileService.getFileLock(fileid);
@@ -467,27 +486,29 @@ public class FileController extends BaseController {
 					File file = new File(fileFolder, filename);
 
 					serverFilePath = file.getPath();
-					fileStructPath = new String[]{
-							project.getProjectCde(),this.sysConfig
-									.getFolderNameByFolderCde(docType),
-									filename};
+					fileStructPath = new String[] { project.getProjectCde(),
+							this.sysConfig.getFolderNameByFolderCde(docType),
+							filename };
 					// get remote user ip
 					IPItem item = UserIPDAO.getUserIPBean(username);
 
 					if (item == null) {
-						return this.failMessage("Client is not run, could not edit");
+						return this
+								.failMessage("Client is not run, could not edit");
 					} else {
 						projectService.updateFileBy(project, fileid, username,
 								new Date());
 
-						ReleaseFileClientBuilder callback = new ReleaseFileClientBuilder(item.getPCIP(), serverFilePath,
-								fileStructPath, fileid, taskid);
+						ReleaseFileClientBuilder callback = new ReleaseFileClientBuilder(
+								item.getPCIP(), serverFilePath, fileStructPath,
+								fileid, taskid);
 						FutureTask t = new FutureTask(callback);
 						new Thread(t).start();
 						try {
 							t.get();
-						} catch (ExecutionException e){
-							return this.failMessage("Client for user: " + item.getPCID() + " wasn't running!");
+						} catch (ExecutionException e) {
+							return this.failMessage("Client for user: "
+									+ item.getPCID() + " wasn't running!");
 						} catch (Exception e) {
 							return this.failMessage(e.getMessage());
 						}

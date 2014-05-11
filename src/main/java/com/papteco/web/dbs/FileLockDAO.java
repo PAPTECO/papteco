@@ -18,20 +18,20 @@ import com.sleepycat.persist.StoreConfig;
 public class FileLockDAO {
 
 	public static final String FILE_LOCK = "FILELOCK";
-	
+
 	@Value("#{settings[datapath]}")
 	protected String datapath;
-	
+
 	private static PrimaryIndex<String, FileLockBean> filelockIndex;
 
 	@PostConstruct
 	public void init() {
 		File f = new File(datapath);
-		if(!f.exists()){
+		if (!f.exists()) {
 			f.mkdirs();
 		}
 		new FileLockDAO(datapath);
-	}  
+	}
 
 	public FileLockDAO(String databasePath) {
 
@@ -49,15 +49,14 @@ public class FileLockDAO {
 		storeConfig.setTransactional(true);
 		EntityStore store = new EntityStore(env, "ProjectStore", storeConfig);
 
-		filelockIndex = store.getPrimaryIndex(String.class,
-				FileLockBean.class);
+		filelockIndex = store.getPrimaryIndex(String.class, FileLockBean.class);
 	}
 
 	// this is retry function
 	public static void saveFileLockBean(FileLockBean filelock) {
 		filelockIndex.put(filelock);
 	}
-	
+
 	public static FileLockBean getFileLockBean(String fileid) {
 		return filelockIndex.get(fileid);
 	}
@@ -68,6 +67,6 @@ public class FileLockDAO {
 
 	/* mandatory constructor method */
 	public FileLockDAO() {
-		
+
 	}
 }

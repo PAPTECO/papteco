@@ -22,77 +22,78 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import com.papteco.web.beans.ClientRequestBean;
 import com.papteco.web.beans.QueueItem;
 
 /**
- * Handler implementation for the object echo client.  It initiates the
- * ping-pong traffic between the object echo client and server by sending the
- * first message to the server.
+ * Handler implementation for the object echo client. It initiates the ping-pong
+ * traffic between the object echo client and server by sending the first
+ * message to the server.
  */
 public class OpenFileClientHandler extends ChannelInboundHandlerAdapter {
 
-    private static final Logger logger = Logger.getLogger(
-            OpenFileClientHandler.class.getName());
+	private static final Logger logger = Logger
+			.getLogger(OpenFileClientHandler.class.getName());
 
-    private QueueItem openfile;
-    private String filepath;
-    private String[] fileStructPath;
-    /**
-     * Creates a client-side handler.
-     */
-    public OpenFileClientHandler(QueueItem openfile, String filepath, String[] fileStructPath) {
-    	this.openfile = openfile;
-    	this.filepath = filepath;
-    	this.fileStructPath = fileStructPath;
-    }
+	private QueueItem openfile;
+	private String filepath;
+	private String[] fileStructPath;
 
-    @Override
+	/**
+	 * Creates a client-side handler.
+	 */
+	public OpenFileClientHandler(QueueItem openfile, String filepath,
+			String[] fileStructPath) {
+		this.openfile = openfile;
+		this.filepath = filepath;
+		this.fileStructPath = fileStructPath;
+	}
+
+	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		// TODO Auto-generated method stub
-    	ctx.close();
+		ctx.close();
 	}
-    
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        // Send the first message if this handler is a client-side handler.
-    	File file = new File(this.filepath);
-		if(file.exists()){
+
+	@Override
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		// Send the first message if this handler is a client-side handler.
+		File file = new File(this.filepath);
+		if (file.exists()) {
 			ClientRequestBean bean = new ClientRequestBean('P');
 			QueueItem qItem = new QueueItem();
 			qItem.setParam(this.fileStructPath);
 			bean.setqItem(qItem);
 			InputStream fis = new BufferedInputStream(new FileInputStream(file));
 			byte[] buffer = new byte[fis.available()];
-	        fis.read(buffer);
-	        bean.setPrjObj(buffer);
-	        fis.close();
-	        ctx.writeAndFlush(bean);
+			fis.read(buffer);
+			bean.setPrjObj(buffer);
+			fis.close();
+			ctx.writeAndFlush(bean);
 		}
-    }
+	}
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        // Echo back the received object to the server.
-    	ClientRequestBean bean = new ClientRequestBean('O');
-    	bean.setqItem(openfile);
-    	ctx.writeAndFlush(bean);
-    }
+	@Override
+	public void channelRead(ChannelHandlerContext ctx, Object msg)
+			throws Exception {
+		// Echo back the received object to the server.
+		ClientRequestBean bean = new ClientRequestBean('O');
+		bean.setqItem(openfile);
+		ctx.writeAndFlush(bean);
+	}
 
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-//        ctx.flush();
-    }
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+		// ctx.flush();
+	}
 
-    @Override
-    public void exceptionCaught(
-            ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.log(
-                Level.WARNING,
-                "Unexpected exception from downstream.", cause);
-        ctx.close();
-    }
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+			throws Exception {
+		logger.info("Unexpected exception from downstream.");
+		ctx.close();
+	}
 }

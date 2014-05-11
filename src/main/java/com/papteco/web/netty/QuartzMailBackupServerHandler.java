@@ -23,10 +23,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.papteco.web.beans.ClientRequestBean;
 import com.papteco.web.beans.UsersBean;
@@ -38,64 +37,65 @@ import com.papteco.web.dbs.UserDAO;
  */
 public class QuartzMailBackupServerHandler extends ChannelInboundHandlerAdapter {
 
-    private static final Logger logger = Logger.getLogger(
-            QuartzMailBackupServerHandler.class.getName());
+	private static final Logger logger = Logger
+			.getLogger(QuartzMailBackupServerHandler.class.getName());
 
-    private String mailbackup_dir;
-    private UsersBean user;
-    
-    public QuartzMailBackupServerHandler(String rootpath){
-    	this.mailbackup_dir = new File(rootpath, "MAILS_BACKUP").getPath();
-    }
-    @Override
-    public void channelRead(
-            ChannelHandlerContext ctx, Object msg) throws Exception {
-        // Echo back the received object to the client.
-    	ClientRequestBean bean = (ClientRequestBean) msg;
-    	switch (bean.getActionType())
-    	{
-    	case 'M':
-    		user = UserDAO.getUser(bean.getReqUser());
-    		if(StringUtils.isNotBlank(user.getMailFileTimeStamp()))
-    			bean.setTimestamp(user.getMailFileTimeStamp());
-    		ctx.write(bean);
-    		break;
-    	case 'U':
-    		if(bean.getPrjObj() != null){
-        		byte[] buffer = (byte[]) bean.getPrjObj();
-        		BufferedOutputStream buff = null;
-        		String storingPath = new File(mailbackup_dir, bean.getReqUser()).getPath();
-        		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+	private String mailbackup_dir;
+	private UsersBean user;
 
-        		File mailbackupfile = new File(storingPath,sdf.format(new Date()) + bean.getMailfileSuffix());
-        		if(!mailbackupfile.exists()){
-        			mailbackupfile.getParentFile().mkdirs();
-        			mailbackupfile.createNewFile();
-        		}
-        		buff = new BufferedOutputStream(new FileOutputStream(mailbackupfile));
-        		buff.write(buffer);
-        		buff.flush();
-        		buff.close();
-        		user.setMailFileTimeStamp(bean.getTimestamp());
-        		UserDAO.saveUser(user);
-        	}
-        	ctx.close();
-    		break;
-    	}
-    }
+	public QuartzMailBackupServerHandler(String rootpath) {
+		this.mailbackup_dir = new File(rootpath, "MAILS_BACKUP").getPath();
+	}
 
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
-    }
+	@Override
+	public void channelRead(ChannelHandlerContext ctx, Object msg)
+			throws Exception {
+		// Echo back the received object to the client.
+		ClientRequestBean bean = (ClientRequestBean) msg;
+		switch (bean.getActionType()) {
+		case 'M':
+			user = UserDAO.getUser(bean.getReqUser());
+			if (StringUtils.isNotBlank(user.getMailFileTimeStamp()))
+				bean.setTimestamp(user.getMailFileTimeStamp());
+			ctx.write(bean);
+			break;
+		case 'U':
+			if (bean.getPrjObj() != null) {
+				byte[] buffer = (byte[]) bean.getPrjObj();
+				BufferedOutputStream buff = null;
+				String storingPath = new File(mailbackup_dir, bean.getReqUser())
+						.getPath();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
 
-    @Override
-    public void exceptionCaught(
-            ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.log(
-                Level.WARNING,
-                "Unexpected exception from downstream.", cause);
-        ctx.close();
-    }
-    
+				File mailbackupfile = new File(storingPath,
+						sdf.format(new Date()) + bean.getMailfileSuffix());
+				if (!mailbackupfile.exists()) {
+					mailbackupfile.getParentFile().mkdirs();
+					mailbackupfile.createNewFile();
+				}
+				buff = new BufferedOutputStream(new FileOutputStream(
+						mailbackupfile));
+				buff.write(buffer);
+				buff.flush();
+				buff.close();
+				user.setMailFileTimeStamp(bean.getTimestamp());
+				UserDAO.saveUser(user);
+			}
+			ctx.close();
+			break;
+		}
+	}
+
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+		ctx.flush();
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+			throws Exception {
+		logger.info("Unexpected exception from downstream.");
+		ctx.close();
+	}
+
 }

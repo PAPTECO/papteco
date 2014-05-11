@@ -28,19 +28,19 @@ public class UserDAO {
 	protected boolean sysadmin_ind;
 	@Value("#{settings[sysadmin_pwd]}")
 	protected String sysadmin_pwd;
-	
+
 	private static PrimaryIndex<String, UsersBean> usersIndex;
 
 	@PostConstruct
 	public void init() {
 		File f = new File(datapath);
-		if(!f.exists()){
+		if (!f.exists()) {
 			f.mkdirs();
 		}
 		new UserDAO(datapath);
-		if(sysadmin_ind){
+		if (sysadmin_ind) {
 			UsersBean sysadmin = getUser("sysadmin");
-			if(sysadmin == null){
+			if (sysadmin == null) {
 				sysadmin = new UsersBean();
 				sysadmin.setUserName("sysadmin");
 				sysadmin.setPassword(sysadmin_pwd);
@@ -49,8 +49,8 @@ public class UserDAO {
 				roles.add("Administrator");
 				sysadmin.setRoles(roles);
 				saveUser(sysadmin);
-			} else{
-				if(!sysadmin.getRoles().contains("Administrator")){
+			} else {
+				if (!sysadmin.getRoles().contains("Administrator")) {
 					List<String> roles = sysadmin.getRoles();
 					roles.add("Administrator");
 					sysadmin.setRoles(roles);
@@ -58,7 +58,7 @@ public class UserDAO {
 				}
 			}
 		}
-	}  
+	}
 
 	public UserDAO(String databasePath) {
 
@@ -76,47 +76,49 @@ public class UserDAO {
 		storeConfig.setTransactional(true);
 		EntityStore store = new EntityStore(env, "ProjectStore", storeConfig);
 
-		usersIndex = store.getPrimaryIndex(String.class,
-				UsersBean.class);
+		usersIndex = store.getPrimaryIndex(String.class, UsersBean.class);
 	}
 
 	// this is retry function
 	public static void saveUser(UsersBean user) {
 		usersIndex.put(user);
 	}
-	
+
 	// this is retry function
 	public static void deleteUser(UsersBean user) {
 		usersIndex.delete(user.getUserName());
 	}
-	
+
 	public static UsersBean getUser(String username) {
 		return usersIndex.get(username);
 	}
 
-	public static List<UsersBean> getUsersByFilter(String username, String rolekey){
+	public static List<UsersBean> getUsersByFilter(String username,
+			String rolekey) {
 		EntityCursor<UsersBean> allUsers = usersIndex.entities();
 		List<UsersBean> result = new LinkedList<UsersBean>();
-		for (UsersBean bean : allUsers){
-			if(StringUtils.isBlank(username) && StringUtils.isBlank(rolekey)){
+		for (UsersBean bean : allUsers) {
+			if (StringUtils.isBlank(username) && StringUtils.isBlank(rolekey)) {
 				result.add(bean);
-			}else if(StringUtils.isBlank(username) && StringUtils.isNotBlank(rolekey)){
+			} else if (StringUtils.isBlank(username)
+					&& StringUtils.isNotBlank(rolekey)) {
 				List<String> roles = bean.getRoles();
-				for(String role : roles){
-					if(role.contains(rolekey)){
+				for (String role : roles) {
+					if (role.contains(rolekey)) {
 						result.add(bean);
 						break;
 					}
 				}
-			}else if(StringUtils.isNotBlank(username) && StringUtils.isBlank(rolekey)){
-				if(bean.getUserName().contains(username.trim())){
+			} else if (StringUtils.isNotBlank(username)
+					&& StringUtils.isBlank(rolekey)) {
+				if (bean.getUserName().contains(username.trim())) {
 					result.add(bean);
 				}
-			}else{
-				if(bean.getUserName().contains(username.trim())){
+			} else {
+				if (bean.getUserName().contains(username.trim())) {
 					List<String> roles = bean.getRoles();
-					for(String role : roles){
-						if(role.contains(rolekey)){
+					for (String role : roles) {
+						if (role.contains(rolekey)) {
 							result.add(bean);
 							break;
 						}
@@ -127,9 +129,9 @@ public class UserDAO {
 		allUsers.close();
 		return result;
 	}
-	
+
 	/* mandatory constructor method */
-	public UserDAO(){
-		
+	public UserDAO() {
+
 	}
 }

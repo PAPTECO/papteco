@@ -37,24 +37,27 @@ public class ProjectCacheDAO {
 	protected FoldersUtils foldersUtils;
 	@Value("#{settings[datapath]}")
 	protected String datapath;
-	
+
 	private static PrimaryIndex<String, ProjectBean> projectIdIndex;
 
 	@PostConstruct
 	public void init() {
 		File f = new File(datapath);
-		if(!f.exists()){
+		if (!f.exists()) {
 			f.mkdirs();
 		}
 		new ProjectCacheDAO(datapath);
 		ProjectBean templatePrj = getProjectTree("0");
-		if(templatePrj == null){
+		if (templatePrj == null) {
 			templatePrj = templateCreateSample();
-			foldersUtils.createProjectFolders(foldersUtils.prepareProjectPath(templatePrj.getProjectCde()), templatePrj.getFolderTree());
+			foldersUtils.createProjectFolders(foldersUtils
+					.prepareProjectPath(templatePrj.getProjectCde()),
+					templatePrj.getFolderTree());
 			saveProjectTree(templatePrj);
 		}
-	}  
-	public ProjectBean templateCreateSample(){
+	}
+
+	public ProjectBean templateCreateSample() {
 		ProjectBean tmpProject = new ProjectBean();
 		tmpProject.setProjectId("0");
 		tmpProject.setProjectCde("Templates");
@@ -68,7 +71,7 @@ public class ProjectCacheDAO {
 		tmpProject.setFolderTree(this.sysConfig.prepareFolderStructure());
 		return tmpProject;
 	}
-	
+
 	public ProjectCacheDAO(String databasePath) {
 
 		// Open a transactional Berkeley DB engine environment.
@@ -85,65 +88,67 @@ public class ProjectCacheDAO {
 		storeConfig.setTransactional(true);
 		EntityStore store = new EntityStore(env, "ProjectStore", storeConfig);
 
-		projectIdIndex = store.getPrimaryIndex(String.class,
-				ProjectBean.class);
+		projectIdIndex = store.getPrimaryIndex(String.class, ProjectBean.class);
 	}
 
 	// this is retry function
 	public static void saveProjectTree(ProjectBean project) {
 		projectIdIndex.put(project);
 	}
-	
+
 	public static ProjectBean getProjectTree(String id) {
 		return projectIdIndex.get(id);
 	}
 
-	public static void deleteProjectTree(String id){
+	public static void deleteProjectTree(String id) {
 		projectIdIndex.delete(id);
 	}
-	
-	public static String getMaxProjectId(){
-		if(projectIdIndex != null && projectIdIndex.count() == 0){
+
+	public static String getMaxProjectId() {
+		if (projectIdIndex != null && projectIdIndex.count() == 0) {
 			return "001";
-		}else{
-			return getIncreaseNumberBylatestKey(projectIdIndex.sortedMap().lastKey());
+		} else {
+			return getIncreaseNumberBylatestKey(projectIdIndex.sortedMap()
+					.lastKey());
 		}
 	}
-	
-	public static String getIncreaseNumberBylatestKey(String key){
-		Integer intKey = Integer.valueOf(key)+1;
-		
-		PreserveNosBean presNo = PreserveNosDAO.getPresNosBean(PreserveNosDAO.PRES_NO_CDE);
-		while(intKey >= presNo.getPresNoFrom() && intKey <= presNo.getPresNoTo()){
-			intKey = intKey+1;
+
+	public static String getIncreaseNumberBylatestKey(String key) {
+		Integer intKey = Integer.valueOf(key) + 1;
+
+		PreserveNosBean presNo = PreserveNosDAO
+				.getPresNosBean(PreserveNosDAO.PRES_NO_CDE);
+		while (intKey >= presNo.getPresNoFrom()
+				&& intKey <= presNo.getPresNoTo()) {
+			intKey = intKey + 1;
 		}
 		return formatIncreaseNumber(String.valueOf(intKey), 3);
 	}
-	
-	public static String formatIncreaseNumber(String num, int digs){
+
+	public static String formatIncreaseNumber(String num, int digs) {
 		StringBuffer result = new StringBuffer();
-		for(int i = 0; i < digs-num.length(); i++){
+		for (int i = 0; i < digs - num.length(); i++) {
 			result.append("0");
 		}
 		result.append(num);
 		return result.toString();
 	}
-	
-	public static List<ProjectBean> getAllProjectBeans(){
+
+	public static List<ProjectBean> getAllProjectBeans() {
 		EntityCursor<ProjectBean> allProjects = projectIdIndex.entities();
 		List<ProjectBean> result = new LinkedList<ProjectBean>();
-		for (ProjectBean bean : allProjects){
+		for (ProjectBean bean : allProjects) {
 			result.add(bean);
 		}
 		allProjects.close();
 		return result;
 	}
-	
-	public static ProjectBean getProjectBeanByFilterProjectCde(String prjCde){
+
+	public static ProjectBean getProjectBeanByFilterProjectCde(String prjCde) {
 		EntityCursor<ProjectBean> allProjects = projectIdIndex.entities();
 		ProjectBean project = new ProjectBean();
-		for (ProjectBean bean : allProjects){
-			if(prjCde.equals(bean.getProjectCde())){
+		for (ProjectBean bean : allProjects) {
+			if (prjCde.equals(bean.getProjectCde())) {
 				project = bean;
 				allProjects.close();
 				return project;
@@ -152,30 +157,33 @@ public class ProjectCacheDAO {
 		allProjects.close();
 		return null;
 	}
-	
-	public static List<ProjectBean> getProjectBeansByFilter(String clientNo, String anyKey){
+
+	public static List<ProjectBean> getProjectBeansByFilter(String clientNo,
+			String anyKey) {
 		EntityCursor<ProjectBean> allProjects = projectIdIndex.entities();
 		List<ProjectBean> result = new LinkedList<ProjectBean>();
-		for (ProjectBean bean : allProjects){
-			if(StringUtils.isBlank(clientNo) && StringUtils.isBlank(anyKey)){
+		for (ProjectBean bean : allProjects) {
+			if (StringUtils.isBlank(clientNo) && StringUtils.isBlank(anyKey)) {
 				result.add(bean);
-			}else if(StringUtils.isBlank(clientNo) && StringUtils.isNotBlank(anyKey)){
+			} else if (StringUtils.isBlank(clientNo)
+					&& StringUtils.isNotBlank(anyKey)) {
 				List<String> files = bean.getTotalFileList();
-				for(String file : files){
-					if(file.contains(anyKey)){
+				for (String file : files) {
+					if (file.contains(anyKey)) {
 						result.add(bean);
 						break;
 					}
 				}
-			}else if(StringUtils.isNotBlank(clientNo) && StringUtils.isBlank(anyKey)){
-				if(clientNo.trim().equals(bean.getClientNo().trim())){
+			} else if (StringUtils.isNotBlank(clientNo)
+					&& StringUtils.isBlank(anyKey)) {
+				if (clientNo.trim().equals(bean.getClientNo().trim())) {
 					result.add(bean);
 				}
-			}else{
-				if(clientNo.trim().equals(bean.getClientNo().trim())){
+			} else {
+				if (clientNo.trim().equals(bean.getClientNo().trim())) {
 					List<String> files = bean.getTotalFileList();
-					for(String file : files){
-						if(file.contains(anyKey)){
+					for (String file : files) {
+						if (file.contains(anyKey)) {
 							result.add(bean);
 							break;
 						}
@@ -186,11 +194,12 @@ public class ProjectCacheDAO {
 		allProjects.close();
 		return result;
 	}
-	
-	public static void saveFileBean(String projectId,String docType, FileBean fileBean){
+
+	public static void saveFileBean(String projectId, String docType,
+			FileBean fileBean) {
 		ProjectBean project = projectIdIndex.get(projectId);
-		for(FolderBean folder : project.getFolderTree()){
-			if(docType.equals(folder.getDocType())){
+		for (FolderBean folder : project.getFolderTree()) {
+			if (docType.equals(folder.getDocType())) {
 				ArrayList<FileBean> fileList = folder.getFileTree();
 				fileList.add(fileBean);
 				Collections.sort(fileList, new SortByFileName());
@@ -199,19 +208,21 @@ public class ProjectCacheDAO {
 			}
 		}
 		List<String> totalFileList = project.getTotalFileList();
-		totalFileList.add(StringEscapeUtils.unescapeHtml(fileBean.getFileName()));
+		totalFileList
+				.add(StringEscapeUtils.unescapeHtml(fileBean.getFileName()));
 		project.setTotalFileList(totalFileList);
 		saveProjectTree(project);
 	}
-	
-	public static void deleteFileBean(String projectId,String docType, String fileName){
+
+	public static void deleteFileBean(String projectId, String docType,
+			String fileName) {
 		ProjectBean project = projectIdIndex.get(projectId);
-		for(FolderBean folder : project.getFolderTree()){
-			if(docType.equals(folder.getDocType())){
+		for (FolderBean folder : project.getFolderTree()) {
+			if (docType.equals(folder.getDocType())) {
 				ArrayList<FileBean> fileList = folder.getFileTree();
 				FileBean removingfile = null;
-				for(FileBean file : fileList){
-					if(fileName.equals(file.getFileName())){
+				for (FileBean file : fileList) {
+					if (fileName.equals(file.getFileName())) {
 						removingfile = file;
 						break;
 					}
@@ -226,18 +237,18 @@ public class ProjectCacheDAO {
 		project.setTotalFileList(totalFileList);
 		saveProjectTree(project);
 	}
-	
+
 	/* mandatory constructor method */
 	public ProjectCacheDAO() {
-		
+
 	}
 
 	@SuppressWarnings("rawtypes")
 	static class SortByFileName implements Comparator {
 		public int compare(Object o1, Object o2) {
-			  FileBean file1 = (FileBean) o1;
-			  FileBean file2 = (FileBean) o2;
-			  return file1.getFileName().compareTo(file2.getFileName());
-			 }
+			FileBean file1 = (FileBean) o1;
+			FileBean file2 = (FileBean) o2;
+			return file1.getFileName().compareTo(file2.getFileName());
+		}
 	}
 }

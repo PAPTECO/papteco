@@ -49,7 +49,7 @@ public class Roles2RightsConfiguration extends BaseUtils {
 		}
 		return rightssetting;
 	}
-	
+
 	public static Properties getActionSetting() {
 		if (actionsetting != null)
 			return actionsetting;

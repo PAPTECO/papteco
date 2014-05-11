@@ -18,20 +18,20 @@ import com.sleepycat.persist.StoreConfig;
 public class PreserveNosDAO {
 
 	public static final String PRES_NO_CDE = "PRESERVENOS";
-	
+
 	@Value("#{settings[datapath]}")
 	protected String datapath;
-	
+
 	private static PrimaryIndex<String, PreserveNosBean> presNosIndex;
 
 	@PostConstruct
 	public void init() {
 		File f = new File(datapath);
-		if(!f.exists()){
+		if (!f.exists()) {
 			f.mkdirs();
 		}
 		new PreserveNosDAO(datapath);
-	}  
+	}
 
 	public PreserveNosDAO(String databasePath) {
 
@@ -51,8 +51,8 @@ public class PreserveNosDAO {
 
 		presNosIndex = store.getPrimaryIndex(String.class,
 				PreserveNosBean.class);
-		if(presNosIndex.get(PRES_NO_CDE) == null){
-			presNosIndex.put(new PreserveNosBean(PRES_NO_CDE,0,0));
+		if (presNosIndex.get(PRES_NO_CDE) == null) {
+			presNosIndex.put(new PreserveNosBean(PRES_NO_CDE, 0, 0));
 		}
 	}
 
@@ -60,13 +60,13 @@ public class PreserveNosDAO {
 	public static void savePresNosBean(PreserveNosBean presNoBean) {
 		presNosIndex.put(presNoBean);
 	}
-	
+
 	public static PreserveNosBean getPresNosBean(String presNoCde) {
 		return presNosIndex.get(presNoCde);
 	}
 
 	/* mandatory constructor method */
 	public PreserveNosDAO() {
-		
+
 	}
 }
