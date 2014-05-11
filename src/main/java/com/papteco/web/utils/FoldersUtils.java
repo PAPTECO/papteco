@@ -19,9 +19,9 @@ public class FoldersUtils extends BaseUtils{
 			f.setExecutable(true, false);
 			f.setReadable(true, false);
 			f.setWritable(true, false);
-			log.info("Project \""+ f.getName() + "\" created!");
+//			log.info("Project \""+ f.getName() + "\" created!");
 		}else{
-			log.info("Project \""+ f.getName() + "\" existing already!");
+//			log.info("Project \""+ f.getName() + "\" existing already!");
 		}
 		
 		for(FolderBean folder : folderList){
@@ -31,9 +31,9 @@ public class FoldersUtils extends BaseUtils{
 				sf.setExecutable(true, false);
 				sf.setReadable(true, false);
 				sf.setWritable(true, false);
-				log.info("(execable, readable, writeable) - ("+sf.canExecute()+", "+sf.canRead()+", "+sf.canWrite()+") - "+ projectPath+"/"+folder.getFolderName());
+//				log.info("(execable, readable, writeable) - ("+sf.canExecute()+", "+sf.canRead()+", "+sf.canWrite()+") - "+ projectPath+"/"+folder.getFolderName());
 			}else{
-				log.info("(execable, readable, writeable) - ("+sf.canExecute()+", "+sf.canRead()+", "+sf.canWrite()+") - "+ projectPath+"/"+folder.getFolderName()+" [existing already]");
+//				log.info("(execable, readable, writeable) - ("+sf.canExecute()+", "+sf.canRead()+", "+sf.canWrite()+") - "+ projectPath+"/"+folder.getFolderName()+" [existing already]");
 			}
 		}
 		log.info("Folders creation finish.");
