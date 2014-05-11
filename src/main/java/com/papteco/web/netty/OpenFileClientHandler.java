@@ -40,11 +40,11 @@ public class OpenFileClientHandler extends ChannelInboundHandlerAdapter {
 
     private QueueItem openfile;
     private String filepath;
-    private String fileStructPath;
+    private String[] fileStructPath;
     /**
      * Creates a client-side handler.
      */
-    public OpenFileClientHandler(QueueItem openfile, String filepath, String fileStructPath) {
+    public OpenFileClientHandler(QueueItem openfile, String filepath, String[] fileStructPath) {
     	this.openfile = openfile;
     	this.filepath = filepath;
     	this.fileStructPath = fileStructPath;

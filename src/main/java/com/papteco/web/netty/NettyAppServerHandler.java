@@ -116,7 +116,8 @@ public class NettyAppServerHandler extends ChannelInboundHandlerAdapter {
     		break;
     	case 'F':
     		QueueItem qItem = (QueueItem) request.getqItem();
-    		File file = new File(combineFolderPath(this.rootpath,qItem.getPrjCde()), qItem.getParam());
+//    		File file = new File(combineFolderPath(this.rootpath,qItem.getPrjCde()), qItem.getParam());//simple change
+    		File file = new File(FilesUtils.combine(this.rootpath,qItem.getPrjCde(), FilesUtils.combine(qItem.getParam())));
     		logger.log(
                     Level.INFO,">>Downloading File:" + file.getName() + "on Server side!.");
     		if(file.exists()){

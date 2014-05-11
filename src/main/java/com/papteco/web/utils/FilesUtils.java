@@ -85,6 +85,32 @@ public class FilesUtils extends BaseUtils{
 		Runtime.getRuntime().exec("cmd /C Start " + file); 
 	}
 	
+//	public static String combine (String[] paths)
+//	{
+//		
+//		File f = null;
+//		for(String path:paths){
+//			if(f == null)
+//				f = new File(path);
+//			else
+//				f = new File(f,path);
+//		}
+//		return f==null?"":f.toString();
+//	}
+	
+	public static String combine(String...paths)
+	{
+		
+		File f = null;
+		for(String path:paths){
+			if(f == null)
+				f = new File(path);
+			else
+				f = new File(f,path);
+		}
+		return f==null?"":f.toString();
+	}
+	
 	public static void main(String[] args){
 //		FilesUtils fu = new FilesUtils();
 //		try {

@@ -48,7 +48,7 @@ public class FileController extends BaseController {
 	@Autowired
 	private ProjectServiceImpl projectService;
 
-	private String fileStructPath;
+	private String[] fileStructPath;
 	private String serverFilePath;
 
 	private String prepareFileName(DocTypeFieldSet bean) {
@@ -207,16 +207,16 @@ public class FileController extends BaseController {
 				// Order client to open the file
 				// temp solution for upload
 				serverFilePath = tofile.getPath();
-				fileStructPath = combineFolderPath(
-						bean.getProjectCde(),
-						combineFolderPath(this.sysConfig
-								.getFolderNameByFolderCde(bean
-										.getUpload_doctype()), fileBean
-								.getFileName()));
+				fileStructPath = new String[]{bean.getProjectCde(),
+						this.sysConfig
+						.getFolderNameByFolderCde(bean
+								.getUpload_doctype()),fileBean
+								.getFileName()};
 
 				// open add rev file on local
 				QueueItem openfile = new QueueItem();
 				openfile.setActionType("OPENFILE");
+//				openfile.setParam(fileStructPath); // simplechanges
 				openfile.setParam(fileStructPath);
 				fileService.saveFileLock(new FileLockBean(fileBean.getFileId(),
 						username, new Date()));
@@ -402,15 +402,13 @@ public class FileController extends BaseController {
 		File file = new File(fileFolder, filename);
 
 		serverFilePath = file.getPath();
-		fileStructPath = combineFolderPath(
-				project.getProjectCde(),
-				combineFolderPath(
-						this.sysConfig.getFolderNameByFolderCde(docType),
-						filename));
+		fileStructPath = new String[]{project.getProjectCde(),this.sysConfig.getFolderNameByFolderCde(docType)
+				,filename};
 
 		// open add rev file on local
 		QueueItem openfile = new QueueItem();
 		openfile.setActionType("OPENFILE");
+//		openfile.setParam(fileStructPath); //simple changes
 		openfile.setParam(fileStructPath);
 
 		// get remote user ip
@@ -469,11 +467,10 @@ public class FileController extends BaseController {
 					File file = new File(fileFolder, filename);
 
 					serverFilePath = file.getPath();
-					fileStructPath = combineFolderPath(
-							project.getProjectCde(),
-							combineFolderPath(this.sysConfig
+					fileStructPath = new String[]{
+							project.getProjectCde(),this.sysConfig
 									.getFolderNameByFolderCde(docType),
-									filename));
+									filename};
 					// get remote user ip
 					IPItem item = UserIPDAO.getUserIPBean(username);
 

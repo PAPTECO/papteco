@@ -36,12 +36,12 @@ public class OpenFileClientBuilder extends BasicBuilder implements Callable{
     private final String host;
     private QueueItem openfile;
     private String filepath;
-    private String fileStructPath;
+    private String[] fileStructPath;
 
     public OpenFileClientBuilder(String ip) {
     	this.host = ip;
     }
-    public OpenFileClientBuilder(String ip, QueueItem openfile, String filepath, String fileStructPath) {
+    public OpenFileClientBuilder(String ip, QueueItem openfile, String filepath, String[] fileStructPath) {
     	this.host = ip;
     	this.openfile = openfile;
     	this.filepath = filepath;
