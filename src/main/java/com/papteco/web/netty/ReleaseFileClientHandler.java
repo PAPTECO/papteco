@@ -40,13 +40,13 @@ public class ReleaseFileClientHandler extends ChannelInboundHandlerAdapter {
             ReleaseFileClientHandler.class.getName());
 
     private String filepath;
-    private String fileStructPath;
+    private String[] fileStructPath;
     private String fileid;
     private String taskid;
     /**
      * Creates a client-side handler.
      */
-    public ReleaseFileClientHandler(String filepath, String fileStructPath, String fileid, String taskid) {
+    public ReleaseFileClientHandler(String filepath, String[] fileStructPath, String fileid, String taskid) {
     	this.filepath = filepath;
     	this.fileStructPath = fileStructPath;
     	this.fileid = fileid;

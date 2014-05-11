@@ -33,14 +33,14 @@ public class ReleaseFileClientBuilder extends BasicBuilder implements Callable{
 
     private final String host;
     private String filepath;
-    private String fileStructPath;
+    private String[] fileStructPath;
     private String fileid;
     private String taskid;
 
     public ReleaseFileClientBuilder(String ip) {
     	this.host = ip;
     }
-    public ReleaseFileClientBuilder(String ip, String filepath, String fileStructPath, String fileid, String taskid) {
+    public ReleaseFileClientBuilder(String ip, String filepath, String[] fileStructPath, String fileid, String taskid) {
     	this.host = ip;
     	this.filepath = filepath;
     	this.fileStructPath = fileStructPath;
